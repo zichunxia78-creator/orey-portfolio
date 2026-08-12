@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bumble DeepSync — Case Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #0A0A0A;
+  --surface: #131313;
+  --card: #1A1A1A;
+  --card-border: #222;
+  --bumble: #FFC629;
+  --bumble-dim: rgba(255,198,41,0.12);
+  --bumble-mid: rgba(255,198,41,0.25);
+  --white: #F5F5F5;
+  --gray: #999;
+  --dim: #666;
+  --faint: #333;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--black);
+  color: var(--white);
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── UTILITIES ─── */
+.container { max-width: 1200px; margin: 0 auto; padding: 0 40px; }
+.section { padding: 120px 0; }
+.section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--bumble);
+  margin-bottom: 24px;
+}
+.section-headline {
+  font-size: clamp(32px, 4.5vw, 56px);
+  font-weight: 900;
+  letter-spacing: -1.5px;
+  line-height: 1.08;
+  color: var(--white);
+  max-width: 800px;
+}
+.section-body {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--gray);
+  max-width: 900px;
+  margin-top: 28px;
+}
+.thesis {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(22px, 2.8vw, 32px);
+  line-height: 1.4;
+  color: var(--white);
+  max-width: 960px;
+  margin: 48px 0;
+  padding-left: 24px;
+  border-left: 3px solid var(--bumble);
+}
+.tag {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 14px;
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--gray);
+  border: 1px solid var(--card-border);
+}
+.divider {
+  width: 60px;
+  height: 2px;
+  background: var(--bumble);
+  margin: 80px 0;
+}
+
+/* ─── HERO ─── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--black);
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%;
+  right: -20%;
+  width: 800px;
+  height: 800px;
+  background: radial-gradient(circle, var(--bumble-dim) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-content { position: relative; z-index: 1; }
+.hero-overline {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--bumble);
+  margin-bottom: 32px;
+}
+.hero-title {
+  font-size: clamp(56px, 9vw, 120px);
+  font-weight: 900;
+  letter-spacing: -3px;
+  line-height: 0.95;
+  color: var(--white);
+}
+.hero-title span { color: var(--bumble); }
+.hero-subtitle {
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: 800;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  color: var(--white);
+  margin-top: 20px;
+  opacity: 0.85;
+}
+.hero-desc {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--white);
+  max-width: 580px;
+  margin-top: 36px;
+}
+.hero-tags { margin-top: 40px; display: flex; gap: 12px; flex-wrap: wrap; }
+.hero-tags .tag {
+  background: rgba(255, 198, 41, 0.2);
+  color: var(--bumble);
+  border: none;
+  border-radius: 40px;
+  padding: 10px 22px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+}
+
+/* ─── HERO META ─── */
+.hero-meta {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
+  margin-top: 64px;
+  padding-top: 40px;
+  border-top: 1px solid var(--faint);
+}
+.hero-meta-item {}
+.hero-meta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 10px;
+}
+.hero-meta-value {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.5;
+}
+
+/* ─── 01 PROBLEM ─── */
+.loop-visual {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-top: 56px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.loop-step {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+.loop-node {
+  padding: 16px 28px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--white);
+  white-space: nowrap;
+}
+.loop-node.active {
+  background: var(--bumble);
+  color: var(--black);
+  border-color: var(--bumble);
+}
+.loop-node.fade {
+  background: transparent;
+  border-color: var(--faint);
+  color: var(--dim);
+}
+.loop-arrow {
+  font-size: 20px;
+  color: var(--faint);
+  padding: 0 12px;
+  font-weight: 300;
+}
+.loop-return {
+  width: 100%;
+  text-align: center;
+  margin-top: 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--dim);
+  letter-spacing: 2px;
+}
+
+/* ─── SWIPE ANIMATION ─── */
+.swipe-scene {
+  position: relative;
+  width: 260px;
+  height: 360px;
+  margin: 56px auto 0;
+  perspective: 800px;
+}
+.swipe-card {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 24px;
+  background-size: cover;
+  background-position: center;
+}
+.swipe-card-name {
+  font-size: 20px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.5);
+}
+.swipe-card-age {
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.8);
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+}
+.swipe-card:nth-child(1) {
+  background: linear-gradient(180deg, #555 0%, #333 60%, #1a1a1a 100%);
+  z-index: 5;
+  animation: swipeRight 3.6s ease-in-out infinite;
+}
+.swipe-card:nth-child(2) {
+  background: linear-gradient(180deg, #4a4a4a 0%, #2a2a2a 60%, #151515 100%);
+  z-index: 4;
+  animation: swipeLeft 3.6s ease-in-out 0.9s infinite;
+}
+.swipe-card:nth-child(3) {
+  background: linear-gradient(180deg, #606060 0%, #383838 60%, #1c1c1c 100%);
+  z-index: 3;
+  animation: swipeRight 3.6s ease-in-out 1.8s infinite;
+}
+.swipe-card:nth-child(4) {
+  background: linear-gradient(180deg, #4e4e4e 0%, #2e2e2e 60%, #181818 100%);
+  z-index: 2;
+}
+@keyframes swipeRight {
+  0%, 20% { transform: translateX(0) rotate(0deg); opacity: 1; }
+  35% { transform: translateX(140%) rotate(18deg); opacity: 0; }
+  36%, 100% { transform: translateX(0) rotate(0deg); opacity: 0; }
+}
+@keyframes swipeLeft {
+  0%, 20% { transform: translateX(0) rotate(0deg); opacity: 1; }
+  35% { transform: translateX(-140%) rotate(-18deg); opacity: 0; }
+  36%, 100% { transform: translateX(0) rotate(0deg); opacity: 0; }
+}
+
+/* ─── 02 REFRAMING ─── */
+.contrast-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.contrast-col {
+  padding: 40px 36px;
+}
+.contrast-col.easy {
+  background: var(--card);
+}
+.contrast-col.hard {
+  background: var(--bumble);
+  color: var(--black);
+}
+.contrast-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.contrast-col.easy .contrast-label { color: var(--dim); }
+.contrast-col.hard .contrast-label { color: rgba(0,0,0,0.5); }
+.contrast-item {
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.contrast-col.hard .contrast-item {
+  border-bottom-color: rgba(0,0,0,0.1);
+  color: var(--black);
+}
+.contrast-signal {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 16px;
+}
+.signal-bar {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.contrast-col.easy .signal-bar { color: var(--dim); }
+.contrast-col.hard .signal-bar { color: rgba(0,0,0,0.5); }
+.signal-dots { display: flex; gap: 4px; }
+.signal-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.15);
+}
+.contrast-col.hard .signal-dot { background: rgba(0,0,0,0.2); }
+.signal-dot.filled { background: var(--white); }
+.contrast-col.hard .signal-dot.filled { background: var(--black); }
+
+.reframe-strip {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 32px;
+  margin-top: 56px;
+  padding: 32px 36px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+.reframe-box h4 {
+  font-size: 13px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 12px;
+}
+.reframe-box p {
+  font-size: 15px;
+  color: var(--gray);
+  line-height: 1.5;
+}
+.reframe-arrow {
+  font-size: 28px;
+  color: var(--bumble);
+  font-weight: 300;
+}
+.closing-statement {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--white);
+  max-width: 640px;
+  margin-top: 56px;
+  line-height: 1.5;
+}
+
+/* ─── REFRAME CARDS ─── */
+.reframe-cards {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: start;
+  gap: 32px;
+  margin-top: 56px;
+}
+.reframe-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+.reframe-card-header {
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 800;
+  padding: 0 0 20px 0;
+}
+.reframe-card-header--old { color: #ddd; }
+.reframe-card-header--new { color: var(--bumble); }
+.reframe-card-body {
+  background: #252525;
+  border: 1px solid #4a4a4a;
+  border-radius: 14px;
+  padding: 36px 32px;
+}
+.reframe-card--new .reframe-card-body {
+  background: var(--card);
+  border-color: var(--bumble-mid);
+}
+.reframe-card-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.reframe-card--old .reframe-card-title { color: #e0e0e0; }
+.reframe-card-line {
+  width: 40px;
+  height: 3px;
+  background: #777;
+  margin-bottom: 16px;
+}
+.reframe-card--new .reframe-card-line { background: var(--bumble); }
+.reframe-card-desc {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--gray);
+  margin-bottom: 24px;
+}
+.reframe-card--old .reframe-card-desc { color: #bbb; }
+.reframe-card-chips {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.reframe-chip {
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+.reframe-chip--red { background: rgba(255,255,255,0.1); color: #ccc; }
+.reframe-chip--green { background: var(--bumble-dim); color: var(--bumble); }
+.reframe-arrow-big {
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--bumble);
+  align-self: center;
+  margin-top: 48px;
+}
+.reframe-hmw {
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--white);
+  line-height: 1.6;
+  max-width: 720px;
+  margin-top: 48px;
+}
+.hmw-text-inline {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(22px, 3vw, 34px);
+  line-height: 1.4;
+  color: var(--white);
+  max-width: 800px;
+  padding-left: 28px;
+  border-left: 3px solid var(--bumble);
+}
+
+/* ─── 03 HMW ─── */
+.hmw-section {
+  padding: 140px 0;
+  text-align: center;
+}
+.hmw-text {
+  font-family: 'DM Serif Display', serif;
+  font-style: italic;
+  font-size: clamp(28px, 4vw, 48px);
+  line-height: 1.3;
+  color: var(--white);
+  max-width: 860px;
+  margin: 0 auto;
+}
+.hmw-text em {
+  color: var(--bumble);
+  font-style: italic;
+}
+
+/* ─── 03 CONTRAST V2 ─── */
+.contrast-v2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 48px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.contrast-v2-col {
+  padding: 48px 40px;
+  position: relative;
+}
+.contrast-v2-col--dark {
+  background: var(--card);
+}
+.contrast-v2-col--yellow {
+  background: var(--bumble);
+}
+.contrast-v2-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--bumble);
+  margin-bottom: 32px;
+}
+.contrast-v2-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.contrast-v2-item {
+  font-size: clamp(24px, 3vw, 36px);
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+}
+.contrast-v2-item--dim {
+  color: var(--gray);
+}
+.contrast-v2-arrow {
+  position: absolute;
+  right: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 30px;
+  height: 60px;
+  opacity: 0.5;
+}
+.contrast-v2-arrow--up {
+  opacity: 0.3;
+}
+.contrast-v2-signal {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 32px;
+}
+.contrast-v2-dash {
+  display: block;
+  width: 28px;
+  height: 2px;
+  flex-shrink: 0;
+}
+.contrast-v2-signal-text {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+/* ─── 04 & 06: 60/40 SPLIT ─── */
+.split-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: start;
+}
+.split-left { max-width: 600px; }
+.split-right {
+  position: sticky;
+  top: 80px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+.prototype-placeholder {
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 9/19.5;
+  background: var(--surface);
+  border: 2px dashed var(--faint);
+  border-radius: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 40px;
+  text-align: center;
+}
+.prototype-placeholder .ph-icon {
+  width: 48px; height: 48px;
+  border: 2px solid var(--faint);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: var(--dim);
+}
+.prototype-placeholder .ph-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--dim);
+  line-height: 1.5;
+}
+.prototype-placeholder .ph-desc {
+  font-size: 12px;
+  color: var(--faint);
+  line-height: 1.5;
+}
+
+.prototype-video {
+  width: 100%;
+  max-width: 360px;
+  border-radius: 32px;
+  overflow: hidden;
+  background: var(--black);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.prototype-video video {
+  width: 100%;
+  display: block;
+}
+
+.principle-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 32px;
+}
+.principle-card {
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+}
+.principle-card h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 6px;
+}
+.principle-card p {
+  font-size: 13px;
+  color: var(--dim);
+  line-height: 1.4;
+}
+
+/* ─── 05 THREE-DAY ─── */
+.phones-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 56px;
+}
+.phone-card {
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+.phone-card:hover { transform: translateY(-4px); }
+.phone-screen {
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+.phone-screen img {
+  width: 100%;
+  display: block;
+}
+.phone-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+.phone-card:hover .phone-screen::after {
+  opacity: 0;
+}
+.phone-screen-inner {
+  text-align: center;
+  padding: 32px;
+}
+.phone-day {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--bumble);
+  margin-bottom: 16px;
+}
+.phone-day-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--white);
+  letter-spacing: -0.5px;
+  margin-bottom: 8px;
+}
+.phone-day-sub {
+  font-size: 14px;
+  color: var(--dim);
+}
+.phone-caption {
+  padding: 20px 24px;
+}
+.phone-caption h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.phone-caption p {
+  font-size: 13px;
+  color: var(--dim);
+}
+
+.day-progression {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 48px;
+  padding: 24px;
+}
+.day-prog-step {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gray);
+  font-weight: 600;
+}
+.day-prog-arrow {
+  color: var(--bumble);
+  font-size: 18px;
+}
+
+/* ─── 06 AI DIAGRAM ─── */
+.system-flow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+  row-gap: 10px;
+  margin: 40px 0;
+  padding: 20px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+}
+.flow-node {
+  padding: 8px 12px;
+  font-size: 11px;
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+.flow-node.data { background: var(--surface); color: var(--gray); border: 1px solid var(--faint); }
+.flow-node.ai { background: var(--bumble-dim); color: var(--bumble); border: 1px solid var(--bumble-mid); }
+.flow-node.human { background: var(--bumble); color: var(--black); }
+.flow-arrow {
+  color: var(--bumble);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
+.ai-principles {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  margin-top: 32px;
+}
+.ai-principle {
+  padding: 16px 20px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  border-left: 3px solid var(--bumble);
+  text-align: left;
+}
+.ai-principle h4 {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.ai-principle p {
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--dim);
+  line-height: 1.4;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+/* ─── 07 PAYOFF ─── */
+.payoff-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 48px 0;
+  flex-wrap: wrap;
+}
+.payoff-step {
+  padding: 14px 24px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.payoff-step.free { background: var(--card); color: var(--gray); border: 1px solid var(--card-border); }
+.payoff-step.gate { background: var(--bumble-dim); color: var(--bumble); border: 1px solid var(--bumble-mid); }
+.payoff-step.premium { background: var(--bumble); color: var(--black); }
+.payoff-arrow { color: var(--white); font-size: 18px; }
+
+.dimensions-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 48px;
+}
+.dimension-card {
+  padding: 28px 24px;
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  text-align: center;
+}
+.dimension-icon {
+  width: 48px; height: 48px;
+  margin: 0 auto 16px;
+  border-radius: 50%;
+  background: var(--bumble-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+}
+.dimension-card h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.dimension-card p {
+  font-size: 12px;
+  color: var(--dim);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ─── PAYOFF PHONES ─── */
+.payoff-phones {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 64px;
+}
+.payoff-phone {
+  width: 280px;
+  flex-shrink: 0;
+}
+.payoff-phone img {
+  width: 100%;
+  display: block;
+  border-radius: 32px;
+  border: 2px solid #2a2a2a;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+/* ─── 08 VALIDATION ─── */
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.metric {
+  padding: 28px 24px;
+  background: var(--card);
+}
+.metric .metric-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--dim);
+  margin-bottom: 8px;
+}
+.metric .metric-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 900px) {
+  .container { padding: 0 24px; }
+  .section { padding: 80px 0; }
+  .split-section {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+  .split-right {
+    position: static;
+    justify-content: center;
+  }
+  .contrast-grid { grid-template-columns: 1fr; }
+  .phones-row { grid-template-columns: 1fr; max-width: 360px; margin-left: auto; margin-right: auto; }
+  .dimensions-grid { grid-template-columns: 1fr 1fr; }
+  .metrics-strip { grid-template-columns: 1fr; }
+  .ai-principles { grid-template-columns: 1fr 1fr; }
+  .reframe-strip { grid-template-columns: 1fr; text-align: center; }
+  .reframe-arrow { transform: rotate(90deg); }
+  .principle-cards { grid-template-columns: 1fr; }
+  .loop-visual { gap: 8px; }
+  .hero-title { letter-spacing: -2px; }
+  .hero-meta { grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .reframe-cards { grid-template-columns: 1fr; gap: 24px; }
+  .reframe-arrow-big { margin-top: 0; transform: rotate(90deg); justify-self: center; }
+  .contrast-v2 { grid-template-columns: 1fr; }
+  .contrast-v2-arrow { display: none; }
+}
+
+@media (max-width: 600px) {
+  .dimensions-grid { grid-template-columns: 1fr; }
+  .ai-principles { grid-template-columns: 1fr; }
+  .metrics-strip { grid-template-columns: 1fr; }
+  .hero-meta { grid-template-columns: 1fr; gap: 20px; }
+}
+
+/* ─── BUMBLE FLOWER CURSOR ─── */
+html, body { cursor: none !important; }
+a, button, .tag, .loop-node, .principle-card, .phone-card, .dimension-card, .metric, .payoff-step {
+  cursor: none !important;
+}
+#flower-cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 40px; height: 40px;
+  pointer-events: none;
+  z-index: 99999;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  transition: opacity 0.2s;
+}
+#flower-cursor.hidden { opacity: 0; }
+#flower-cursor svg { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════ HERO ═══════════════════ -->
+<section class="hero">
+  <div class="container hero-content">
+    <div class="hero-overline">Case Study</div>
+    <h1 class="hero-title">Bumble<br>Deep<span>Sync</span></h1>
+    <p class="hero-subtitle">Turning Compatibility<br>Into Conversation</p>
+    <p class="hero-desc">"A shared 3-day interaction that turns compatibility signals into better conversations—with AI acting as a catalyst rather than the conversation itself."</p>
+    <div class="hero-tags">
+      <span class="tag">B2C Product Design</span>
+      <span class="tag">AI-Mediated Interaction</span>
+      <span class="tag">Behavioral Design</span>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Context</div>
+        <div class="hero-meta-value">CMU · Advanced Interaction Design</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Role</div>
+        <div class="hero-meta-value">Product Strategy · Interaction Design · Prototyping</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Timeline</div>
+        <div class="hero-meta-value">6 Weeks · Jan–Feb 2026</div>
+      </div>
+      <div class="hero-meta-item">
+        <div class="hero-meta-label">Team</div>
+        <div class="hero-meta-value">Independent Project</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 01 · THE PROBLEM ═══════════════════ -->
+<section class="section" style="background: var(--surface);">
+  <div class="container">
+    <div class="section-label">01 · When Speed Isn't Value</div>
+    <div style="display:grid; grid-template-columns:1fr auto; gap:60px; align-items:start;">
+      <div>
+        <h2 class="section-headline">Swiping creates matches faster than it creates understanding.</h2>
+        <p class="section-body">Bumble makes it easy to create a match, but the harder problem begins afterward. When early conversations stay at the level of small talk, momentum fades—and users return to the swipe loop before understanding whether the connection is worth pursuing.</p>
+      </div>
+      <div class="swipe-scene" style="margin:0; position:relative;">
+        <div class="swipe-card">
+          <div class="swipe-card-name">Danna, 28</div>
+          <div class="swipe-card-age">3 miles away</div>
+        </div>
+        <div class="swipe-card">
+          <div class="swipe-card-name">Josh, 34</div>
+          <div class="swipe-card-age">1 mile away</div>
+        </div>
+        <div class="swipe-card">
+          <div class="swipe-card-name">Tiana, 30</div>
+          <div class="swipe-card-age">5 miles away</div>
+        </div>
+        <div class="swipe-card">
+          <div class="swipe-card-name">Alex, 27</div>
+          <div class="swipe-card-age">2 miles away</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="loop-visual">
+      <div class="loop-step">
+        <div class="loop-node active">Swipe</div>
+        <span class="loop-arrow">→</span>
+      </div>
+      <div class="loop-step">
+        <div class="loop-node active">Match</div>
+        <span class="loop-arrow">→</span>
+      </div>
+      <div class="loop-step">
+        <div class="loop-node">Small Talk</div>
+        <span class="loop-arrow">→</span>
+      </div>
+      <div class="loop-step">
+        <div class="loop-node fade">Momentum Fades</div>
+        <span class="loop-arrow">→</span>
+      </div>
+      <div class="loop-step">
+        <div class="loop-node fade">Swipe Again</div>
+      </div>
+      <div class="loop-return">↩ cycle repeats</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 02 · REFRAMING ═══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">02 · Reframing the Opportunity</div>
+    <h2 class="section-headline">From immediacy to meaningful compatibility.</h2>
+    <p class="section-body">The original ask was straightforward: notify users when a match was within 0.5 km. But rather than treating proximity as the solution, I examined the assumption behind it—whether creating more immediacy would actually lead to stronger connections.</p>
+    <p class="section-body" style="margin-top:16px;">The data suggested otherwise. While proximity could prompt faster action, engagement declined over time. Speeding up the path to meeting wasn't addressing the underlying issue; it was simply accelerating interactions that might not have enough compatibility to sustain them.</p>
+    <p class="section-body" style="margin-top:16px;">This shifted the focus from how quickly people connect to whether a connection has enough substance to continue.</p>
+
+    <div class="reframe-cards">
+      <div class="reframe-card reframe-card--old">
+        <h3 class="reframe-card-header reframe-card-header--old">Original Brief</h3>
+        <div class="reframe-card-body">
+          <h4 class="reframe-card-title">Precision Proximity Alert</h4>
+          <div class="reframe-card-line"></div>
+          <p class="reframe-card-desc">Notify users when a match is within 0.5km<br>Drive premium conversion by creating urgency</p>
+          <div class="reframe-card-chips">
+            <span class="reframe-chip reframe-chip--red">More discovery</span>
+            <span class="reframe-chip reframe-chip--red">More urgency</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="reframe-arrow-big">→</div>
+
+      <div class="reframe-card reframe-card--new">
+        <h3 class="reframe-card-header reframe-card-header--new">Reframed Direction</h3>
+        <div class="reframe-card-body">
+          <h4 class="reframe-card-title">Bumble DeepSync</h4>
+          <div class="reframe-card-line"></div>
+          <p class="reframe-card-desc">Use shared compatibility activities to help existing matches move beyond small talk and uncover what matters together.</p>
+          <div class="reframe-card-chips">
+            <span class="reframe-chip reframe-chip--green">Deeper post-match engagement</span>
+            <span class="reframe-chip reframe-chip--green">Meaningful compatibility</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label" style="margin-top:56px; margin-bottom:16px;">Opportunity Statement</div>
+    <div class="thesis">How might we sustain engagement beyond the initial match by helping people uncover meaningful compatibility over time?</div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 03 · SWIPING IS EASY ═══════════════════ -->
+<section class="section" style="background: var(--surface);">
+  <div class="container">
+    <div class="section-label">03 · The Conversational Cost</div>
+    <h2 class="section-headline">Swiping is easy.<br>Asking what matters isn't.</h2>
+    <p class="section-body">Most dating experiences optimize for getting people to a match quickly, while early conversations stay on easy topics like weekend plans, food, and music. Yet the signals that matter more for long-term compatibility—values, conflict style, emotional needs, stability, and independence—are often harder to surface naturally.</p>
+    <p class="section-body" style="margin-top:16px;">Understanding these signals earlier can help people decide whether a connection is worth investing in before weeks of momentum build around a mismatch. This shaped DeepSync around a simple idea: surface high-value compatibility signals earlier, while lowering the social friction of exploring them together.</p>
+    <p class="section-body" style="margin-top:16px;">Rather than adding another compatibility score—or turning early conversations into an interview—DeepSync structures harder questions into a shared experience, then turns what both people reveal into something they can actually talk about.</p>
+    <p class="section-body" style="margin-top:16px;">The goal isn't to rush intimacy—it's to help people invest their time more intentionally.</p>
+
+    <div class="contrast-v2">
+      <div class="contrast-v2-col contrast-v2-col--dark">
+        <div class="contrast-v2-label">Easy to Ask</div>
+        <div class="contrast-v2-items">
+          <div class="contrast-v2-item contrast-v2-item--dim">Weekend plans</div>
+          <div class="contrast-v2-item contrast-v2-item--dim">Food & taste</div>
+          <div class="contrast-v2-item contrast-v2-item--dim">Music & hobbies</div>
+        </div>
+        <div class="contrast-v2-arrow contrast-v2-arrow--down">
+          <svg viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 0 L20 68 M6 54 L20 68 L34 54" stroke="#444" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="contrast-v2-signal">
+          <span class="contrast-v2-dash" style="background:#444;"></span>
+          <span class="contrast-v2-signal-text" style="color:#666;">Low Friction · Low Signal</span>
+        </div>
+      </div>
+
+      <div class="contrast-v2-col contrast-v2-col--yellow">
+        <div class="contrast-v2-label" style="color:var(--black);">Harder to Ask</div>
+        <div class="contrast-v2-items">
+          <div class="contrast-v2-item" style="color:var(--black);">Conflict style</div>
+          <div class="contrast-v2-item" style="color:var(--black);">Financial values</div>
+          <div class="contrast-v2-item" style="color:var(--black);">Space & independence</div>
+        </div>
+        <div class="contrast-v2-arrow contrast-v2-arrow--up">
+          <svg viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 L20 12 M6 26 L20 12 L34 26" stroke="rgba(0,0,0,0.2)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="contrast-v2-signal">
+          <span class="contrast-v2-dash" style="background:var(--black);"></span>
+          <span class="contrast-v2-signal-text" style="color:rgba(0,0,0,0.5);">High Signal · High Friction</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="thesis" style="margin-top:56px;">"The questions with the highest compatibility signal often have the highest conversational cost."</div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 04 · CO-CREATION ═══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">04 · Designing for Co-Creation</div>
+    <div class="split-section">
+      <div class="split-left">
+        <h2 class="section-headline">Compatibility shouldn't be something the app simply tells you. It can be something two people discover together.</h2>
+        <p class="section-body">The sprint lets each match participate independently, while shared insights only unlock once both people respond. This creates mutual investment before any AI-generated insight appears.</p>
+
+        <div class="principle-cards">
+          <div class="principle-card">
+            <h4>Asynchronous Participation</h4>
+            <p>Each person responds on their own time. No pressure to be online simultaneously.</p>
+          </div>
+          <div class="principle-card">
+            <h4>Shared Unlock</h4>
+            <p>Insights only appear once both people complete their responses. Neither sees results alone.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:40px;">
+          <div class="section-label" style="margin-bottom:12px; color:var(--dim);">Prototype shows</div>
+          <p style="font-size:14px; color:var(--dim); line-height:1.6;">Start Sprint → ranking → Complete Day 1 → Lucas pending → Lucas completed → shared unlock</p>
+        </div>
+      </div>
+
+      <div class="split-right">
+        <div class="prototype-video" style="max-width:310px;">
+          <video autoplay muted loop playsinline>
+            <source src="bumble-demo-m1.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 05 · THREE-DAY RHYTHM ═══════════════════ -->
+<section class="section" style="background: var(--surface);">
+  <div class="container">
+    <div class="section-label">05 · Designing a Three-Day Rhythm</div>
+    <h2 class="section-headline">Start with what matters. Move into how life feels. End with how people reconnect.</h2>
+
+    <div class="phones-row">
+      <div class="phone-card">
+        <div class="phone-screen">
+          <img src="day1-v2.png" alt="Day 1: What Matters Most?">
+        </div>
+        <div class="phone-caption">
+          <h4>Values & Priorities</h4>
+          <p>What do you each value most in a relationship?</p>
+        </div>
+      </div>
+
+      <div class="phone-card">
+        <div class="phone-screen">
+          <img src="day2-v2.png" alt="Day 2: How Do You Recharge?">
+        </div>
+        <div class="phone-caption">
+          <h4>Lifestyle & Social Energy</h4>
+          <p>How does each person recharge and spend their time?</p>
+        </div>
+      </div>
+
+      <div class="phone-card">
+        <div class="phone-screen">
+          <img src="day3-v2.png" alt="Day 3: Heart Sync">
+        </div>
+        <div class="phone-caption">
+          <h4>Emotional Dynamics</h4>
+          <p>How do you navigate disagreement and come back together?</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-progression">
+      <span class="day-prog-step">Values</span>
+      <span class="day-prog-arrow">→</span>
+      <span class="day-prog-step">Lifestyle</span>
+      <span class="day-prog-arrow">→</span>
+      <span class="day-prog-step">Emotional Dynamics</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 06 · AI CATALYST ═══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">06 · Designing AI as a Conversation Catalyst</div>
+    <div class="split-section">
+      <div class="split-left">
+        <h2 class="section-headline">The AI doesn't replace the conversation. It creates the conditions for a better one.</h2>
+        <p class="section-body">DeepSync compares what both people explicitly shared, identifies a meaningful point of alignment or difference, and uses AI to generate a grounded Conversation Spark. The system then hands control back to the user, who decides whether to send it.</p>
+
+        <div class="system-flow">
+          <div class="flow-node data">Structured Responses</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node data">Shared Signal</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node ai">AI Interpretation</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node ai">AI-Generated Conversation Spark</div>
+          <span class="flow-arrow">→</span>
+          <div class="flow-node human">Human Conversation</div>
+        </div>
+
+        <div class="ai-principles">
+          <div class="ai-principle">
+            <h4>Grounded</h4>
+            <p>Uses only what both people explicitly shared.</p>
+          </div>
+          <div class="ai-principle">
+            <h4>Non-diagnostic</h4>
+            <p>Surfaces patterns without assigning personality or compatibility verdicts.</p>
+          </div>
+          <div class="ai-principle">
+            <h4>Human-led</h4>
+            <p>AI proposes; the user decides what to send.</p>
+          </div>
+          <div class="ai-principle">
+            <h4>No auto-send</h4>
+            <p>Generated prompts never enter the conversation without user action.</p>
+          </div>
+        </div>
+
+        <div style="margin-top:40px;">
+          <div class="section-label" style="margin-bottom:12px; color:var(--dim);">Prototype shows</div>
+          <p style="font-size:14px; color:var(--dim); line-height:1.6;">Alignment Insight → AI-generated Conversation Spark → Ask Lucas → prompt enters composer → user sends</p>
+        </div>
+      </div>
+
+      <div class="split-right">
+        <div class="prototype-video">
+          <video autoplay muted loop playsinline>
+            <source src="bumble-demo-catalyst.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 07 · PAYOFF ═══════════════════ -->
+<section class="section" style="background: var(--surface);">
+  <div class="container">
+    <div class="section-label">07 · Designing the Payoff</div>
+    <h2 class="section-headline">The shared experience creates value first. Deeper interpretation comes later.</h2>
+
+    <div class="payoff-flow">
+      <div class="payoff-step free">Match</div>
+      <span class="payoff-arrow">→</span>
+      <div class="payoff-step free">Participate</div>
+      <span class="payoff-arrow">→</span>
+      <div class="payoff-step free">Compare</div>
+      <span class="payoff-arrow">→</span>
+      <div class="payoff-step free">Converse</div>
+      <span class="payoff-arrow">→</span>
+      <div class="payoff-step gate">Curiosity Compounds</div>
+      <span class="payoff-arrow">→</span>
+      <div class="payoff-step premium">Premium Synthesis</div>
+    </div>
+
+    <div class="thesis" style="font-size:clamp(18px,2.2vw,26px);">"Free helps people talk. Premium helps them understand the pattern."</div>
+
+    <p class="section-body">Rather than gating the shared sprint upfront, DeepSync uses the free experience to drive repeated participation and post-match conversation. By Day 3, both people have contributed enough signal for the deeper interpretation to feel specific—and curiosity about the relationship has had time to build.</p>
+    <p class="section-body" style="margin-top:16px;">Premium captures that higher-intent moment by unlocking the full DeepSync Report.</p>
+
+    <div class="payoff-phones">
+      <div class="payoff-phone">
+        <img src="deepsync-unlock.png" alt="Unlock DeepSync Report">
+      </div>
+      <div class="payoff-phone">
+        <img src="deepsync-report.png" alt="DeepSync Report">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ 08 · VALIDATION ═══════════════════ -->
+<section class="section">
+  <div class="container">
+    <div class="section-label">08 · Validate Before Expanding</div>
+    <h2 class="section-headline" style="font-size:clamp(28px,3.5vw,42px);">Does the ritual create better conversation—or just another task?</h2>
+    <p class="section-body">Before expanding DeepSync into a broader compatibility system, I'd first validate whether the shared ritual actually changes post-match behavior—not just whether people complete it.</p>
+
+    <div class="metrics-strip">
+      <div class="metric">
+        <div class="metric-label">Adoption</div>
+        <div class="metric-name">Sprint opt-in rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Follow-through</div>
+        <div class="metric-name">Day 1 → Day 3 completion</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Reciprocity</div>
+        <div class="metric-name">Partner completion rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Conversation</div>
+        <div class="metric-name">Spark send / reply rate</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Re-engagement</div>
+        <div class="metric-name">Conversation reactivation</div>
+      </div>
+      <div class="metric">
+        <div class="metric-label">Business Value</div>
+        <div class="metric-name">DeepSync Report conversion</div>
+      </div>
+    </div>
+
+    <!-- FUTURE EXTENSION -->
+    <div style="margin-top:120px; padding-top:80px; border-top:1px solid var(--faint);">
+      <h2 class="section-headline" style="font-size:clamp(24px,3vw,36px); color:var(--gray);">If the signal proves useful, compatibility could shape discovery too.</h2>
+      <p class="section-body" style="margin-top:24px;">If DeepSync proves valuable within existing matches, the same explicitly shared compatibility signals could later support a more intentional discovery experience. With user opt-in, people could choose to surface profiles aligned around the values and dynamics they care about most.</p>
+
+      <div style="display:flex; justify-content:center; gap:40px; margin-top:56px;">
+        <div style="width:280px; flex-shrink:0; border-radius:32px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+          <img src="deepsync-profiles.png" alt="DeepSync Profiles" style="width:100%; display:block; opacity:0.75;">
+        </div>
+        <div style="width:280px; flex-shrink:0; border-radius:32px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.3);">
+          <img src="deepsync-aligned.png" alt="Aligned Profiles" style="width:100%; display:block; opacity:0.75;">
+        </div>
+      </div>
+      <p style="text-align:center; margin-top:20px; font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:var(--dim);">Future concept · Not part of the core MVP</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════ FOOTER ═══════════════════ -->
+<footer style="padding:80px 0; text-align:center; border-top:1px solid var(--faint);">
+  <div class="container">
+    <p style="font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--dim); letter-spacing:2px; text-transform:uppercase;">Orey Xia — Bumble DeepSync Case Study</p>
+  </div>
+</footer>
+
+<!-- BUMBLE FLOWER CURSOR -->
+<div id="flower-cursor" class="hidden">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <!-- 6 petals -->
+    <ellipse cx="50" cy="20" rx="14" ry="22" fill="#EFD06A" transform="rotate(0 50 50)"/>
+    <ellipse cx="50" cy="20" rx="14" ry="22" fill="#EFD06A" transform="rotate(60 50 50)"/>
+    <ellipse cx="50" cy="20" rx="14" ry="22" fill="#EFD06A" transform="rotate(120 50 50)"/>
+    <ellipse cx="50" cy="20" rx="14" ry="22" fill="#EFD06A" transform="rotate(180 50 50)"/>
+    <ellipse cx="50" cy="20" rx="14" ry="22" fill="#EFD06A" transform="rotate(240 50 50)"/>
+    <ellipse cx="50" cy="20" rx="14" ry="22" fill="#EFD06A" transform="rotate(300 50 50)"/>
+    <!-- hexagon center -->
+    <polygon points="50,36 62,43 62,57 50,64 38,57 38,43" fill="#0A0A0A"/>
+    <!-- 3 bars in hexagon (bumble mark) in yellow -->
+    <rect x="43" y="44" width="14" height="3" rx="1.5" fill="#EFD06A"/>
+    <rect x="43" y="49" width="14" height="3" rx="1.5" fill="#EFD06A"/>
+    <rect x="43" y="54" width="14" height="3" rx="1.5" fill="#EFD06A"/>
+  </svg>
+</div>
+
+<script>
+(function() {
+  const cursor = document.getElementById('flower-cursor');
+  let mouseX = -100, mouseY = -100;
+  let curX = -100, curY = -100;
+  let scrollRotation = 0;
+  let lastScroll = 0;
+  let visible = false;
+
+  // Track mouse
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!visible) {
+      visible = true;
+      cursor.classList.remove('hidden');
+    }
+  });
+
+  document.addEventListener('mouseleave', () => {
+    visible = false;
+    cursor.classList.add('hidden');
+  });
+
+  document.addEventListener('mouseenter', () => {
+    visible = true;
+    cursor.classList.remove('hidden');
+  });
+
+  // Scroll rotation
+  window.addEventListener('scroll', () => {
+    const delta = window.scrollY - lastScroll;
+    scrollRotation += delta * 0.5;
+    lastScroll = window.scrollY;
+  });
+
+  // Smooth follow + rotation
+  function animate() {
+    curX += (mouseX - curX) * 0.15;
+    curY += (mouseY - curY) * 0.15;
+    cursor.style.transform = `translate(${curX - 20}px, ${curY - 20}px) rotate(${scrollRotation}deg)`;
+    requestAnimationFrame(animate);
+  }
+  animate();
+})();
+</script>
+
+</body>
+</html>
