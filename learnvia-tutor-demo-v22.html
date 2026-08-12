@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnVIA Tutor Demo v22</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+body{margin:0;padding:0;background:#1c1c1e;font-family:system-ui,-apple-system,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+.lv-wrap{background:#1c1c1e;border-radius:0;overflow:hidden;font-family:system-ui,-apple-system,sans-serif;color:#e0dee4;max-width:100%;margin:0 auto}
+.lv-top{display:flex;align-items:center;justify-content:space-between;padding:8px 16px;background:#181819;border-bottom:1px solid #2a2a2e}
+.lv-top-btn{font-size:12px;color:#9895a0;background:#252528;border:1px solid #333338;border-radius:6px;padding:4px 10px;cursor:default}
+.lv-main{display:flex;min-height:500px}
+.lv-left{flex:1;padding:20px 24px;border-right:1px solid #2a2a2e;overflow-y:auto;position:relative;background:#1c1c1e}
+.lv-right{width:290px;display:flex;flex-direction:column;background:#1e1e22}
+.lv-qheader{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.lv-qheader h3{font-size:14px;font-weight:500;color:#c5c3ca}
+.lv-qheader span{font-size:12px;color:#777}
+.lv-math-main{font-family:'Times New Roman',serif;font-size:17px;margin:12px 0 20px;color:#d5d3da}
+.lv-qtabs{display:flex;gap:4px;justify-content:center;margin:16px 0}
+.lv-qtab{width:32px;height:28px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#777;background:#252528;border:1px solid #333338;border-radius:6px;cursor:default}
+.lv-qtab.active{border-color:#5c52a0;color:#a89ec5}
+.lv-step-label{font-size:13px;color:#aaa;margin:16px 0 8px}
+.lv-expr-box{background:#252528;border:1px solid #333338;border-radius:8px;padding:12px 16px;margin:8px 0;font-family:'Times New Roman',serif;font-size:15px;color:#c5c3ca;transition:border-color 0.4s}
+.lv-expr-box.highlighted{border-color:#5c52a0}
+.lv-expr-blank{display:inline-block;width:80px;border-bottom:2px solid #444;margin-left:8px}
+.lv-choices{margin-top:12px}
+.lv-choice{background:#232326;border:1px solid #333338;border-radius:8px;padding:10px 14px;margin:8px 0;font-family:'Times New Roman',serif;font-size:14px;color:#aaa;cursor:default;transition:opacity 0.4s}
+.lv-choice.faded{opacity:0.3}
+.lv-rh{display:flex;border-bottom:1px solid #2a2a2e}
+.lv-rh-tab{flex:1;text-align:center;padding:10px;font-size:13px;color:#777;cursor:default;border-bottom:2px solid transparent}
+.lv-rh-tab.active{color:#a99df0;border-bottom-color:#7C6DFF}
+.lv-rh-sub{display:flex;border-bottom:1px solid #2a2a2e}
+.lv-rh-sub span{padding:8px 12px;font-size:12px;color:#666;cursor:default}
+.lv-rh-sub span.active{color:#aaa}
+.lv-chat{flex:1;padding:12px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.lv-msg{border-radius:10px;padding:10px 12px;font-size:12.5px;line-height:1.5;max-width:92%;transition:opacity 0.4s,transform 0.4s}
+.lv-msg.tutor{background:#2a2838;border:1px solid #3a384a;color:#d8d5e0;align-self:flex-start}
+.lv-msg.student{background:#2c2b30;border:1px solid #3a3940;color:#b5b2bb;align-self:flex-end}
+.lv-msg-enter{opacity:0;transform:translateY(6px)}
+.lv-msg-visible{opacity:1;transform:translateY(0)}
+.lv-msg-fade{opacity:0.25}
+.lv-thumbs{display:flex;justify-content:flex-end;gap:8px;margin-top:4px}
+.lv-thumb{font-size:12px;color:#555;cursor:pointer;transition:color 0.2s}
+.lv-thumb:hover{color:#9895a0}
+.lv-badge{display:inline-flex;align-items:center;gap:5px;margin-bottom:2px}
+.lv-badge-icon{width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0}
+@keyframes badgePop{0%{transform:scale(0) rotate(-30deg);opacity:0}50%{transform:scale(1.2) rotate(5deg);opacity:1}70%{transform:scale(0.9) rotate(-2deg)}100%{transform:scale(1) rotate(0deg)}}
+.lv-badge-icon svg{animation:badgePop 0.5s cubic-bezier(.34,1.56,.64,1)}
+.lv-badge-text{font-size:11.5px;color:#c5c3ca}
+.lv-chips{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px}
+.lv-chip{background:#28272e;border:1px solid #3a3940;border-radius:12px;padding:5px 10px;font-size:11px;color:#9895a0;cursor:pointer;text-align:center;transition:all 0.25s;display:flex;align-items:center;justify-content:center;line-height:1.3}
+.lv-chip:hover{background:#302e3a;border-color:#504a68;color:#beb8cc}
+.lv-chip.done{background:#7C6DFF;border-color:#7C6DFF;color:#fff;cursor:default}
+.lv-chip.done:hover{background:#7C6DFF;border-color:#7C6DFF;color:#fff}
+@keyframes chipDone{0%{transform:scale(1)}50%{transform:scale(1.04)}100%{transform:scale(1)}}
+.lv-chip.just-done{animation:chipDone 0.35s ease}
+.lv-back{font-size:11px;color:#9895a0;cursor:pointer;margin-bottom:6px;display:flex;align-items:center;gap:3px;transition:color 0.2s}
+.lv-back:hover{color:#beb8cc}
+.lv-branch{margin-top:6px}
+.lv-branch-q{font-size:12px;color:#c5c3ca;line-height:1.5;margin-bottom:6px}
+.lv-branch-math{font-family:'Times New Roman',serif;font-size:12px;color:#b8b0cc;background:#28263a;border-radius:4px;padding:5px 8px;margin:5px 0;display:block;line-height:1.5}
+.lv-resp-opts{display:flex;flex-wrap:wrap;gap:5px;margin-top:5px}
+.lv-resp-opt{background:#28272e;border:1px solid #3a3940;border-radius:12px;padding:5px 10px;font-size:11px;color:#9895a0;cursor:pointer;transition:all 0.25s}
+.lv-resp-opt:hover{background:#302e3a;border-color:#504a68;color:#beb8cc}
+.lv-resp-opt.selected{background:#7C6DFF;border-color:#7C6DFF;color:#fff;pointer-events:none}
+.lv-resp-opt.unselected{opacity:0.25;pointer-events:none}
+.lv-resp-opt.wrong{background:#3a2525;border-color:#604040;color:#c08888;pointer-events:none}
+.lv-result{margin-top:6px;font-size:11.5px;color:#c5c3ca;line-height:1.5}
+.lv-sub-chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.lv-sub-chip{background:#28272e;border:1px solid #3a3940;border-radius:10px;padding:4px 8px;font-size:11px;color:#9895a0;cursor:pointer;transition:all 0.25s;font-family:'Times New Roman',serif}
+.lv-sub-chip:hover{background:#302e3a;border-color:#504a68;color:#beb8cc}
+.lv-sub-chip.selected{background:#7C6DFF;border-color:#7C6DFF;color:#fff;pointer-events:none}
+.lv-sub-chip.unselected{opacity:0.25;pointer-events:none}
+.lv-learn-trace{font-size:10px;color:#666;margin-top:4px;padding:4px 8px;background:#222225;border:1px solid #2a2a2e;border-radius:4px;line-height:1.5}
+.lv-learn-trace-title{color:#8a7eaa;font-size:10px;margin-bottom:2px}
+.lv-expr-opts{display:flex;flex-direction:column;gap:4px;margin-top:5px}
+.lv-expr-opt{background:#28272e;border:1px solid #3a3940;border-radius:8px;padding:5px 10px;font-size:11.5px;font-family:'Times New Roman',serif;color:#9895a0;cursor:pointer;transition:all 0.25s}
+.lv-expr-opt:hover{background:#302e3a;border-color:#504a68;color:#beb8cc}
+.lv-expr-opt.selected{background:#7C6DFF;border-color:#7C6DFF;color:#fff;pointer-events:none}
+.lv-expr-opt.unselected{opacity:0.25;pointer-events:none}
+.lv-op-row{display:flex;align-items:center;gap:6px;margin-top:5px;font-family:'Times New Roman',serif;font-size:13px;color:#aaa}
+.lv-op-btn{background:#28272e;border:1px solid #3a3940;border-radius:6px;width:30px;height:26px;display:flex;align-items:center;justify-content:center;font-size:14px;color:#9895a0;cursor:pointer;transition:all 0.25s;font-family:'Times New Roman',serif}
+.lv-op-btn:hover{background:#302e3a;border-color:#504a68;color:#beb8cc}
+.lv-op-btn.selected{background:#7C6DFF;border-color:#7C6DFF;color:#fff;pointer-events:none}
+.lv-op-btn.unselected{opacity:0.25;pointer-events:none}
+.lv-il{display:flex;gap:5px;margin-top:7px}
+.lv-il input{flex:1;background:#222225;border:1px solid #3a3940;border-radius:6px;padding:5px 8px;font-size:11px;color:#ddd;outline:none;transition:border-color 0.2s;font-family:system-ui,-apple-system,sans-serif}
+.lv-il input:focus{border-color:#7C6DFF}
+.lv-il button{background:#403888;border:none;border-radius:6px;padding:4px 14px;font-size:11px;color:#fff;cursor:pointer;font-weight:500;transition:background 0.15s}
+.lv-il button:hover{background:#4a40a0}
+.lv-il button:active,.lv-il button.pressed{background:#7C6DFF}
+.lv-il button:disabled{background:#333338;color:#5a5860;cursor:default}
+.lv-il-fb{font-size:11px;margin-top:4px;line-height:1.4;padding:3px 0}
+.lv-il-fb.err{color:#b08888}
+.lv-il-fb.ok{color:#a99df0}
+.lv-il-fb.partial{color:#a99df0}
+.lv-il-prev{font-size:10px;color:#555;margin-top:2px;font-style:italic}
+.lv-confirm-check{color:#a99df0;font-size:11px;margin-bottom:3px}
+.lv-support-opts{display:flex;flex-direction:column;gap:4px;margin-top:7px}
+.lv-support-opt{display:flex;align-items:center;gap:6px;background:#28272e;border:1px solid #3a3940;border-radius:8px;padding:6px 10px;font-size:11px;color:#9895a0;cursor:pointer;transition:all 0.25s}
+.lv-support-opt:hover{background:#302e3a;border-color:#504a68}
+.lv-support-opt.selected{background:#7C6DFF;border-color:#7C6DFF;color:#fff}
+.lv-support-dot{width:5px;height:5px;border-radius:50%}
+.lv-support-opt:nth-child(1) .lv-support-dot{background:#5c52a0}
+.lv-support-opt:nth-child(2) .lv-support-dot{background:#7C6DFF}
+.lv-support-opt:nth-child(3) .lv-support-dot{background:#a99df0}
+.lv-support-opt.selected .lv-support-dot{background:rgba(255,255,255,0.6)}
+.lv-worked-step{font-size:11px;color:#b8b0cc;background:#28263a;border:1px solid #3a384a;border-radius:6px;padding:7px 10px;margin-top:5px;opacity:0;max-height:0;overflow:hidden;transition:opacity 0.35s,max-height 0.4s;font-family:'Times New Roman',serif}
+.lv-worked-step.show{opacity:1;max-height:80px}
+.lv-continue{font-size:11px;color:#7C6DFF;margin-top:7px;cursor:pointer;text-align:center;padding:5px;border:1px solid #3a3940;border-radius:6px;transition:border-color 0.2s}
+.lv-continue:hover{border-color:#504a68}
+.lv-input-bar{padding:8px 12px;border-top:1px solid #2a2a2e}
+.lv-input-bar-inner{background:#1c1c1e;border:1px solid #3a3940;border-radius:10px;padding:10px 12px;display:flex;align-items:center;justify-content:space-between}
+.lv-input-bar-inner span{font-size:11px;color:#777}
+.lv-send-circle{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,0.12);display:flex;align-items:center;justify-content:center;color:#7C6DFF;font-size:14px;cursor:default;flex-shrink:0}
+.lv-controls{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 16px;background:#1e1e22;border-top:1px solid #333338}
+.lv-ctrl-btn{background:#2a2a2e;border:1px solid #444448;border-radius:6px;padding:5px 12px;font-size:12px;color:#bbb;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;gap:4px}
+.lv-ctrl-btn:hover{border-color:#7C6DFF;color:#d5d0e0;background:#333338}
+.lv-ctrl-btn.active{background:#7C6DFF;border-color:#7C6DFF;color:#fff}
+.lv-ctrl-btn:disabled{opacity:0.35;cursor:default}
+.lv-state-indicator{display:flex;gap:6px;align-items:center}
+.lv-state-dot{width:7px;height:7px;border-radius:50%;background:#444448;transition:all 0.25s}
+.lv-state-dot.active{background:#7C6DFF}
+.lv-state-dot.done{background:#5c52a0}
+.lv-state-label{font-size:11px;color:#aaa;min-width:120px;text-align:center}
+.lv-transition-label{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#1c1c1e;border:1px solid #504a68;border-radius:8px;padding:6px 16px;font-size:12px;color:#a99df0;opacity:0;pointer-events:none;transition:opacity 0.35s;z-index:10;white-space:nowrap}
+.lv-transition-label.show{opacity:1}
+.lv-next-link{font-size:12px;color:#7C6DFF;text-align:center;margin-top:12px;cursor:default}
+.lv-all-done{margin-top:8px;font-size:11.5px;color:#c5c3ca;line-height:1.5}
+.lv-all-done-prompt{margin-top:6px;font-size:11px;color:#7C6DFF;cursor:pointer;text-align:center;padding:5px;border:1px solid #3a3940;border-radius:6px;transition:border-color 0.2s}
+.lv-all-done-prompt:hover{border-color:#504a68}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="lv-wrap">
+  <div class="lv-top"><span style="font-size:13px;color:#999">LearnVIA</span><span class="lv-top-btn"><i class="ti ti-message" aria-hidden="true" style="font-size:13px;margin-right:4px"></i>Feedback</span></div>
+  <div class="lv-main">
+    <div class="lv-left">
+      <div class="lv-qheader"><h3>Question set 5.3.1.3</h3><span id="cc">0 / 3 completed</span></div>
+      <div class="lv-math-main">We will find ∫ (3 sin(x) − 2 cos(x)) dx.</div>
+      <div class="lv-qtabs"><div class="lv-qtab active">Q1</div><div class="lv-qtab">Q2</div><div class="lv-qtab">Q3</div></div>
+      <div class="lv-step-label">Using the difference rule, we can separate the integral into:</div>
+      <div class="lv-expr-box" id="exprMain">∫ (3 sin(x) − 2 cos(x)) dx = <span class="lv-expr-blank"></span></div>
+      <div class="lv-choices"><div class="lv-choice" id="cA">∫ 3 sin(x) dx + ∫ 2 cos(x) dx</div><div class="lv-choice" id="cB">3 · 2 ∫ sin(x) dx − ∫ cos(x) dx</div><div class="lv-choice" id="cC">∫ 3 sin(x) dx − ∫ 2 cos(x) dx</div></div>
+      <div class="lv-next-link">Next <i class="ti ti-arrow-right" aria-hidden="true" style="font-size:13px"></i></div>
+      <div class="lv-transition-label" id="transLabel"></div>
+    </div>
+    <div class="lv-right">
+      <div class="lv-rh"><div class="lv-rh-tab">Discussions</div><div class="lv-rh-tab active">Tutor <i class="ti ti-sparkles" aria-hidden="true" style="font-size:12px"></i></div></div>
+      <div class="lv-rh-sub"><span>All</span><span class="active">Lesson 5.3.1</span></div>
+      <div class="lv-chat" id="chatArea"></div>
+      <div class="lv-input-bar"><div class="lv-input-bar-inner"><span>Ask the AI Tutor:</span><div class="lv-send-circle"><i class="ti ti-arrow-up" aria-hidden="true"></i></div></div></div>
+    </div>
+  </div>
+  <div class="lv-controls" id="lvControls">
+    <button class="lv-ctrl-btn" id="prevBtn" disabled><i class="ti ti-chevron-left" aria-hidden="true" style="font-size:14px"></i> Prev</button>
+    <div class="lv-state-indicator"><div class="lv-state-dot active" data-idx="0"></div><div class="lv-state-dot" data-idx="1"></div><div class="lv-state-dot" data-idx="2"></div><div class="lv-state-dot" data-idx="3"></div></div>
+    <div class="lv-state-label" id="stateLabel">First confusion</div>
+    <button class="lv-ctrl-btn" id="nextBtn">Next <i class="ti ti-chevron-right" aria-hidden="true" style="font-size:14px"></i></button>
+    <button class="lv-ctrl-btn" id="replayBtn"><i class="ti ti-refresh" aria-hidden="true" style="font-size:14px"></i> Replay</button>
+    <button class="lv-ctrl-btn" id="autoBtn"><i class="ti ti-player-play" aria-hidden="true" style="font-size:14px"></i> Auto</button>
+  </div>
+</div>
+
+<script>
+(function(){
+var chat=document.getElementById('chatArea'),stateLabel=document.getElementById('stateLabel'),
+    prevBtn=document.getElementById('prevBtn'),nextBtn=document.getElementById('nextBtn'),
+    replayBtn=document.getElementById('replayBtn'),autoBtn=document.getElementById('autoBtn'),
+    dots=document.querySelectorAll('.lv-state-dot'),exprMain=document.getElementById('exprMain'),
+    cA=document.getElementById('cA'),cB=document.getElementById('cB'),cC=document.getElementById('cC'),
+    transLabel=document.getElementById('transLabel'),cc=document.getElementById('cc');
+var SN=['First confusion','Repeated confusion','Deep struggle','Re-engagement'];
+var cur=-1,autoTimer=null,TT=[];
+function ct(){TT.forEach(clearTimeout);TT=[];}
+function later(fn,ms){var t=setTimeout(fn,ms);TT.push(t);return t;}
+function clr(){ct();chat.innerHTML='';}
+function rl(){exprMain.innerHTML='∫ (3 sin(x) − 2 cos(x)) dx = <span class="lv-expr-blank"></span>';exprMain.classList.remove('highlighted');[cA,cB,cC].forEach(function(c){c.classList.remove('faded')});cc.textContent='0 / 3 completed';}
+function addM(t,h,c){var d=document.createElement('div');d.className='lv-msg '+t+' lv-msg-enter'+(c?' '+c:'');d.innerHTML=h;chat.appendChild(d);requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.remove('lv-msg-enter');d.classList.add('lv-msg-visible')})});chat.scrollTop=chat.scrollHeight;return d;}
+function remM(el){if(el&&el.parentNode)el.parentNode.removeChild(el);}
+function hl(o){if(o)exprMain.classList.add('highlighted');else exprMain.classList.remove('highlighted')}
+function fd(o){[cA,cB,cC].forEach(function(c){if(o)c.classList.add('faded');else c.classList.remove('faded')})}
+function shTr(t){transLabel.textContent=t;transLabel.classList.add('show');later(function(){transLabel.classList.remove('show')},1800)}
+function scr(){chat.scrollTop=chat.scrollHeight;}
+function norm(s){return s.trim().toLowerCase().replace(/\s+/g,'').replace(/[()]/g,'').replace(/−/g,'-');}
+function badge(){return '<span class="lv-badge-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 1l2.9 3.3 4.3-.6.6 4.3L23 12l-3.2 3-0.6 4.3-4.3.6L12 23l-2.9-3.1-4.3.6-.6-4.3L1 12l3.2-3 .6-4.3 4.3-.6L12 1z" fill="#7C6DFF"/><path d="M8.5 12.5l2 2 5-5" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>';}
+function badgeResult(txt){return "<div class='lv-badge'>"+badge()+"<span class='lv-badge-text'>"+txt+"</span></div>";}
+function wireCheckPress(btn){btn.addEventListener('mousedown',function(){this.classList.add('pressed')});btn.addEventListener('mouseup',function(){var b=this;later(function(){b.classList.remove('pressed')},150)});}
+
+var done={goal:false,rule:false,step:false,term:false};
+function allDone(){return done.goal&&done.rule&&done.step&&done.term;}
+var gridEl=null,markTimer=null;
+
+function renderState0(){ct();clr();rl();done={goal:false,rule:false,step:false,term:false};gridEl=null;markTimer=null;
+  addM('student',"I don't get it.");
+  later(function(){showGrid();},500);
+}
+function showGrid(){
+  remM(gridEl);if(markTimer){clearTimeout(markTimer);markTimer=null;}
+  var ad=allDone();
+  gridEl=addM('tutor',"<div id='s0r'><div id='s0p'>Let's pinpoint what feels unclear.</div>"+
+    "<div class='lv-chips' id='s0c'>"+
+      "<div class='lv-chip"+(done.goal?' done':'')+"' data-v='goal'>Problem goal</div>"+
+      "<div class='lv-chip"+(done.rule?' done':'')+"' data-v='rule'>Which rule</div>"+
+      "<div class='lv-chip"+(done.step?' done':'')+"' data-v='step'>First step</div>"+
+      "<div class='lv-chip"+(done.term?' done':'')+"' data-v='term'>Specific term</div>"+
+    "</div>"+(ad?"<div class='lv-all-done'>"+badgeResult("You've explored all four areas.")+"<div class='lv-all-done-prompt'>Ready to try the problem <i class='ti ti-arrow-right' aria-hidden='true' style='font-size:12px'></i></div></div>":"")+"</div>");
+  later(function(){
+    document.querySelectorAll('#s0c .lv-chip').forEach(function(c){
+      if(!c.classList.contains('done')){c.addEventListener('click',function(){enterB(this.dataset.v);});}
+    });
+    var ap=document.querySelector('.lv-all-done-prompt');
+    if(ap){ap.addEventListener('click',function(){goTo(1);});}
+  },50);
+}
+function enterB(v){
+  var r=document.getElementById('s0r');if(!r)return;
+  var bk="<div class='lv-back' id='s0bk'><i class='ti ti-arrow-left' aria-hidden='true' style='font-size:11px'></i> Back to options</div>";
+  if(v==='goal')r.innerHTML=bk+"<div class='lv-branch'><div class='lv-branch-q'>What does the ∫ symbol ask you to find?</div><div class='lv-resp-opts' id='gO'><div class='lv-resp-opt' data-a='anti'>An antiderivative</div><div class='lv-resp-opt' data-a='deriv'>A derivative</div></div><div id='gR'></div></div>";
+  else if(v==='rule')r.innerHTML=bk+"<div class='lv-branch'><div class='lv-branch-q'>Which rule lets us integrate the two terms separately?</div><div class='lv-resp-opts' id='rO'><div class='lv-resp-opt' data-a='sum'>Sum / difference rule</div><div class='lv-resp-opt' data-a='prod'>Product rule</div><div class='lv-resp-opt' data-a='chain'>Chain rule</div></div><div id='rR'></div></div>";
+  else if(v==='step')r.innerHTML=bk+"<div class='lv-branch'><div class='lv-branch-q'>What would you do first?</div><div class='lv-resp-opts' id='sO'><div class='lv-resp-opt' data-a='sep'>Separate the terms</div><div class='lv-resp-opt' data-a='int'>Integrate immediately</div><div class='lv-resp-opt' data-a='diff'>Differentiate first</div></div><div id='sR'></div></div>";
+  else r.innerHTML=bk+"<div class='lv-branch'><div class='lv-branch-q'>Which part is unfamiliar?</div><div class='lv-sub-chips' id='tC'><div class='lv-sub-chip' data-t='int'>∫</div><div class='lv-sub-chip' data-t='sin'>sin(x)</div><div class='lv-sub-chip' data-t='cos'>cos(x)</div><div class='lv-sub-chip' data-t='neg'>− sign</div></div><div id='tB'></div></div>";
+  scr();
+  document.getElementById('s0bk').addEventListener('click',function(){showGrid();});
+  later(function(){wireB(v);},50);
+}
+function markD(v){
+  done[v]=true;if(markTimer){clearTimeout(markTimer);markTimer=null;}
+  markTimer=later(function(){markTimer=null;showGrid();later(function(){var ch=document.querySelector('#s0c .lv-chip[data-v="'+v+'"]');if(ch){ch.classList.add('just-done');later(function(){ch.classList.remove('just-done')},400);}},80);},4000);
+}
+function wireB(v){
+  if(v==='goal'){document.querySelectorAll('#gO .lv-resp-opt').forEach(function(o){o.addEventListener('click',function(){var a=this.dataset.a;document.querySelectorAll('#gO .lv-resp-opt').forEach(function(x){if(x.dataset.a===a)x.classList.add('selected');else x.classList.add('unselected')});later(function(){var r=document.getElementById('gR');if(a==='anti'){r.innerHTML=badgeResult("A function whose derivative gives the expression inside.")+"<div class='lv-thumbs'><span class='lv-thumb'><i class='ti ti-thumb-up' aria-hidden='true'></i></span><span class='lv-thumb'><i class='ti ti-thumb-down' aria-hidden='true'></i></span></div>";scr();markD('goal');}else{r.innerHTML="<div class='lv-result'>Not quite — the ∫ asks for a function whose derivative gives the expression inside.</div>";scr();}},250);})});}
+  else if(v==='rule'){document.querySelectorAll('#rO .lv-resp-opt').forEach(function(o){o.addEventListener('click',function(){var a=this.dataset.a;document.querySelectorAll('#rO .lv-resp-opt').forEach(function(x){if(x.dataset.a===a)x.classList.add('selected');else x.classList.add('unselected')});later(function(){var r=document.getElementById('rR');if(a==='sum'){r.innerHTML=badgeResult("Apply it by splitting into two integrals.")+"<span class='lv-branch-math' style='margin-top:6px'>∫ (3 sin x − 2 cos x) dx =</span><div class='lv-expr-opts' id='rA'><div class='lv-expr-opt' data-a='c'>∫ 3 sin x dx − ∫ 2 cos x dx</div><div class='lv-expr-opt' data-a='w'>∫ (3 sin x)(−2 cos x) dx</div></div><div id='rA2'></div>";scr();later(function(){document.querySelectorAll('#rA .lv-expr-opt').forEach(function(e){e.addEventListener('click',function(){var ev=this.dataset.a;document.querySelectorAll('#rA .lv-expr-opt').forEach(function(x){if(x.dataset.a===ev)x.classList.add('selected');else x.classList.add('unselected')});if(ev==='c')later(function(){document.getElementById('rA2').innerHTML=badgeResult("");scr();markD('rule');},250);})})},50);}else if(a==='prod'){r.innerHTML="<div class='lv-result'>Product rule is for derivatives of products — here we have a sum.</div>";scr();}else{r.innerHTML="<div class='lv-result'>Chain rule is for compositions — here terms are added/subtracted.</div>";scr();}},250);})});}
+  else if(v==='step'){document.querySelectorAll('#sO .lv-resp-opt').forEach(function(o){o.addEventListener('click',function(){var a=this.dataset.a;document.querySelectorAll('#sO .lv-resp-opt').forEach(function(x){if(x.dataset.a===a)x.classList.add('selected');else x.classList.add('unselected')});later(function(){var r=document.getElementById('sR');if(a==='sep'){r.innerHTML=badgeResult("Yes, that's correct.")+"<div style='font-size:11px;color:#7C6DFF;margin-top:3px'>Write the two integrals separately.</div><div class='lv-op-row' id='opR' style='margin-top:6px'><span>∫ 3 sin(x) dx</span><div class='lv-op-btn' data-a='+'>+</div><div class='lv-op-btn' data-a='−'>−</div><span>∫ 2 cos(x) dx</span></div><div id='opR2'></div>";scr();later(function(){document.querySelectorAll('#opR .lv-op-btn').forEach(function(b){b.addEventListener('click',function(){var bv=this.dataset.a;document.querySelectorAll('#opR .lv-op-btn').forEach(function(x){if(x.dataset.a===bv)x.classList.add('selected');else x.classList.add('unselected')});if(bv==='−')later(function(){document.getElementById('opR2').innerHTML=badgeResult("");scr();markD('step');},250);})})},50);}else if(a==='int'){r.innerHTML="<div class='lv-result'>With two terms, separate them first.</div>";scr();}else{r.innerHTML="<div class='lv-result'>We want to integrate, not differentiate.</div>";scr();}},250);})});}
+  else{document.querySelectorAll('#tC .lv-sub-chip').forEach(function(c){c.addEventListener('click',function(){var t=this.dataset.t;document.querySelectorAll('#tC .lv-sub-chip').forEach(function(x){if(x.dataset.t===t)x.classList.add('selected');else x.classList.add('unselected')});var tb=document.getElementById('tB');if(t==='sin'){tSin(tb);}else if(t==='int'){tb.innerHTML="<div style='margin-top:5px'>"+badgeResult("The ∫ symbol means \"find the antiderivative.\"")+"</div>";scr();markD('term');}else if(t==='cos'){tb.innerHTML="<div style='margin-top:5px'>"+badgeResult("cos(x): antiderivative is sin(x).")+"</div>";scr();markD('term');}else{tb.innerHTML="<div style='margin-top:5px'>"+badgeResult("The − sign means subtraction between the two integrals.")+"</div>";scr();markD('term');}})});}
+}
+function tSin(tb){var had=false;tb.innerHTML="<div class='lv-branch-q' style='margin-top:5px'>What function differentiates to sin(x)?</div><div class='lv-resp-opts' id='sinO'><div class='lv-resp-opt' data-a='neg'>−cos(x)</div><div class='lv-resp-opt' data-a='cos'>cos(x)</div><div class='lv-resp-opt' data-a='nsin'>−sin(x)</div></div><div id='sinR'></div>";scr();
+  later(function(){document.querySelectorAll('#sinO .lv-resp-opt').forEach(function(o){o.addEventListener('click',function(){var a=this.dataset.a;if(a==='neg'){document.querySelectorAll('#sinO .lv-resp-opt').forEach(function(x){if(x.dataset.a==='neg')x.classList.add('selected');else x.classList.add('unselected')});later(function(){document.getElementById('sinR').innerHTML=badgeResult("∫ sin(x) dx = −cos(x) + C")+(had?"<div class='lv-learn-trace'><div class='lv-learn-trace-title'>Concept to revisit</div>Signs in trigonometric antiderivatives<br><span style='color:#555'>Needs another independent attempt</span></div>":"");scr();markD('term');},250);}else{had=true;this.classList.add('wrong');later(function(){var sr=document.getElementById('sinR');if(!document.getElementById('sinRem')){var d=document.createElement('div');d.id='sinRem';d.innerHTML="<div class='lv-result' style='margin-top:4px'>Sign relationship may be mixed up.</div><span class='lv-branch-math'>(d/dx) cos(x) = −sin(x)</span><div class='lv-branch-q' style='margin-top:4px'>What differentiates to +sin(x)?</div><div class='lv-resp-opts' id='sinO2'><div class='lv-resp-opt' data-a='neg'>−cos(x)</div></div>";sr.appendChild(d);scr();later(function(){document.querySelectorAll('#sinO2 .lv-resp-opt').forEach(function(o2){o2.addEventListener('click',function(){this.classList.add('selected');later(function(){sr.innerHTML=badgeResult("∫ sin(x) dx = −cos(x) + C")+"<div class='lv-learn-trace'><div class='lv-learn-trace-title'>Concept to revisit</div>Signs in trigonometric antiderivatives<br><span style='color:#555'>Needs another independent attempt</span></div>";scr();markD('term');},250);})})},50);}},250);}})})},50);
+}
+
+function renderState1(){ct();clr();rl();gridEl=null;markTimer=null;
+  addM('tutor',"Let's pinpoint what feels unclear.<div class='lv-chips'><div class='lv-chip done'>Problem goal</div></div>",'lv-msg-fade');
+  later(function(){addM('student',"I still don't get it.");later(function(){shTr("Trying a different approach");hl(true);fd(true);later(function(){addM('tutor',"Let's isolate one part.<br><span style='color:#9895a0;font-size:11px;display:block;margin-top:3px'>Focus on the highlighted expression:</span><span class='lv-branch-math' style='font-size:13px;margin-top:5px'>∫ 3 sin(x) dx = ?</span><div class='lv-il'><input type='text' id='s1f' placeholder='Your answer...' autocomplete='off' /><button type='button' id='s1c'>Check</button></div><div id='s1fb'></div><div id='s1h'></div>");later(function(){wireS1();},80);},500);},500);},350);
+}
+function wireS1(){var f=document.getElementById('s1f'),b=document.getElementById('s1c'),fb=document.getElementById('s1fb'),hi=document.getElementById('s1h');if(!f||!b)return;wireCheckPress(b);var st='idle';function ss(s){st=s;b.disabled=(s!=='idle'&&s!=='incorrect');}
+  b.addEventListener('click',function(e){e.preventDefault();if(st!=='idle'&&st!=='incorrect')return;var r=f.value.trim();if(!r)return;ss('checking');var p=document.createElement('div');p.className='lv-il-prev';p.textContent='Tried: '+r;hi.appendChild(p);
+    later(function(){var n=norm(r);if(/^-3cos\s*x?(\+c)?$/.test(n)){ss('correct');f.disabled=true;fb.innerHTML="<div class='lv-il-fb ok'>"+badge()+" ∫ 3 sin(x) dx = −3 cos(x) + C</div>";scr();later(function(){goTo(3);},1000);}
+    else if(n.indexOf('-')<0&&/^(\+)?3?cos\s*x?(\+c)?$/.test(n)){ss('misconceptionRepair');fb.innerHTML="<div class='lv-il-fb err'>Almost — right function, but check the sign.</div><span class='lv-branch-math' style='margin-top:3px'>(d/dx) cos(x) = −sin(x)</span><div style='font-size:11px;color:#c5c3ca;margin-top:3px'>What differentiates to +sin(x)?</div><div class='lv-resp-opts' id='s1r'><div class='lv-resp-opt' data-a='neg'>−cos(x)</div><div class='lv-resp-opt' data-a='cos'>cos(x)</div></div><div id='s1rr'></div>";scr();later(function(){document.querySelectorAll('#s1r .lv-resp-opt').forEach(function(o){o.addEventListener('click',function(){var a=this.dataset.a;document.querySelectorAll('#s1r .lv-resp-opt').forEach(function(x){if(x.dataset.a===a)x.classList.add('selected');else x.classList.add('unselected')});if(a==='neg')later(function(){document.getElementById('s1rr').innerHTML="<div class='lv-il-fb ok'>"+badge()+" ∫ 3 sin(x) dx = −3 cos(x) + C</div>";scr();later(function(){goTo(3);},1000);},250);else{this.classList.remove('selected');this.classList.add('wrong');later(function(){document.getElementById('s1rr').innerHTML="<div class='lv-il-fb err'>(d/dx) cos(x) = −sin(x). Try the other.</div>";scr();document.querySelectorAll('#s1r .lv-resp-opt').forEach(function(x){if(x.dataset.a==='neg'){x.classList.remove('unselected');x.style.pointerEvents='auto';}});},250);}})})},50);}
+    else{ss('incorrect');fb.innerHTML="<div class='lv-il-fb err'>Not quite. Differentiate your answer to check.</div>";f.value='';f.focus();scr();}},350);
+  });f.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();b.click();}});
+}
+
+function renderState2(){ct();clr();rl();gridEl=null;markTimer=null;hl(true);fd(true);
+  addM('tutor',"Let's isolate one part...<div class='lv-il'><input type='text' placeholder='Your answer...' disabled /></div>",'lv-msg-fade');
+  later(function(){addM('student',"I don't know — I've been struggling with this.");later(function(){addM('tutor',"You've been working through a difficult step. Let's make it smaller.<div class='lv-support-opts' id='supO'><div class='lv-support-opt' data-lv='hint'><span class='lv-support-dot'></span>Small hint</div><div class='lv-support-opt' data-lv='step'><span class='lv-support-dot'></span>Show one step</div><div class='lv-support-opt' data-lv='explain'><span class='lv-support-dot'></span>Explain this part</div></div><div class='lv-worked-step' id='ws'></div>");later(function(){document.querySelectorAll('#supO .lv-support-opt').forEach(function(o){o.addEventListener('click',function(){document.querySelectorAll('#supO .lv-support-opt').forEach(function(x){x.classList.remove('selected')});this.classList.add('selected');var ws=document.getElementById('ws');var m={hint:"Hint: ∫ sin(x) dx = −cos(x). What happens with the 3?",step:"∫ 3 sin(x) dx = 3·(−cos(x)) = −3 cos(x)",explain:"Constant multiple rule: ∫ k·f(x) dx = k·∫ f(x) dx. k=3, antideriv of sin = −cos."};ws.textContent=m[this.dataset.lv];ws.classList.add('show')})})},80);},500);},350);
+}
+
+function renderState3(){ct();clr();rl();gridEl=null;markTimer=null;
+  addM('tutor',"You've been working through a difficult step.<div class='lv-support-opts'><div class='lv-support-opt selected'><span class='lv-support-dot'></span>Show one step</div></div><div class='lv-worked-step show'>∫ 3 sin(x) dx = −3 cos(x)</div>",'lv-msg-fade');
+  later(function(){addM('student',"−3 cos(x)");later(function(){hl(true);exprMain.innerHTML='∫ (3 sin(x) − 2 cos(x)) dx = −3 cos(x) − <span class="lv-expr-blank"></span>';
+    var tm=addM('tutor',"<div class='lv-confirm-check'>"+badge()+" That step is correct.</div>Now try the next part.<span class='lv-branch-math' style='font-size:13px;margin-top:5px'>∫ 2 cos(x) dx = ?</span><div class='lv-il'><input type='text' id='s3f' placeholder='Your answer...' autocomplete='off' /><button type='button' id='s3c'>Check</button></div><div id='s3fb'></div>");
+    later(function(){wireS3(tm);},80);},500);},350);
+}
+function wireS3(tm){var f=document.getElementById('s3f'),b=document.getElementById('s3c'),fb=document.getElementById('s3fb');if(!f||!b)return;wireCheckPress(b);var st='idle';function ss(s){st=s;b.disabled=(s!=='idle'&&s!=='incorrect');}
+  b.addEventListener('click',function(e){e.preventDefault();if(st!=='idle'&&st!=='incorrect')return;var r=f.value.trim();if(!r)return;ss('checking');later(function(){var n=norm(r);
+    if(/^2sinx?(\+c)?$/.test(n)){ss('correct');f.disabled=true;fb.innerHTML="<div class='lv-il-fb ok'>"+badge()+" ∫ 2 cos(x) dx = 2 sin(x) + C</div>";scr();later(function(){showRec(tm);},700);}
+    else if(/^sinx?(\+c)?$/.test(n)&&n.indexOf('2')<0){ss('partial');f.disabled=true;fb.innerHTML="<div class='lv-il-fb partial'>Right antiderivative. What happens to the multiplier 2?</div><div class='lv-resp-opts' id='s3co'><div class='lv-resp-opt' data-a='keep'>Keep the 2</div><div class='lv-resp-opt' data-a='div'>Divide by 2</div><div class='lv-resp-opt' data-a='rm'>Remove it</div></div><div id='s3cr'></div>";scr();later(function(){document.querySelectorAll('#s3co .lv-resp-opt').forEach(function(o){o.addEventListener('click',function(){var a=this.dataset.a;document.querySelectorAll('#s3co .lv-resp-opt').forEach(function(x){if(x.dataset.a===a)x.classList.add('selected');else x.classList.add('unselected')});later(function(){if(a==='keep'){document.getElementById('s3cr').innerHTML="<div class='lv-il-fb ok'>"+badge()+" ∫ 2 cos(x) dx = 2 sin(x) + C</div>";scr();later(function(){showRec(tm);},700);}else if(a==='div'){document.getElementById('s3cr').innerHTML="<div class='lv-il-fb err'>The constant stays as-is when integrating.</div>";scr();}else{document.getElementById('s3cr').innerHTML="<div class='lv-il-fb err'>The 2 is part of the integrand — it stays.</div>";scr();}},250);})})},50);}
+    else{ss('incorrect');fb.innerHTML="<div class='lv-il-fb err'>Not quite. Differentiate to check.</div>";f.value='';f.focus();scr();}},350);
+  });f.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();b.click();}});
+}
+function showRec(pm){pm.classList.add('lv-msg-fade');later(function(){addM('tutor',"Now combine both terms with the original sign.<div class='lv-op-row' id='s3r' style='margin-top:6px'><span>−3 cos(x)</span><div class='lv-op-btn' data-a='+'>+</div><div class='lv-op-btn' data-a='−'>−</div><span>2 sin(x) + C</span></div><div id='s3rr'></div>");scr();later(function(){document.querySelectorAll('#s3r .lv-op-btn').forEach(function(btn){btn.addEventListener('click',function(){var a=this.dataset.a;document.querySelectorAll('#s3r .lv-op-btn').forEach(function(x){if(x.dataset.a===a)x.classList.add('selected');else x.classList.add('unselected')});later(function(){if(a==='−'){document.getElementById('s3rr').innerHTML="<div style='margin-top:5px'>"+badgeResult("")+"<span class='lv-branch-math' style='margin-top:3px'>∫ (3 sin(x) − 2 cos(x)) dx = −3 cos(x) − 2 sin(x) + C</span></div><div style='font-size:11px;color:#777;margin-top:5px'>Each term handled separately, recombined with the original sign.</div><div class='lv-continue'>Continue to next question <i class='ti ti-arrow-right' aria-hidden='true' style='font-size:12px'></i></div>";exprMain.innerHTML='∫ (3 sin(x) − 2 cos(x)) dx = −3 cos(x) − 2 sin(x) + C';exprMain.classList.remove('highlighted');cc.textContent='1 / 3 completed';scr();}else{document.getElementById('s3rr').innerHTML="<div class='lv-il-fb err' style='margin-top:5px'>Original has 3 sin(x) <em>minus</em> 2 cos(x). Subtraction carries through.</div>";scr();document.querySelectorAll('#s3r .lv-op-btn').forEach(function(x){if(x.dataset.a==='−'){x.classList.remove('unselected');x.style.pointerEvents='auto';}});}},250);})})},50);},350);}
+
+var R=[renderState0,renderState1,renderState2,renderState3];
+function goTo(i){if(i<0||i>3)return;cur=i;R[i]();dots.forEach(function(d,j){d.classList.remove('active','done');if(j<i)d.classList.add('done');if(j===i)d.classList.add('active')});stateLabel.textContent=SN[i];prevBtn.disabled=i===0;nextBtn.disabled=i===3;}
+prevBtn.addEventListener('click',function(){if(!prevBtn.disabled){stopA();goTo(cur-1)}});
+nextBtn.addEventListener('click',function(){if(!nextBtn.disabled){stopA();goTo(cur+1)}});
+replayBtn.addEventListener('click',function(){stopA();goTo(0)});
+function stopA(){if(autoTimer){clearInterval(autoTimer);autoTimer=null}autoBtn.classList.remove('active');autoBtn.innerHTML='<i class="ti ti-player-play" aria-hidden="true" style="font-size:14px"></i> Auto'}
+autoBtn.addEventListener('click',function(){if(autoTimer){stopA();return}autoBtn.classList.add('active');autoBtn.innerHTML='<i class="ti ti-player-pause" aria-hidden="true" style="font-size:14px"></i> Stop';autoTimer=setInterval(function(){if(cur>=3){stopA();return}goTo(cur+1)},4000)});
+
+/* ═══════════════════════════════════════════════════
+   SCRIPTED AUTO-PLAY — triggered by ?autoplay=1
+   Simulates all interactions: typing, clicking chips,
+   selecting answers, cycling through all 4 states.
+   ═══════════════════════════════════════════════════ */
+var isAutoplay = /[?&]autoplay=1/.test(location.search);
+
+if (isAutoplay) {
+  // Hide manual controls in autoplay mode
+  document.getElementById('lvControls').style.display = 'none';
+
+  // Autoplay uses raw setTimeout so ct() won't kill our chain
+  var AP = [];
+  function apLater(fn, ms) { var t = setTimeout(fn, ms); AP.push(t); return t; }
+  function apClearAll() { AP.forEach(clearTimeout); AP = []; }
+
+  // Simulate typing character by character
+  function apType(sel, text, cb) {
+    var el = document.querySelector(sel);
+    if (!el) { if (cb) cb(); return; }
+    el.focus();
+    var i = 0;
+    function next() {
+      if (i < text.length) {
+        el.value += text[i]; i++;
+        apLater(next, 90);
+      } else if (cb) {
+        apLater(cb, 150);
+      }
+    }
+    next();
+  }
+
+  // Simulate a click on a selector
+  function apClick(sel) {
+    var el = document.querySelector(sel);
+    if (el) el.click();
+  }
+
+  function runAutoplayLoop() {
+    apClearAll();
+
+    // ─── STATE 0: First confusion ───
+    // Grid appears ~550ms after goTo(0), listeners wired ~600ms
+    goTo(0);
+
+    // Click "Which rule" chip
+    apLater(function() {
+      apClick('#s0c .lv-chip[data-v="rule"]');
+
+      // Click "Sum / difference rule" — listeners wired ~50ms after enterB
+      apLater(function() {
+        apClick('#rO .lv-resp-opt[data-a="sum"]');
+
+        // Click correct expression — appears ~300ms after sum click
+        apLater(function() {
+          apClick('#rA .lv-expr-opt[data-a="c"]');
+
+          // Badge appears. Wait, then transition to State 1.
+          // (markD schedules showGrid after 4s, but goTo(1) will ct() it)
+          apLater(function() {
+            goTo(1);
+
+            // ─── STATE 1: Repeated confusion ───
+            // Input #s1f ready ~1430ms after goTo(1)
+            apLater(function() {
+              // Type wrong answer: "3cosx" (missing negative → triggers misconception repair)
+              apType('#s1f', '3cosx', function() {
+                // Click Check
+                apLater(function() {
+                  apClick('#s1c');
+
+                  // Feedback + repair options appear ~400ms after click
+                  // Click "−cos(x)" to repair
+                  apLater(function() {
+                    apClick('#s1r .lv-resp-opt[data-a="neg"]');
+
+                    // Correct! goTo(3) scheduled by wireS1 after 1250ms
+                    // But we want to show State 2 first. Override by going to State 2.
+                    apLater(function() {
+                      goTo(2);
+
+                      // ─── STATE 2: Deep struggle ───
+                      // Support options ready ~930ms after goTo(2)
+                      apLater(function() {
+                        // Click "Show one step"
+                        apClick('#supO .lv-support-opt[data-lv="step"]');
+
+                        // Worked step reveals. Wait, then go to State 3.
+                        apLater(function() {
+                          goTo(3);
+
+                          // ─── STATE 3: Re-engagement ───
+                          // Input #s3f ready ~930ms after goTo(3)
+                          apLater(function() {
+                            // Type correct answer: "2sinx"
+                            apType('#s3f', '2sinx', function() {
+                              // Click Check
+                              apLater(function() {
+                                apClick('#s3c');
+
+                                // Correct! showRec called ~1050ms after check
+                                // Combine step with operator buttons appears ~1400ms after check
+                                apLater(function() {
+                                  // Click "−" operator
+                                  apClick('#s3r .lv-op-btn[data-a="−"]');
+
+                                  // Final answer appears! Wait then loop.
+                                  apLater(function() {
+                                    runAutoplayLoop();
+                                  }, 4000);
+                                }, 2000);
+                              }, 400);
+                            });
+                          }, 1200);
+                        }, 3500);
+                      }, 1200);
+                    }, 1500);
+                  }, 1200);
+                }, 400);
+              });
+            }, 1800);
+          }, 2500);
+        }, 1200);
+      }, 1000);
+    }, 1500);
+  }
+
+  // Start autoplay after a brief initial delay
+  apLater(runAutoplayLoop, 800);
+} else {
+  goTo(0);
+}
+
+})();
+</script>
+
+</body>
+</html>

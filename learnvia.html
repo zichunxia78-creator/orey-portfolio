@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Learnvia AI Tutor — Case Study</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="grain"></div>
+<div class="scroll-flower" id="scrollFlower">
+  <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" fill="#8B93C7">
+    <g transform="translate(50,50)">
+      <path d="M0,-42 C-9,-42 -16,-35 -16,-28 C-16,-19 0,-6 0,-6 C0,-6 16,-19 16,-28 C16,-35 9,-42 0,-42Z"/>
+      <path d="M0,-42 C-9,-42 -16,-35 -16,-28 C-16,-19 0,-6 0,-6 C0,-6 16,-19 16,-28 C16,-35 9,-42 0,-42Z" transform="rotate(72)"/>
+      <path d="M0,-42 C-9,-42 -16,-35 -16,-28 C-16,-19 0,-6 0,-6 C0,-6 16,-19 16,-28 C16,-35 9,-42 0,-42Z" transform="rotate(144)"/>
+      <path d="M0,-42 C-9,-42 -16,-35 -16,-28 C-16,-19 0,-6 0,-6 C0,-6 16,-19 16,-28 C16,-35 9,-42 0,-42Z" transform="rotate(216)"/>
+      <path d="M0,-42 C-9,-42 -16,-35 -16,-28 C-16,-19 0,-6 0,-6 C0,-6 16,-19 16,-28 C16,-35 9,-42 0,-42Z" transform="rotate(288)"/>
+    </g>
+    <circle cx="50" cy="50" r="4.5" fill="none" stroke="#8B93C7" stroke-width="2"/>
+  </svg>
+</div>
+<nav class="nav" id="nav">
+  <a href="#top" class="logo" aria-label="LOCAI — home">L<svg class="dot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50"/></svg>CAI</a>
+  <span class="nav-links">
+    <a href="#problem">Problem</a>
+    <a href="#lens">Lens</a>
+    <a href="#research">Research</a>
+    <a href="#insights">Insights</a>
+    <a href="#response">Response</a>
+    <a href="#design">Design</a>
+  </span>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<span id="top"></span>
+<header class="hero">
+  <svg id="amb" class="hero-amb" width="100%" height="100%" viewBox="0 0 760 380" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path id="hf1" d="M-40,228 C170,196 360,272 760,212" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.12" />
+    <path id="hf2" d="M-40,278 C210,316 450,224 760,288" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.10" />
+    <path id="hf3" d="M-40,322 C190,346 380,296 760,338" fill="none" stroke="var(--accent)" stroke-width="1" opacity="0.08" />
+    <circle class="station" cx="180" cy="246" r="11" fill="none" stroke="var(--accent)" style="transform-origin:180px 246px" />
+    <circle class="station" cx="510" cy="262" r="9" fill="none" stroke="var(--accent)" style="transform-origin:510px 262px;animation-delay:1.6s" />
+    <circle class="station" cx="350" cy="326" r="8" fill="none" stroke="var(--accent)" style="transform-origin:350px 326px;animation-delay:3s" />
+    <circle r="2.6" fill="var(--accent)" opacity="0.5"><animateMotion dur="9s" begin="0s" repeatCount="indefinite"><mpath href="#hf1" /></animateMotion></circle>
+    <circle r="2.2" fill="var(--accent)" opacity="0.4"><animateMotion dur="9s" begin="4.5s" repeatCount="indefinite"><mpath href="#hf1" /></animateMotion></circle>
+    <circle r="2.6" fill="var(--accent)" opacity="0.5"><animateMotion dur="11s" begin="1.5s" repeatCount="indefinite"><mpath href="#hf2" /></animateMotion></circle>
+    <circle r="2.2" fill="var(--accent)" opacity="0.4"><animateMotion dur="11s" begin="7s" repeatCount="indefinite"><mpath href="#hf2" /></animateMotion></circle>
+    <circle r="2.4" fill="var(--accent)" opacity="0.45"><animateMotion dur="13s" begin="3s" repeatCount="indefinite"><mpath href="#hf3" /></animateMotion></circle>
+  </svg>
+  <div class="hero-backdrop" aria-hidden="true">
+    <iframe src="learnvia-tutor-demo-v22.html?autoplay=1" class="hero-backdrop-frame" title="" tabindex="-1"></iframe>
+  </div>
+  <div class="hero-inner rv">
+    <span class="hero-client">Client: Learnvia</span>
+    <h1 class="hero-title">An Adaptive AI Tutor for Productive Struggle</h1>
+    <p class="hero-desc">I analyzed how users signal confusion, disengagement, and intent shifts across conversations — then redesigned the AI response strategy to intervene with the right level of support.</p>
+    <div class="hero-tags">
+      <span class="htag">EdTech Design</span>
+      <span class="htag">Qualitative Coding</span>
+      <span class="htag">Conversational AI Design</span>
+      <span class="htag">Adaptive Design</span>
+    </div>
+  </div>
+  <div class="hero-meta rv">
+    <div class="hm-col"><span class="hm-label">Team</span><p>CMU HCII-METALS:<br>Amanda, Camille, Iris, Orey, Louisa</p></div>
+    <div class="hm-col"><span class="hm-label">Role</span><p>Design Lead</p></div>
+    <div class="hm-col"><span class="hm-label">Timeline</span><p>Jan–Aug 2026 · 8 months</p></div>
+    <div class="hm-col"><span class="hm-label">Data Scale</span><p>57,622 student turns<br>21,891 transitions analyzed</p></div>
+  </div>
+</header>
+
+<main>
+
+<!-- ═══ 01 PROBLEM ═══ -->
+<section id="problem" class="sec">
+  <div class="wrap">
+    <span class="sec-eyebrow rv">01 · Problem</span>
+    <h2 class="sec-heading rv">The tutor couldn't tell productive struggle from disengagement.</h2>
+    <p class="sec-desc rv">Learnvia's AI tutor serves Calculus I students, but treats every learner state the same. One-size-fits-all responses fail when user needs change across a conversation — without detecting whether a student is struggling productively, disengaging, or seeking shortcuts, the tutor can't adapt and sometimes reinforces the wrong behavior.</p>
+
+    <div class="stats rv">
+      <div class="stat"><span class="stat-n">42.7%</span><span class="stat-l">of conversations contained at least one struggle turn</span></div>
+      <div class="stat"><span class="stat-n">42.5%</span><span class="stat-l">ended while the learner was still struggling</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 02 THE LENS ═══ -->
+<section id="lens" class="sec sec-alt">
+  <div class="wrap">
+    <span class="sec-eyebrow rv">02 · The Lens</span>
+    <h2 class="sec-heading rv">Two constructs decide what "good help" means.</h2>
+    <p class="sec-desc rv">Everything we code traces back to two ideas from learning science. They're how we tell help that builds understanding from help that quietly replaces it.</p>
+
+    <div class="cc-cards rv">
+      <div class="cc">
+        <div class="cc-ic cc-ic-ps">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1" stroke-linecap="round"/><circle cx="12" cy="12" r="3.5"/></svg>
+        </div>
+        <h3>Productive struggle</h3>
+        <p class="cc-k">Learner side</p>
+        <p>The cognitive effort a learner spends making sense of a problem that sits just beyond what they can do on their own. It's where schemas get built and retention sticks.</p>
+        <p class="cc-vs">Not the same as <em>destructive</em> struggle — the kind that tips into frustration and shutdown. The tutor's job is to keep effort on the productive side of that line.</p>
+      </div>
+      <div class="cc">
+        <div class="cc-ic cc-ic-ie">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16M4 5v14M4 19h16" stroke-linecap="round"/><path d="M8 13l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3>Instructional effectiveness</h3>
+        <p class="cc-k">Tutor side</p>
+        <p>How much a tutor's move actually advances a learner toward understanding a concept — and being able to apply it independently afterward.</p>
+        <p class="cc-vs">The distinction that matters: <em>cognitive guidance</em> that develops a learner's thinking, versus plain <em>information transfer</em> that hands over an answer.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 03 RESEARCH ═══ -->
+<section id="research" class="sec">
+  <div class="wrap">
+    <span class="sec-eyebrow rv">03 · Research</span>
+    <h2 class="sec-heading rv">Decoding behavioral patterns from real conversations</h2>
+    <p class="sec-desc rv">We narrowed a larger codebook to <strong>5 reliably detectable learner behaviors</strong> — from confusion signals to engagement recovery — then mapped how students transitioned between states at scale.</p>
+
+    <div class="stats rv">
+      <div class="stat"><span class="stat-n" data-count="57622" data-format="comma">0</span><span class="stat-l">Student turns analyzed</span></div>
+      <div class="stat"><span class="stat-n" data-count="21891" data-format="comma">0</span><span class="stat-l">Turn transitions mapped</span></div>
+      <div class="stat"><span class="stat-n" data-count="5">0</span><span class="stat-l">Learner behavior codes</span></div>
+      <div class="stat"><span class="stat-n" data-count="3309" data-format="comma">0</span><span class="stat-l">Confusion signals identified</span></div>
+    </div>
+
+    <!-- Research pipeline (ported from original LOCAI) -->
+    <div class="pipe rv" id="pipe">
+      <div class="track" id="track">
+        <span class="track-cell"><button class="dot on" data-i="0">1</button><span class="seg"></span></span>
+        <span class="track-cell"><button class="dot" data-i="1">2</button><span class="seg"></span></span>
+        <span class="track-cell"><button class="dot" data-i="2">3</button><span class="seg"></span></span>
+        <span class="track-cell"><button class="dot" data-i="3">4</button><span class="seg"></span></span>
+        <span class="track-cell"><button class="dot" data-i="4">5</button><span class="seg"></span></span>
+        <span class="track-cell"><button class="dot" data-i="5">6</button></span>
+      </div>
+      <div class="stage">
+        <div class="scene on">
+          <div class="sc-conv">
+            <div class="bubble bub-tutor pingA">Let's go step by step — what's the derivative of x²?</div>
+            <div class="bubble bub-user pingB">2x? I think… not sure why.</div>
+          </div>
+        </div>
+        <div class="scene">
+          <div class="sc-schema">
+            <div class="bub-ink">2x? I think… not sure why.</div>
+            <div class="tags">
+              <span class="tag tone-spring tagIn" style="animation-delay:0s">Productive struggle</span>
+              <span class="tag tone-input tagIn" style="animation-delay:.25s">Attempted Response with Uncertainty</span>
+              <span class="tag tone-input tagIn" style="animation-delay:.5s">Attempt to Answer Tutor Prompt</span>
+            </div>
+          </div>
+        </div>
+        <div class="scene">
+          <div class="sc-irr">
+            <div class="avatars"><span class="av">R1</span><span class="av">R2</span><span class="av">R3</span></div>
+            <div class="bar-label">inter-rater agreement</div>
+            <div class="bar"><span class="bar-fill"></span></div>
+            <div class="kappa">α ≈ 0.82</div>
+          </div>
+        </div>
+        <div class="scene">
+          <div class="sc-scale">
+            <div class="one">
+              <span class="chip-ic"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M10 4v3M14 4v3M10 17v3M14 17v3M4 10h3M4 14h3M17 10h3M17 14h3" stroke-linecap="round"/></svg></span>
+              <span class="one-l">1 coded</span>
+            </div>
+            <span class="arrow"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h13M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div class="grid">
+              <span class="cell" style="animation-delay:0s"></span><span class="cell" style="animation-delay:.1s"></span><span class="cell" style="animation-delay:.2s"></span><span class="cell" style="animation-delay:.3s"></span>
+              <span class="cell" style="animation-delay:.05s"></span><span class="cell" style="animation-delay:.15s"></span><span class="cell" style="animation-delay:.25s"></span><span class="cell" style="animation-delay:.35s"></span>
+            </div>
+          </div>
+        </div>
+        <div class="scene">
+          <div class="sc-trans">
+            <div class="tr-row">
+              <span class="tr-node">Signals confusion</span>
+              <span class="tr-conn"><i></i></span>
+              <span class="tr-node tr-loop">Signals confusion</span>
+              <span class="tr-tag tag-loop">Continued struggle</span>
+            </div>
+            <div class="tr-row">
+              <span class="tr-node">Signals confusion</span>
+              <span class="tr-conn"><i style="animation-delay:.35s"></i></span>
+              <span class="tr-node tr-fork">Asks for the solution</span>
+              <span class="tr-tag tag-fork">Engagement fork</span>
+            </div>
+            <div class="tr-row">
+              <span class="tr-node">Signals confusion</span>
+              <span class="tr-conn"><i style="animation-delay:.7s"></i></span>
+              <span class="tr-node tr-rec">Engages with tutor</span>
+              <span class="tr-tag tag-rec">Recovery</span>
+            </div>
+          </div>
+        </div>
+        <div class="scene">
+          <div class="sc-recs">
+            <span class="bulb"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.8.8 1 1.3 1 2.5h6c0-1.2.2-1.7 1-2.5A6 6 0 0 0 12 3z" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            <div>
+              <svg width="220" height="40" viewBox="0 0 220 40" aria-hidden="true">
+                <defs><marker id="la" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+                <path class="loop" d="M180,12 C210,26 60,40 26,22" fill="none" stroke="var(--accent-light)" stroke-width="1.6" stroke-linecap="round" stroke-dasharray="5 5" marker-end="url(#la)" />
+              </svg>
+              <span class="loop-l">feeds back to refine the tutor</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="caption"><span class="cap-title" id="capTitle"></span><span class="phase" id="phase"></span></div>
+      <p class="cap-blurb" id="blurb"></p>
+      <div class="controls">
+        <button class="ctrl" id="pp"></button>
+        <button class="ctrl icon" id="prev" aria-label="Previous"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 6l-6 6 6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button class="ctrl icon" id="next" aria-label="Next"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 03 INSIGHTS ═══ -->
+<span id="loop"></span>
+<section id="insights" class="sec sec-alt">
+  <div class="wrap">
+    <span class="sec-eyebrow rv">04 · Insights</span>
+    <h2 class="sec-heading rv">User state is dynamic — the next AI move changes what happens next.</h2>
+    <p class="sec-desc rv">Across 3,309 identified confusion signals, a learner's next move depended on how the tutor responded. One comparison drove the entire redesign.</p>
+
+    <div class="cmp rv">
+      <div class="cmp-card cmp-scaffold">
+        <h3>After scaffolding or prompting</h3>
+        <div class="cmp-pills">
+          <span class="cmp-pill">Prompted reasoning</span>
+          <span class="cmp-pill">Scaffolded next step</span>
+        </div>
+        <div class="cmp-stat">
+          <span class="cmp-n">38%</span>
+          <span class="cmp-l">learner recovery rate</span>
+        </div>
+      </div>
+      <div class="cmp-vs">vs.</div>
+      <div class="cmp-card cmp-direct">
+        <h3>After direct answering</h3>
+        <div class="cmp-pills">
+          <span class="cmp-pill">Gave the solution</span>
+          <span class="cmp-pill">No actionable next step</span>
+        </div>
+        <div class="cmp-stat">
+          <span class="cmp-n">14%</span>
+          <span class="cmp-l">learner recovery rate</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="insights-split rv">
+      <div class="insights-left">
+        <div class="evidence-block">
+          <span class="ev-n">3,309</span>
+          <span class="ev-l">confusion signals identified</span>
+          <h3>Confusion appeared in distinct behavioral forms</h3>
+          <p>The final analysis used five learner behavior codes spanning unproductive and productive states, including repeated input, answer-seeking, signals of misunderstanding, engagement with tutor feedback, and follow-up questions.</p>
+        </div>
+
+        <div class="evidence-block">
+          <span class="ev-n">42.5%</span>
+          <span class="ev-l">ended while the learner was still struggling</span>
+          <h3>Many struggle conversations never recovered</h3>
+          <p>17.6% of struggle conversations contained streaks of 3+ consecutive struggling turns.</p>
+        </div>
+      </div>
+
+      <div class="insights-right">
+        <div class="cl2-diagram" role="img" aria-label="Behavioral model. Learners cycle between signaling confusion, repeating input, and asking for the solution. A tutor response either reinforces the loop or supports recovery.">
+          <svg class="cl2-arrows" viewBox="0 0 520 600" aria-hidden="true">
+            <defs>
+              <marker id="mP" markerWidth="7" markerHeight="7" refX="5.4" refY="3.5" orient="auto"><path d="M0,0 L7,3.5 L0,7 Z" fill="#8B93C7"/></marker>
+            </defs>
+            <path class="cl2-arrow cl2-loop" d="M210,66 C178,90 158,116 151,145" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+            <path class="cl2-arrow cl2-loop" d="M188,176 C233,204 287,204 310,176" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+            <path class="cl2-arrow cl2-loop" d="M369,145 C362,116 342,90 310,66" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+            <path class="cl2-arrow cl2-down" d="M260,200 L260,245" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+            <path class="cl2-arrow cl2-branch" d="M219,288 C194,315 172,339 159,361" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+            <path class="cl2-arrow cl2-branch" d="M301,288 C326,315 348,335 361,352" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+            <path class="cl2-arrow cl2-return g-reinf" d="M82,362 C57,298 63,232 97,190" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+            <path class="cl2-arrow cl2-recarrow g-recov" d="M400,459 L400,500" fill="none" stroke="#8B93C7" stroke-width="1.6" marker-end="url(#mP)"/>
+          </svg>
+          <div class="cl2-node learner cl2-signals">Signals confusion</div>
+          <div class="cl2-node learner cl2-repeats">Repeats input</div>
+          <div class="cl2-node learner cl2-asks">Asks for the solution</div>
+          <p class="cl2-caption">Tutor response becomes the intervention point.</p>
+          <div class="cl2-node tutor cl2-tutor">Tutor response</div>
+          <div class="cl2-node reinf g-reinf cl2-reinf">
+            <span class="cl2-t">Reinforces the loop</span>
+            <span>Direct answering</span>
+            <span>No actionable next step</span>
+          </div>
+          <div class="cl2-node recov g-recov cl2-recov">
+            <span class="cl2-t">Supports recovery</span>
+            <span>Prompt the next step</span>
+            <span>Scaffold the problem</span>
+            <span>Encourage or affirm progress</span>
+          </div>
+          <div class="cl2-node reengage g-recov cl2-reengage">
+            <span class="cl2-t">Learner re-engages</span>
+            <span>Attempts the next step or asks a follow-up question</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 05 THE RESPONSE ═══ -->
+<section id="response" class="sec">
+  <div class="wrap">
+    <span class="sec-eyebrow rv">05 · The Response</span>
+    <h2 class="sec-heading rv">From confusion signals to tutor actions.</h2>
+    <p class="sec-desc rv">We translated recurring learner behavior patterns into six tutor recommendations designed to support persistence, active participation, and recovery from unproductive struggle.</p>
+
+    <div class="rec-stages rv">
+      <div class="rec-stage">
+        <div class="rec-stage-header">
+          <span class="rec-sn">01</span>
+          <h3 class="rec-st">Intervene before the loop forms</h3>
+          <p class="rec-sd">Respond when confusion first appears, before it develops into repetition, prolonged struggle, or answer-seeking.</p>
+        </div>
+        <div class="rec-cards">
+          <article class="rec-card">
+            <span class="rec-num">01</span>
+            <h4>Intervene at the first sign of confusion</h4>
+            <p>Respond to early signals of uncertainty before they develop into repeated input, prolonged confusion, or requests for the complete solution.</p>
+            <span class="rec-trans">Confusion → Timely support</span>
+          </article>
+          <article class="rec-card">
+            <span class="rec-num">02</span>
+            <h4>Prompt learners to take the next step</h4>
+            <p>Direct learners toward one manageable next action that keeps them actively involved in the reasoning process.</p>
+            <span class="rec-trans">Uncertainty → Active attempt</span>
+          </article>
+        </div>
+      </div>
+
+      <div class="rec-stage">
+        <div class="rec-stage-header">
+          <span class="rec-sn">02</span>
+          <h3 class="rec-st">Guide without taking over</h3>
+          <p class="rec-sd">Provide enough structure to move the learner forward without removing their role in the problem-solving process.</p>
+        </div>
+        <div class="rec-cards">
+          <article class="rec-card">
+            <span class="rec-num">03</span>
+            <h4>Reduce direct answering during struggle</h4>
+            <p>Prioritize targeted questions, hints, and scaffolding before revealing a complete solution, particularly when learners are confused or seeking the answer.</p>
+            <span class="rec-trans">Answer-seeking → Participation</span>
+          </article>
+          <article class="rec-card">
+            <span class="rec-num">04</span>
+            <h4>Continue using step-by-step guidance</h4>
+            <p>Break complex problems into smaller, sequenced actions so learners can remain active in the problem-solving process without becoming overwhelmed.</p>
+            <span class="rec-trans">Complex task → Guided progress</span>
+          </article>
+        </div>
+      </div>
+
+      <div class="rec-stage">
+        <div class="rec-stage-header">
+          <span class="rec-sn">03</span>
+          <h3 class="rec-st">Support recovery when struggle persists</h3>
+          <p class="rec-sd">When learners remain stuck, combine instructional guidance with encouragement and recognition of partial progress.</p>
+        </div>
+        <div class="rec-cards">
+          <article class="rec-card">
+            <span class="rec-num">05</span>
+            <h4>Provide encouragement during sustained struggle</h4>
+            <p>Pair instructional guidance with brief encouragement that acknowledges difficulty and supports continued effort.</p>
+            <span class="rec-trans">Sustained struggle → Re-engagement</span>
+          </article>
+          <article class="rec-card">
+            <span class="rec-num">06</span>
+            <h4>Affirm what the learner has right</h4>
+            <p>Identify correct or partially correct thinking before redirecting the learner toward revision, a different representation, or another approach.</p>
+            <span class="rec-trans">Repetition → Revised attempt</span>
+          </article>
+        </div>
+      </div>
+    </div>
+
+    <div class="rec-callout rv">
+      <p class="rec-callout-label">Design implication</p>
+      <p class="rec-callout-main">The tutor should respond to the learner's behavioral state — not only whether the latest answer is correct.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ 06 ADAPTIVE TUTOR SYSTEM ═══ -->
+<section id="design" class="sec sec-alt">
+  <div class="wrap">
+    <span class="sec-eyebrow rv">06 · Adaptive Tutor System</span>
+    <h2 class="sec-heading rv">From behavioral signals to adaptive support</h2>
+    <p class="sec-desc rv">Recurring learner behaviors were translated into detectable signals, then into adaptive tutor responses that support recovery instead of reinforcing confusion.</p>
+
+    <div class="pipe-cols rv">
+      <div class="pipe-col">
+        <div class="pc-header pc-h1">
+          <span class="pc-num">01</span>
+          <h4>Data-Informed Insights</h4>
+          <p class="pc-q">What patterns appeared across conversations?</p>
+        </div>
+        <ul class="pc-list">
+          <li>Repeated answer-seeking</li>
+          <li>Unresolved confusion</li>
+          <li>Shallow engagement</li>
+          <li>Recovery after prompting</li>
+          <li>Disengagement signals</li>
+        </ul>
+      </div>
+      <div class="pipe-arrow"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h13M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="pipe-col">
+        <div class="pc-header pc-h2">
+          <span class="pc-num">02</span>
+          <h4>Behavioral Signals</h4>
+          <p class="pc-q">What could the system detect?</p>
+        </div>
+        <ul class="pc-list">
+          <li>Multiple direct-answer requests</li>
+          <li>Repeated incorrect attempts</li>
+          <li>Low-effort responses</li>
+          <li>Long pauses or rapid guessing</li>
+          <li>Re-engagement after scaffolding</li>
+        </ul>
+      </div>
+      <div class="pipe-arrow"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h13M13 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="pipe-col">
+        <div class="pc-header pc-h3">
+          <span class="pc-num">03</span>
+          <h4>Adaptive Solutions</h4>
+          <p class="pc-q">How should the tutor respond?</p>
+        </div>
+        <ul class="pc-list">
+          <li>Misconception-specific guidance</li>
+          <li>Progressive hint ladders</li>
+          <li>"Show your work" prompts</li>
+          <li>Confidence-aware fallbacks</li>
+          <li>Re-engagement interventions</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="demo-split rv">
+      <div class="demo-text">
+        <span class="demo-rule"></span>
+        <h3 class="demo-heading">The redesigned tutor experience</h3>
+        <p class="demo-caption">The tutor responds to confusion with scaffolded next steps, targeted feedback, and support for recovery.</p>
+      </div>
+      <div class="demo-container">
+        <div class="demo-chrome">
+          <div class="demo-dots"><span></span><span></span><span></span></div>
+          <span class="demo-label">Interactive prototype — Adaptive AI Tutor</span>
+        </div>
+        <iframe id="tutorDemo" src="learnvia-tutor-demo-v22.html?autoplay=1" class="demo-frame" title="Learnvia Tutor Demo"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot" id="contact">
+  <div class="wrap foot-grid">
+    <div><p class="foot-mark"><span class="logo">L<svg class="dot" viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="50" r="50"/></svg>CAI</span></p><p class="foot-sub">CMU METALS Capstone · 2026 · in partnership with Learnvia</p></div>
+    <div class="foot-meta">
+      <div class="foot-affil">
+        <p class="foot-affil-label">Affiliated with</p>
+        <div class="foot-logos">
+          <span class="chip"><img src="images/learnvia-logo.png" alt="Learnvia" /></span>
+          <span class="chip"><img src="images/metals-logo.png" alt="CMU METALS" /></span>
+          <span class="chip"><img src="images/cmu-logo.png" alt="Carnegie Mellon University" /></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
