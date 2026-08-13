@@ -109,6 +109,19 @@ body {
   background: radial-gradient(circle, var(--bumble-dim) 0%, transparent 70%);
   pointer-events: none;
 }
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 5%;
+  transform: translateY(-50%);
+  width: 340px;
+  height: 680px;
+  background: url('deepsync-report.png') center/cover no-repeat;
+  border-radius: 32px;
+  opacity: 0.4;
+  pointer-events: none;
+}
 .hero-content { position: relative; z-index: 1; }
 .hero-overline {
   font-family: 'JetBrains Mono', monospace;
@@ -1297,7 +1310,7 @@ a, button, .tag, .loop-node, .principle-card, .phone-card, .dimension-card, .met
       </div>
 
       <div class="split-right">
-        <div class="prototype-video">
+        <div class="prototype-video" style="max-width:310px;">
           <video autoplay muted loop playsinline>
             <source src="catalyst flow bumble.mp4" type="video/mp4">
           </video>
