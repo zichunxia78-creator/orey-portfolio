@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Playground · Orey Xia</title>
+<meta name="description" content="Side builds and experiments by Orey Xia: games, prototypes, and tools.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000'/><g fill='%23F3EFE8'><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(0 50 50)'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(60 50 50)'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(120 50 50)'/></g><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Mono:wght@400&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#000; --tile:#111112; --tile2:#18181A; --line:#232326;
+  --ink:#F3EFE8; --muted:#8E8C88; --dim:#5E5D5A;
+  --pink:#F5C6D6; --indigo:#3A2A9C; --lav:#B9A6F0; --yellow:#F2D35B; --green:#3FA66B;
+  --sans:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.6 var(--sans);-webkit-font-smoothing:antialiased;margin:0}
+a{color:inherit;text-decoration:none}
+p{margin:0}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.02em;line-height:1.05;text-wrap:balance}
+.wrap{max-width:1320px;margin:0 auto;padding-inline:clamp(16px,2.4vw,28px)}
+
+/* top bar — same as home */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;padding-top:12px}
+.topbar{display:flex;align-items:center;justify-content:space-between;height:58px;padding:0 8px 0 18px;background:rgba(17,17,18,.82);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--line);border-radius:18px}
+.topbar .me{display:inline-flex;align-items:center}
+.topbar .mark{transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.topbar .me:hover .mark{transform:rotate(60deg)}
+.topbar .links{display:flex;gap:4px;font-size:14.5px}
+.topbar .links a{color:var(--muted);padding:9px 14px;border-radius:12px;transition:color .2s,background .2s}
+.topbar .links a:hover{color:var(--ink);background:var(--tile2)}
+.topbar .links a[aria-current="page"]{color:#16121F;background:var(--pink)}
+.topbar .links a[aria-current="page"]:hover{color:#16121F;background:#F9D6E2}
+.topbar a:focus-visible,.card:focus-visible{outline:2px solid var(--lav);outline-offset:2px}
+
+/* intro */
+.intro{position:relative;padding-block:clamp(56px,8vw,112px) clamp(28px,4vw,48px)}
+.intro::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(50% 60% at 70% 45%,rgba(185,166,240,.10),transparent 70%)}
+.kicker{font:500 12px/1 var(--mono);color:var(--muted);letter-spacing:.04em;display:block;margin-bottom:18px}
+.intro h1{font:700 clamp(38px,5.4vw,76px)/1.02 var(--sans);letter-spacing:-.04em}
+.intro h1 .hl{display:inline-block;background:var(--lav);color:#16121F;border-radius:.2em;padding:0 .14em}
+.intro .lede{margin-top:22px;max-width:52ch;font:400 clamp(14px,1.2vw,16px)/1.65 "DM Mono",var(--mono);letter-spacing:-.02em;color:#A9A59E}
+
+/* filter row */
+.row{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:14px}
+.row .count{font:500 12px/1 var(--mono);color:var(--muted)}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.legend span{font:500 11px/1 var(--mono);padding:7px 10px;border-radius:999px;border:1px solid #34343A;color:#CFCBC3}
+
+/* cards */
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.tile{background:var(--tile);border:1px solid var(--line);border-radius:22px;position:relative;overflow:hidden}
+.card{display:flex;flex-direction:column;padding:10px;transition:border-color .2s}
+a.card:hover{border-color:#3A3A40}
+.shot{border-radius:14px;overflow:hidden;aspect-ratio:16/10;background:var(--tile2);position:relative}
+.shot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .5s ease}
+a.card:hover .shot img{transform:scale(1.03)}
+.meta{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:16px 8px 8px}
+.meta .yr{font:500 11px/1 var(--mono);color:var(--dim);display:block;margin-bottom:8px}
+.card h3{font-size:21px;letter-spacing:-.01em}
+.card .sum{color:var(--muted);font-size:14.5px;margin-top:6px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.tags span{font:500 11px/1 var(--mono);padding:6px 9px;border-radius:999px;background:var(--tile2);color:#CFCBC3}
+.go{flex:none;width:38px;height:38px;border-radius:50%;background:var(--indigo);display:grid;place-items:center;transition:transform .25s}
+a.card:hover .go{transform:rotate(-45deg)}
+
+/* in-progress card */
+.card.wip{background:transparent;border-style:dashed;border-color:#2E2E33}
+.wip .shot{background:
+  radial-gradient(circle at 70% 35%,rgba(242,211,91,.14),transparent 55%),
+  radial-gradient(circle at 25% 75%,rgba(185,166,240,.12),transparent 55%),#0E0E10;display:grid;place-items:center}
+.wip .shot svg{width:62%;height:auto;opacity:.9}
+.status{display:inline-flex;align-items:center;gap:8px;font:500 11px/1 var(--mono);color:#CFCBC3;border:1px solid #34343A;border-radius:999px;padding:7px 10px;flex:none}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--yellow);box-shadow:0 0 0 3px rgba(242,211,91,.18)}
+
+/* back to projects */
+.more{margin-block:clamp(56px,7vw,96px) 12px;padding:clamp(24px,3.4vw,44px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+.more h2{font-size:clamp(26px,3.2vw,42px);letter-spacing:-.03em}
+.more p{color:var(--muted);font-size:15px;margin-top:8px}
+.btn{display:inline-flex;align-items:center;gap:16px;height:46px;font:600 15px/1 var(--sans);color:#16121F;background:var(--pink);border-radius:999px;padding:0 5px 0 22px}
+.btn i{width:36px;height:36px;border-radius:50%;background:var(--indigo);display:grid;place-items:center;transition:transform .25s ease}
+.btn:hover i{transform:translateX(3px) rotate(-45deg)}
+.btn:focus-visible{outline:2px solid var(--lav);outline-offset:3px}
+footer{padding-block:18px 28px;color:var(--dim);font:400 12px/1 var(--mono);display:flex;justify-content:space-between}
+
+@media (max-width:1000px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:640px){
+  .grid{grid-template-columns:1fr}
+  .grid .card{max-width:440px}
+  .shot{aspect-ratio:16/9}
+  .topbar{padding:0 4px 0 14px}.topbar .links{gap:0}.topbar .links a{padding:8px 7px;font-size:13px;white-space:nowrap}
+}
+@media (prefers-reduced-motion:reduce){.shot img,.go,.btn i,.topbar .mark{transition:none}}
+
+/* ambient flowing light */
+body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(80px);will-change:transform}
+body::before{width:58vw;height:58vw;left:-8vw;top:-22vw;background:radial-gradient(circle,rgba(245,198,214,.20) 0%,rgba(245,198,214,0) 65%);animation:auraA 36s ease-in-out infinite alternate}
+body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradient(circle,rgba(92,78,200,.30) 0%,rgba(92,78,200,0) 65%);animation:auraB 44s ease-in-out infinite alternate}
+@keyframes auraA{0%{transform:translate(0,0) scale(1)}50%{transform:translate(20vw,8vh) scale(1.12)}100%{transform:translate(38vw,-2vh) scale(.95)}}
+@keyframes auraB{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-24vw,10vh) scale(1.08)}100%{transform:translate(-10vw,4vh) scale(1)}}
+.topbar{background:#111112!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+.btn.ghost{background:#000}
+@media (prefers-reduced-motion:reduce){body::before,body::after{animation:none}}
+/* barglow */
+.topbar{background:radial-gradient(30% 140% at 8% 0%,rgba(245,198,214,.18),transparent 70%),radial-gradient(35% 160% at 92% 100%,rgba(110,92,230,.26),transparent 70%),#121214!important;border-color:#26262B!important}
+.topbar .links a{color:#B4B1AB!important}
+.topbar .links a:hover{color:var(--ink)!important;background:rgba(255,255,255,.06)!important}
+.topbar .links a[aria-current="page"]{color:#FBE3EC!important;background:rgba(245,198,214,.24)!important;box-shadow:none!important}
+.topbar .links a[aria-current="page"]:hover{background:rgba(245,198,214,.22)!important}
+/* btnC: translucent pink buttons -> option A (pink 75%) */
+.btn:not(.ghost){background:rgba(245,198,214,.86)!important;color:#16121F!important;transition:background .2s}
+.btn:not(.ghost):hover{background:rgba(245,198,214,.95)!important}
+.btn.ghost{background:#000!important;border:1px solid rgba(243,239,232,.5)!important}
+.btn.ghost span{background:rgba(245,198,214,.74)!important;color:#16121F!important}
+.btn.ghost:hover span{background:rgba(245,198,214,.86)!important}
+.copy{background:rgba(245,198,214,.86)!important;color:#16121F!important}
+.copy:hover{background:rgba(245,198,214,.95)!important}
+</style>
+</head>
+<body>
+<header class="bar">
+  <div class="wrap">
+    <nav class="topbar" aria-label="Main">
+      <a class="me" href="../index.html" aria-label="Orey Xia, home"><svg class="mark" viewBox="0 0 100 100" width="26" height="26" aria-hidden="true"><g fill="#F3EFE8"><rect x="44" y="6" width="12" height="88" rx="6"/><rect x="44" y="6" width="12" height="88" rx="6" transform="rotate(60 50 50)"/><rect x="44" y="6" width="12" height="88" rx="6" transform="rotate(120 50 50)"/></g><circle cx="50" cy="50" r="7" fill="#000"/></svg></a>
+      <div class="links">
+        <a href="../index.html">Home</a>
+        <a href="../index.html#work">Projects</a>
+        <a href="index.html" aria-current="page">Playground</a>
+        <a href="../about/index.html">About me</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="intro">
+    <span class="kicker">Playground</span>
+    <h1>Prototypes as <span class="hl">questions</span>.</h1>
+    <p class="lede">A place for prototypes, games, and strange little experiments that help me think by making.</p>
+  </section>
+
+  <div class="row">
+    <span class="count">02 entries</span>
+  </div>
+
+  <div class="grid">
+    <a class="tile card" href="carbon-farm/index.html">
+      <div class="shot"><img src="carbon-farm/img/night.webp" alt="Carbon Farm at night: a steel cone reactor surrounded by glowing algae columns." loading="lazy"></div>
+      <div class="meta">
+        <div>
+          <span class="yr">2023 · Interactive installation</span>
+          <h3>Hysteresis Progenitorial · Carbon Farm</h3>
+          <p class="sum">Breathe into the machine, see the grams of CO₂ you gave, and watch algae turn it into biomass.</p>
+          <div class="tags"><span>Installation</span><span>Sensors</span><span>Data viz</span></div>
+        </div>
+        <i class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i>
+      </div>
+    </a>
+    <a class="tile card" href="molecule-mythos/index.html">
+      <div class="shot"><img src="../img/mythos.webp" alt="Molecule Mythos: AR molecule models over a tabletop game scene." loading="lazy"></div>
+      <div class="meta">
+        <div>
+          <span class="yr">2024 · AR game</span>
+          <h3>Molecule Mythos</h3>
+          <p class="sum">A tabletop AR game where chemistry is the way to save worlds in trouble, so the concept carries to the next problem.</p>
+          <div class="tags"><span>Unity</span><span>Vuforia</span><span>Learning design</span></div>
+        </div>
+        <i class="go" aria-hidden="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i>
+      </div>
+    </a>
+
+  </div>
+
+  <div class="tile more">
+    <div>
+      <h2>Looking for the full case studies?</h2>
+      <p>Research, design, and evaluation on real problems.</p>
+    </div>
+    <a class="btn" href="../index.html#work">See projects <i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></a>
+  </div>
+
+  <footer><span>© 2026 Orey Xia</span><span>Built by hand · HTML/CSS/JS</span></footer>
+</main>
+</body>
+</html>

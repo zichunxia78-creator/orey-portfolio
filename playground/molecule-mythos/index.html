@@ -1,0 +1,517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Molecule Mythos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Playfair+Display:ital@0;1&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --side:#F4F4F4; --ink:#171717; --muted:#5F5F5F; --line:#E6E6E6;
+  --red:#E3261C; --blue-soft:#E8F0F9; --blue:#2F5DA8;
+  --card-grey:#EBEBED; --card-blue:#E0ECF8; --stitch:#B9BDC4;
+  --back-bg:#4A5A92; --back-ink:#FFFFFF; --back-muted:#D3D9F0;
+  --display:"Poppins","Helvetica Neue",Arial,sans-serif;
+  --body:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  --caption:"Playfair Display",Georgia,serif;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.7 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+p{margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:500;letter-spacing:-.01em;line-height:1.15;text-wrap:balance;margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font:600 11.5px/1.4 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+
+/* shell: sidebar like the portfolio */
+.shell{display:grid;grid-template-columns:296px minmax(0,1fr);min-height:100%}
+.side{background:var(--side);padding:32px 30px;position:sticky;top:env(safe-area-inset-top,0px);height:100vh;display:flex;flex-direction:column;gap:28px}
+.side .brand{font:400 40px/1 var(--display);text-decoration:none;letter-spacing:.01em}
+.side nav{display:flex;flex-direction:column;gap:2px;font:400 17px/1.5 var(--body)}
+.side nav a{text-decoration:none}
+.side nav a:hover{color:var(--red)}
+.side .rule{width:20px;border-top:1px solid var(--ink)}
+.side .current{font:600 16px/1.35 var(--body);color:var(--red)}
+.side ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.4}
+.side ol a{text-decoration:none;color:var(--muted)}
+.side ol a:hover{color:var(--ink)}
+.side small{margin-top:auto;font-size:10px;color:var(--muted)}
+main{min-width:0;padding-inline:clamp(16px,4vw,56px);padding-block:0 64px}
+.col{max-width:980px;margin:0 auto}
+
+/* hero */
+.hero{position:relative;margin-inline:calc(-1 * clamp(16px,4vw,56px));min-height:clamp(360px,42vw,600px);display:flex;align-items:flex-end;overflow:hidden;background:#8FA0C8}
+.hero-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 40%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(27,31,75,0) 35%,rgba(27,31,75,.55) 100%),linear-gradient(90deg,rgba(27,31,75,.35),rgba(27,31,75,0) 60%)}
+.hero-in{position:relative;z-index:1;padding:clamp(24px,4vw,56px);max-width:900px;color:#fff}
+.hero .eyebrow{color:#fff;opacity:.9}
+.hero h1{font-size:clamp(44px,7vw,96px);font-weight:600;margin-block:10px 14px;color:#fff;text-shadow:0 2px 24px rgba(27,31,75,.35)}
+.hero .lede{font-size:clamp(16px,1.5vw,19px);line-height:1.6;max-width:52ch;color:#fff}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 24px;margin:0;padding-block:28px 36px}
+.meta dt{font:600 11px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.meta dd{margin:0;font-size:14.5px;line-height:1.5}
+
+section{padding-block:clamp(40px,6vw,80px);border-top:1px solid var(--line)}
+.sec-head:has(> :only-child){display:block}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:clamp(16px,3vw,48px);margin-bottom:clamp(24px,3.5vw,40px)}
+.sec-head h2{font-size:clamp(28px,3.2vw,40px);margin-top:8px}
+.sec-head p{color:var(--muted);align-self:end;max-width:60ch}
+
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,4vw,48px)}
+.two h3{font-size:21px;margin:8px 0 10px}
+
+/* learning */
+.path{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink)}
+.path li{padding:18px 20px 4px 0;display:flex;flex-direction:column;gap:6px}
+.path li + li{padding-left:20px;border-left:1px solid var(--line)}
+.path .k{font:600 11px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.path b{font:500 19px/1.25 var(--display)}
+.path li > span:last-child{font-size:14.5px;line-height:1.6;color:var(--muted)}
+.transfer{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:12px;margin-top:clamp(28px,4vw,44px)}
+.transfer > div{border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.transfer p:not(.eyebrow){font-size:14.5px;line-height:1.55}
+.transfer .eyebrow{color:var(--muted)}
+.transfer .far{background:var(--ink);border-color:var(--ink);color:#fff}
+.transfer .far .eyebrow{color:#fff;opacity:.7}
+
+/* deck */
+.hint{display:inline-flex;gap:8px;font:600 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:var(--blue-soft);padding:9px 12px;border-radius:999px;margin-top:14px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(12px,1.6vw,18px);list-style:none;margin:0 auto;padding:0;max-width:880px}
+.card{perspective:2200px;min-width:0}
+.card button{all:unset;display:grid;grid-template-columns:minmax(0,1fr);width:100%;box-sizing:border-box;cursor:pointer;border-radius:22px;-webkit-tap-highlight-color:transparent}
+.card button:focus-visible{outline:3px solid var(--blue);outline-offset:4px}
+.inner{display:grid;grid-template-columns:minmax(0,1fr);width:100%;pointer-events:none;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.2,.75,.25,1)}
+.face{grid-area:1/1;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:22px;position:relative;aspect-ratio:1/1;display:flex;flex-direction:column}
+.face::after{content:"";position:absolute;inset:9px;border:1.5px dashed var(--stitch);border-radius:16px;pointer-events:none}
+.front{background:var(--card-grey);color:var(--ink);box-shadow:0 1px 0 rgba(0,0,0,.04),0 10px 24px -14px rgba(20,24,30,.35);align-items:center;justify-content:center;padding:28px 24px 22px}
+.front.blue{background:var(--card-blue)}
+.front img{width:80%;max-width:100%;height:auto;display:block;margin-top:8px}
+.front .name{font:500 13.5px/1.2 var(--display);margin-top:8px}
+.front .no{position:absolute;top:22px;left:24px;font:500 11px/1 var(--body);letter-spacing:.1em;color:#777}
+.back{background:var(--back-bg);color:var(--back-ink);transform:rotateY(180deg);padding:clamp(20px,2.2vw,28px);gap:10px;box-shadow:0 12px 30px -16px rgba(0,0,0,.5)}
+.back::after{border-color:rgba(255,255,255,.35)}
+.back{background:linear-gradient(160deg,#5A6AA3,#3E4C82)}
+.back .tag{font:600 10.5px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:#DCE2FA;display:flex;justify-content:space-between;gap:8px}
+.back h3{font-size:clamp(18px,1.7vw,21px);color:var(--back-ink)}
+.back p{font-size:12.5px;line-height:1.5}
+.back .why{margin-top:auto;padding-top:12px;border-top:1px solid rgba(255,255,255,.3);font-size:11.5px;color:var(--back-muted)}
+.back .why b{color:var(--back-ink);font-weight:600}
+.card.flipped .inner{transform:rotateY(180deg)}
+@media (hover:hover) and (pointer:fine){.card button:hover .inner{transform:rotateY(180deg)}}
+@media (prefers-reduced-motion:reduce){
+  .inner{transition:none;transform:none!important}
+  .back{transform:none;opacity:0;transition:opacity .2s}
+  .card.flipped .back{opacity:1}
+  @media (hover:hover) and (pointer:fine){.card:hover .back{opacity:1}}
+  .front,.back{backface-visibility:visible}
+}
+
+/* figures */
+.figure{margin:0}
+.figure img{width:100%;height:auto;display:block}
+.figure figcaption{font:italic 400 14px/1.5 var(--caption);color:var(--muted);text-align:center;margin-top:12px}
+
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:32px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.foot a{text-decoration:none;color:var(--ink);font-weight:500}
+.foot a:hover{color:var(--red)}
+
+@media (max-width:1100px){
+  .meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;padding:18px clamp(16px,4vw,56px)}
+  .side .brand{font-size:24px}
+  .side nav{flex-direction:row;gap:18px;font-size:15px}
+  .side .rule,.side ol,.side small,.side .current{display:none}
+  .sec-head,.two{grid-template-columns:1fr}
+  .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .path{grid-template-columns:1fr 1fr}
+  .path li:nth-child(3){padding-left:0;border-left:0}
+  .transfer{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .grid,.path{grid-template-columns:1fr}
+  .path li,.path li + li{padding-left:0;border-left:0;border-bottom:1px solid var(--line);padding-bottom:16px}
+}
+
+.loop{margin:0 0 4px}
+.loop svg{width:100%;height:auto;display:block}
+.travel{margin-top:clamp(40px,5vw,64px)}
+.travel .eyebrow{margin-bottom:10px;color:#E3261C;font-weight:800;font-size:13px;letter-spacing:.14em}
+.board{margin:0}
+.board svg{width:100%;height:auto;display:block}
+@media (min-width:561px){.travel .tlist{display:none}}
+.tlist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--ink)}
+.tlist li{padding:18px 20px 4px 0;display:flex;flex-direction:column;gap:6px}
+.tlist li + li{padding-left:20px;border-left:1px solid var(--line)}
+.tlist .k{font:600 11px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.tlist b{font:500 19px/1.25 var(--display)}
+.tlist li > span:last-child{font-size:14.5px;line-height:1.6;color:var(--muted)}
+.bleed{border-top:0;padding-bottom:clamp(40px,6vw,72px)}
+.closing{margin-top:clamp(36px,5vw,64px);max-width:60ch}
+.closing h3{font-size:21px;margin:8px 0 0;text-wrap:balance}
+.wide{margin-inline:calc(-1 * clamp(16px,4vw,56px))}
+#interaction + #design{padding-top:clamp(24px,3vw,40px)}
+.stack{display:flex;flex-direction:column;gap:4px;margin-inline:calc(-1 * clamp(16px,4vw,56px))}
+.stack img{width:100%;height:auto;display:block}
+@media (max-width:560px){.loop,.board{display:none}.tlist{grid-template-columns:1fr}.tlist li,.tlist li + li{padding-left:0;border-left:0;border-bottom:1px solid var(--line);padding-bottom:16px}}
+
+/* animated learning mechanism */
+#mechLoop .node{transition:stroke .35s ease, stroke-width .35s ease, fill .35s ease}
+#mechLoop .node.on{stroke:#9C6B98;stroke-width:3}
+#mechLoop .node.ok{fill:#F4ECF3}
+#mechLoop .node.miss{stroke:#9C6B98;stroke-dasharray:6 5;stroke-width:2.4}
+#mechLoop .node.dark.on{stroke:#9C6B98}
+#mechLoop .fbtext{transition:opacity .4s ease}
+#mechLoop.run .fbtext{opacity:.35}
+#mechLoop.run .fbtext.on{opacity:1}
+#mechLoop.run #fb{opacity:.35;transition:opacity .4s ease}
+#mechLoop.run #fb.on{opacity:1}
+#mechLoop .rip path{transform-box:fill-box;transform-origin:left center}
+#mechLoop.run .rip{opacity:.35;transition:opacity .4s ease}
+#mechLoop.run .rip.on{opacity:1}
+#mechLoop .rip.on path{animation:mech-rip 1.4s ease-out 2 both}
+#mechLoop .rip.on path:nth-child(2){animation-delay:.18s}
+#mechLoop .rip.on path:nth-child(3){animation-delay:.36s}
+@keyframes mech-rip{0%{transform:translateX(-10px);opacity:0}35%{opacity:1}100%{transform:translateX(12px);opacity:0}}
+</style>
+<link rel="stylesheet" href="ar-biosphere/ar-biosphere.css">
+<link rel="stylesheet" href="../../assets/cs-nav.css"><style>.shell{grid-template-columns:1fr!important}</style>
+</head>
+<body>
+
+<div class="shell">
+  <main>
+   <header class="hero">
+    <img class="hero-bg" src="img/hero-molecules.webp" alt="" width="1774" height="887">
+    <div class="hero-in">
+      <p class="eyebrow">AR / VR Game · Informal STEM Education</p>
+      <h1>Molecule Mythos</h1>
+      <p class="lede">A tabletop AR game that teaches chemistry and environmental science through scenarios, so what students learn in one world carries to the next, and to the real one.</p>
+    </div>
+  </header>
+   <div class="col">
+    <dl class="meta">
+      <div><dt>Time</dt><dd>Oct – Dec 2024</dd></div>
+      <div><dt>Role</dt><dd>100% independent: 3D modeling, game development, learning design</dd></div>
+      <div><dt>Instructor</dt><dd>Han Tu</dd></div>
+      <div><dt>Technology</dt><dd>Unity, C#, Vuforia · iPhone / iPad</dd></div>
+    </dl>
+
+<section class="overview">
+  <div class="two">
+    <div>
+      <p class="eyebrow">The problem</p>
+      <h3>Chemistry learned as formulas stays on the page</h3>
+      <p>Students can balance an equation for methane or recite what oxidation means, then fail to recognize the same chemistry in a news story about melting ice or a methane leak. Knowledge learned without a context rarely travels to a new one.</p>
+    </div>
+    <div>
+      <p class="eyebrow">The approach</p>
+      <h3>Put the concept inside a situation</h3>
+      <p>Molecule Mythos drops players into worlds in trouble: a planet choking on methane, a cave starved of oxygen, a glacier melting under the sun. To save each one they have to choose the right chemistry and act on it with physical cards. The goal is understanding that carries beyond the game, to new problems and to the real world.</p>
+    </div>
+  </div>
+</section><section id="learning">
+  <div>
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Learning design</p>
+        <h2>Scenario first, formula second</h2>
+      </div>
+      <p>The game is built on context- and scenario-based learning. Every concept arrives as the answer to a problem the player is already trying to solve, and reappears in a different world so it has to be recognized, not just recalled. That repetition across contexts is what builds far transfer.</p>
+    </div>
+
+    <figure class="loop" id="mechLoop" aria-label="Learning loop: Context, Decide, Act, Transfer. A wrong pairing loops back to Decide with a hint.">
+      <svg viewBox="0 0 1000 250" role="img">
+        <defs>
+          <marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#171717"/></marker>
+          <marker id="ahr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9C6B98"/></marker>
+        </defs>
+        <g stroke="#171717" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="177" y1="90" x2="320" y2="90" marker-end="url(#ah)"/>
+          <line x1="427" y1="90" x2="570" y2="90" marker-end="url(#ah)"/>
+          <line x1="677" y1="90" x2="820" y2="90" marker-end="url(#ah)"/>
+          <circle class="node" id="n1" cx="125" cy="90" r="46" fill="#FFFFFF"/>
+          <circle class="node" id="n2" cx="375" cy="90" r="46" fill="#FFFFFF"/>
+          <circle class="node" id="n3" cx="625" cy="90" r="46" fill="#FFFFFF"/>
+          <circle class="node dark" id="n4" cx="875" cy="90" r="46" fill="#171717"/>
+          <path d="M103,104 L117,82 L125,93 L135,76 L150,104 Z"/>
+          <path d="M117,74 L120,70 M125,70 L125,65 M130,71 L133,67" stroke="#9C6B98"/>
+          <rect x="356" y="72" width="26" height="34" rx="4" transform="rotate(-10 369 89)" fill="#EBEBED"/>
+          <rect x="370" y="74" width="26" height="34" rx="4" transform="rotate(8 383 91)" fill="#E0ECF8"/>
+          <circle cx="625" cy="90" r="9"/>
+          <line x1="625" y1="81" x2="625" y2="68"/><line x1="617" y1="95" x2="606" y2="103"/><line x1="633" y1="95" x2="644" y2="103"/>
+          <circle cx="625" cy="65" r="4" fill="#171717"/><circle cx="604" cy="105" r="4" fill="#171717"/><circle cx="646" cy="105" r="4" fill="#171717"/>
+          <path d="M858,90 H890 M880,80 L891,90 L880,100" stroke="#FFFFFF" stroke-width="2"/>
+          <g class="rip">
+            <path d="M931,62 A62,62 0 0 1 931,118" stroke="#9C6B98" stroke-width="1.6"/>
+            <path d="M945,50 A78,78 0 0 1 945,130" stroke="#9C6B98" stroke-width="1.4" opacity=".6"/>
+            <path d="M959,40 A94,94 0 0 1 959,140" stroke="#9C6B98" stroke-width="1.2" opacity=".3"/>
+          </g>
+          <path id="fb" d="M612,138 C590,215 410,215 388,138" stroke="#9C6B98" stroke-dasharray="5 6" marker-end="url(#ahr)"/>
+        </g>
+        <text class="fbtext" x="500" y="222" text-anchor="middle" fill="#9C6B98" font-family="Montserrat, Arial, sans-serif" font-size="14" font-weight="500">Wrong pairing → hint, choose again</text>
+        <circle id="tok" cx="125" cy="90" r="7" fill="#9C6B98" opacity="0"/>
+      </svg>
+    </figure>
+
+
+    <ol class="path" aria-label="How a concept moves from scenario to transfer">
+      <li><span class="k">Context</span><b>Meet a world in trouble</b><span>Each level opens with a problem and real numbers: CH<sub>4</sub> at 2–3 ppm, oxygen down to 10–12%, 30% of polar bear habitat lost in 50 years.</span></li>
+      <li><span class="k">Decide</span><b>Choose the chemistry</b><span>Players pick which card fits the situation. A wrong pairing sends them back with a hint, so they reason about the problem instead of guessing.</span></li>
+      <li><span class="k">Act</span><b>Run the reaction</b><span>The right combination triggers the reaction in the scene. Cause and effect are visible: methane breaks down, oxygen rises, the ice holds.</span></li>
+      <li><span class="k">Transfer</span><b>Carry it somewhere new</b><span>Each level closes by linking the reaction to a real issue: greenhouse gas policy, soil and water, arctic wildlife. The concept leaves the game with the player.</span></li>
+    </ol>
+
+    <div class="travel">
+      <p class="eyebrow">The whole loop</p>
+      <figure class="board" aria-label="Learning loop overview: Context, Decide, Act, Transfer; then near transfer, across contexts, far transfer.">
+        <svg viewBox="0 0 1000 520" role="img">
+          <defs>
+            <marker id="wa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#171717"/></marker>
+            <marker id="ra" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#9C6B98"/></marker>
+          </defs>
+          <rect x="1" y="1" width="998" height="518" rx="14" fill="#FFFFFF" stroke="#E6E6E6" stroke-width="1.5"/><text x="40" y="44" font-family="Montserrat, Arial, sans-serif" font-size="20" font-weight="700" fill="#171717">Learning Loop</text><line x1="150" y1="118" x2="318" y2="118" stroke="#171717" stroke-width="1.4" marker-end="url(#wa)"/><line x1="400" y1="118" x2="568" y2="118" stroke="#171717" stroke-width="1.4" marker-end="url(#wa)"/><line x1="650" y1="118" x2="818" y2="118" stroke="#171717" stroke-width="1.4" marker-end="url(#wa)"/><rect x="78" y="86" width="64" height="64" rx="11" fill="#8FA0C8"/><g transform="translate(110,118) scale(1.18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-17,11 L-6,-6 L0,2 L8,-11 L18,11 Z"/></g><rect x="328" y="86" width="64" height="64" rx="11" fill="#8FA0C8"/><g transform="translate(360,118) scale(1.18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><rect x="-15" y="-13" width="16" height="22" rx="3" transform="rotate(-10)" fill="#C9D0DA"/><rect x="-2" y="-11" width="16" height="22" rx="3" transform="rotate(8)" fill="#DCE6F2"/></g><rect x="578" y="86" width="64" height="64" rx="11" fill="#8FA0C8"/><g transform="translate(610,118) scale(1.18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle r="6"/><path d="M0,-6 V-13 M-5,3 L-11,8 M5,3 L11,8"/><circle cy="-15" r="3" fill="#FFFFFF"/><circle cx="-13" cy="10" r="3" fill="#FFFFFF"/><circle cx="13" cy="10" r="3" fill="#FFFFFF"/></g><rect x="828" y="86" width="64" height="64" rx="11" fill="#9C6B98"/><g transform="translate(860,118) scale(1.18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-13,0 H11 M4,-7 L12,0 L4,7"/><path d="M14,-10 A14,14 0 0 1 14,10" opacity=".6"/></g><path d="M604,86 C604,40 366,40 366,84" fill="none" stroke="#9C6B98" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#ra)"/><text x="485" y="46" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="12.5" fill="#9C6B98">wrong pairing → hint, choose again</text><circle cx="76" cy="182" r="10" fill="#171717"/><text x="76" y="186" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">1</text><text x="92" y="187" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="600" fill="#171717">Context</text><text x="66" y="212" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">A world in trouble,</text><text x="66" y="230" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">with real numbers</text><circle cx="326" cy="182" r="10" fill="#171717"/><text x="326" y="186" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">2</text><text x="342" y="187" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="600" fill="#171717">Decide</text><text x="316" y="212" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">Pick the card that</text><text x="316" y="230" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">fits the problem</text><circle cx="576" cy="182" r="10" fill="#171717"/><text x="576" y="186" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">3</text><text x="592" y="187" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="600" fill="#171717">Act</text><text x="566" y="212" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">Run the reaction,</text><text x="566" y="230" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">watch the world change</text><circle cx="826" cy="182" r="10" fill="#9C6B98"/><text x="826" y="186" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">4</text><text x="842" y="187" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="600" fill="#171717">Transfer</text><text x="816" y="212" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">Link it to a</text><text x="816" y="230" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">real climate issue</text><path d="M890,118 H960 V282 H110 V314" fill="none" stroke="#171717" stroke-width="1.4" marker-end="url(#wa)"/><text x="940" y="274" text-anchor="end" font-family="Montserrat, Arial, sans-serif" font-size="12.5" fill="#5F5F5F">how far it travels</text><line x1="150" y1="346" x2="318" y2="346" stroke="#171717" stroke-width="1.4" marker-end="url(#wa)"/><line x1="400" y1="346" x2="568" y2="346" stroke="#171717" stroke-width="1.4" marker-end="url(#wa)"/><rect x="78" y="314" width="64" height="64" rx="11" fill="#8FA0C8"/><g transform="translate(110,346) scale(1.18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle r="10"/><circle r="3" fill="#FFFFFF"/></g><rect x="328" y="314" width="64" height="64" rx="11" fill="#8FA0C8"/><g transform="translate(360,346) scale(1.18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="-10" cy="4" r="6"/><circle cx="10" cy="4" r="6"/><circle cy="-9" r="6"/></g><rect x="578" y="314" width="64" height="64" rx="11" fill="#9C6B98"/><g transform="translate(610,346) scale(1.18)" stroke="#FFFFFF" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle r="13"/><path d="M-13,0 H13 M0,-13 C-7,-6 -7,6 0,13 M0,-13 C7,-6 7,6 0,13"/></g><circle cx="76" cy="410" r="10" fill="#171717"/><text x="76" y="414" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">5</text><text x="92" y="415" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="600" fill="#171717">Near transfer</text><text x="66" y="440" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">Next challenge in</text><text x="66" y="458" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">the same world</text><circle cx="326" cy="410" r="10" fill="#171717"/><text x="326" y="414" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">6</text><text x="342" y="415" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="600" fill="#171717">Across contexts</text><text x="316" y="440" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">Same principles in</text><text x="316" y="458" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">three different worlds</text><circle cx="576" cy="410" r="10" fill="#9C6B98"/><text x="576" y="414" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF">7</text><text x="592" y="415" font-family="Montserrat, Arial, sans-serif" font-size="16" font-weight="600" fill="#171717">Far transfer</text><text x="566" y="440" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">Real problems: methane</text><text x="566" y="458" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#5F5F5F">emissions, glacier melt</text><path d="M636,311 A44,44 0 0 1 636,381" fill="none" stroke="#9C6B98" stroke-width="1.8" opacity="0.7"/><path d="M646,298 A60,60 0 0 1 646,394" fill="none" stroke="#9C6B98" stroke-width="1.8" opacity="0.4"/><path d="M656,285 A76,76 0 0 1 656,407" fill="none" stroke="#9C6B98" stroke-width="1.8" opacity="0.2"/><text x="740" y="351" font-family="Montserrat, Arial, sans-serif" font-size="13" font-weight="600" fill="#9C6B98">→ beyond the game</text>
+        </svg>
+      </figure>
+      <ol class="tlist" aria-label="Levels of transfer">
+        <li><span class="k">Near transfer</span><b>Same world</b><span>Apply a reaction to the next challenge in the level.</span></li>
+        <li><span class="k">Across contexts</span><b>Three worlds</b><span>Recognize the same principles (energy, redox, gas balance) in very different environments.</span></li>
+        <li><span class="k">Far transfer</span><b>The real world</b><span>Explain real climate problems, like methane emissions or glacier melt, with the chemistry they practiced.</span></li>
+      </ol>
+    </div>
+  </div>
+</section><section class="deck" id="deck">
+  <div>
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">The deck</p>
+        <h2>Six cards, one controller</h2>
+      </div>
+      <div>
+        <p>Each card is a Vuforia image target. Scanning one brings a molecule, a machine or a material into the scene. Holding the concept in your hand turns it into something you use, not just something you read.</p>
+        <span class="hint" aria-hidden="true">↻ Hover or tap a card to flip it</span>
+      </div>
+    </div>
+    <ul class="grid">
+      <li class="card"><button type="button" aria-pressed="false" aria-label="Solar Energy card. Show details.">
+        <div class="inner">
+          <div class="face front"><span class="no">01</span><img src="img/card-solar.png" alt="" width="345" height="290"><span class="name">Solar Energy</span></div>
+          <div class="face back">
+            <span class="tag"><span>01 / Power</span><span>Level 3</span></span>
+            <h3>Solar Energy</h3>
+            <p>Places a solar array on the ice. It turns sunlight into power for shelter, heat and food, so life on the glacier keeps running without burning fuel.</p>
+            <p class="why"><b>Why it matters →</b> Clean energy becomes a tool you place, not a slogan.</p>
+          </div>
+        </div></button></li>
+      <li class="card"><button type="button" aria-pressed="false" aria-label="Oxidation Process card. Show details.">
+        <div class="inner">
+          <div class="face front blue"><span class="no">02</span><img src="img/card-oxidation.png" alt="" width="345" height="290"><span class="name">Oxidation Process</span></div>
+          <div class="face back">
+            <span class="tag"><span>02 / Redox</span><span>Level 2</span></span>
+            <h3>Oxidation Process</h3>
+            <p>Summons the oxygen generator. Feed it the right mineral and a redox reaction releases O<sub>2</sub>: 1&nbsp;mol of Fe<sub>2</sub>O<sub>3</sub> yields 1.5&nbsp;mol of oxygen.</p>
+            <p class="why"><b>Why it matters →</b> The air you breathe turns out to be a product of rock and chemistry.</p>
+          </div>
+        </div></button></li>
+      <li class="card"><button type="button" aria-pressed="false" aria-label="Methane card. Show details.">
+        <div class="inner">
+          <div class="face front blue"><span class="no">03</span><img src="img/card-methane.png" alt="" width="345" height="290"><span class="name">Methane</span></div>
+          <div class="face back">
+            <span class="tag"><span>03 / Diagnose</span><span>Level 1</span></span>
+            <h3>Methane</h3>
+            <p>Scan it and the alien sky fills with CH<sub>4</sub>: one carbon bonded to four hydrogens, the gas trapping heat and choking the planet's biosphere.</p>
+            <p class="why"><b>Why it matters →</b> You can't fix an atmosphere until you can see what's in it.</p>
+          </div>
+        </div></button></li>
+      <li class="card"><button type="button" aria-pressed="false" aria-label="Split card. Show details.">
+        <div class="inner">
+          <div class="face front"><span class="no">04</span><img src="img/card-split.png" alt="" width="345" height="290"><span class="name">Split</span></div>
+          <div class="face back">
+            <span class="tag"><span>04 / Break apart</span><span>Level 1</span></span>
+            <h3>Split</h3>
+            <p>Played on methane, it breaks the molecule down into CO<sub>2</sub> and H<sub>2</sub>, and the planet's plants start growing back.</p>
+            <p class="why"><b>Why it matters →</b> A reaction stops being a formula and becomes an action you take.</p>
+          </div>
+        </div></button></li>
+      <li class="card"><button type="button" aria-pressed="false" aria-label="Light Capture card. Show details.">
+        <div class="inner">
+          <div class="face front"><span class="no">05</span><img src="img/card-light.png" alt="" width="345" height="290"><span class="name">Light Capture</span></div>
+          <div class="face back">
+            <span class="tag"><span>05 / Reflect</span><span>Level 3</span></span>
+            <h3>Light Capture</h3>
+            <p>Places a mirror that bounces incoming sunlight back to space. Snow already reflects about 70% of it; more reflective surface means less heat reaches the ice.</p>
+            <p class="why"><b>Why it matters →</b> Albedo, an abstract term, becomes something you can aim.</p>
+          </div>
+        </div></button></li>
+      <li class="card"><button type="button" aria-pressed="false" aria-label="Crystal Structure card. Show details.">
+        <div class="inner">
+          <div class="face front"><span class="no">06</span><img src="img/card-crystal.png" alt="" width="345" height="290"><span class="name">Crystal Structure</span></div>
+          <div class="face back">
+            <span class="tag"><span>06 / Element</span><span>Level 2</span></span>
+            <h3>Crystal Structure</h3>
+            <p>Reveals the minerals in the cave (iron oxide, Fe<sub>2</sub>O<sub>3</sub>, and silicon dioxide, SiO<sub>2</sub>) and the ordered lattices that lock their oxygen in.</p>
+            <p class="why"><b>Why it matters →</b> A material's structure tells you what it can give up.</p>
+          </div>
+        </div></button></li>
+    </ul>
+  </div>
+</section>
+
+
+   </div>
+
+<section id="interaction" class="bleed">
+  <div class="col">
+    <div class="sec-head">
+      <div><p class="eyebrow">Interaction scene</p><h2>The table is the world</h2></div>
+    </div>
+  </div>
+  <div class="wide">
+    <!-- AR Biosphere component: markup pasted verbatim from snippet.html -->
+    <figure class="ar-illo" data-ar-biosphere data-mode="carbon" aria-label="Illustration: a person holds a tablet over a tabletop terrain model; the tablet shows the same biosphere in AR.">
+      <img class="ar-base" src="ar-biosphere/assets/base2.webp" alt="">
+      <div class="ar-layer ar-bloom phys"><img class="m m-carbon" src="ar-biosphere/assets/wash_phys_carbon.webp" alt=""><img class="m m-water" src="ar-biosphere/assets/wash_phys_water.webp" alt=""><img class="m m-light" src="ar-biosphere/assets/wash_phys_light.webp" alt=""></div>
+      <div class="ar-layer ar-bloom tab"><img class="m m-carbon" src="ar-biosphere/assets/wash_tab_carbon.webp" alt=""><img class="m m-water" src="ar-biosphere/assets/wash_tab_water.webp" alt=""><img class="m m-light" src="ar-biosphere/assets/wash_tab_light.webp" alt=""></div>
+      <div class="ar-layer ar-panel"><img class="m m-carbon" src="ar-biosphere/assets/panel_carbon.webp" alt=""><img class="m m-water" src="ar-biosphere/assets/panel_water.webp" alt=""><img class="m m-light" src="ar-biosphere/assets/panel_light.webp" alt=""></div>
+      <svg class="ar-full ar-sym" viewBox="0 0 1920 1017" preserveAspectRatio="none" aria-hidden="true"><g class="sym s-carbon">
+  <g fill="none" stroke="currentColor" stroke-linecap="round">
+    <g stroke-width="2.2" opacity=".8"><line x1="516.7" y1="562.5" x2="517.3" y2="544.5"/><line x1="496.8" y1="578.6" x2="481.9" y2="575.9"/><line x1="505.1" y1="598.1" x2="499.8" y2="605.9"/><line x1="526.4" y1="598.5" x2="535.8" y2="613.3"/></g>
+    <circle cx="516" cy="582" r="18" stroke-width="3" opacity=".8"/>
+    <path d="M522.5,575.5 A8.8 8.8 0 1 0 522.5,588.5" stroke-width="2.6" opacity=".85"/>
+  </g>
+  <g fill="currentColor"><circle class="node" style="animation-delay:0.00s" cx="517.5" cy="539.5" r="5.6"/><circle class="node" style="animation-delay:0.45s" cx="477" cy="575" r="5.6"/><circle class="node" style="animation-delay:0.90s" cx="497" cy="610" r="5.6"/><circle class="node" style="animation-delay:1.35s" cx="538.5" cy="617.5" r="5.6"/></g>
+</g>
+<g class="sym s-water">
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M516,549 C510,559 499,574 499,590 A17,17 0 0 0 533,590 C533,574 522,559 516,549 Z" stroke-width="3" opacity=".85"/>
+    <path class="wave" d="M505.5,593 q5.25,-4 10.5,0 t10.5,0" stroke-width="2.3" opacity=".85"/>
+    <line x1="484" y1="576.5" x2="497" y2="580" stroke-width="2" opacity=".6" stroke-dasharray="2 3.2"/>
+  </g>
+  <g fill="currentColor">
+    <path d="M477,565.5 C474.5,569.5 471.3,573 471.3,577 A5.7,5.7 0 0 0 482.7,577 C482.7,573 479.5,569.5 477,565.5 Z"/>
+    <circle cx="545" cy="562" r="3.2"/><circle cx="539" cy="617" r="4.4"/><circle cx="498" cy="614" r="2.6"/><circle class="drip" cx="516" cy="612" r="2.3"/>
+  </g>
+</g>
+<g class="sym s-light">
+  <g fill="none" stroke="currentColor" stroke-linecap="round">
+    <circle cx="516" cy="582" r="11" stroke-width="3" opacity=".85"/>
+    <g class="srays" stroke-width="2.8" opacity=".8"><line x1="532.4" y1="586.4" x2="540.6" y2="588.6"/><line x1="524.5" y1="596.7" x2="528.8" y2="604.1"/><line x1="511.6" y1="598.4" x2="509.4" y2="606.6"/><line x1="501.3" y1="590.5" x2="493.9" y2="594.8"/><line x1="506.2" y1="568.1" x2="501.4" y2="561.1"/><line x1="519.0" y1="565.3" x2="520.4" y2="556.9"/><line x1="529.9" y1="572.2" x2="536.9" y2="567.4"/></g>
+    <line x1="499.3" y1="579.0" x2="482.4" y2="576.0" stroke-width="2.2" opacity=".75"/>
+  </g>
+  <g fill="currentColor"><circle cx="516" cy="582" r="4.2"/><circle cx="477" cy="575" r="5.6"/></g>
+</g></svg>
+      <img class="ar-hand" src="ar-biosphere/assets/handlines.webp" alt="">
+      <svg class="ar-full" viewBox="0 0 1920 1017" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <mask id="arb-revealL" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1017"><path class="reveal reveal-l" d="M631.76 509 L880.23 173"/></mask>
+          <mask id="arb-revealR" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1017"><path class="reveal reveal-r" d="M867.24 584 L1274.12 237"/></mask>
+          <clipPath id="arb-skyClip"><path d="M800,0 L800,289 L804,283 L808,278 L812,272 L816,267 L820,261 L824,256 L828,250 L832,244 L836,239 L840,233 L844,228 L848,222 L852,219 L856,220 L860,220 L864,220 L868,216 L872,207 L876,197 L880,178 L884,165 L888,161 L892,159 L896,164 L900,168 L904,168 L908,168 L912,166 L916,167 L920,168 L924,172 L928,175 L932,176 L936,176 L940,176 L944,172 L948,167 L952,163 L956,162 L960,166 L964,170 L968,178 L972,182 L976,191 L980,199 L984,201 L988,201 L992,199 L996,196 L1000,197 L1004,197 L1008,197 L1012,197 L1016,194 L1020,192 L1024,192 L1028,192 L1032,192 L1036,198 L1040,201 L1044,202 L1048,202 L1052,201 L1056,204 L1060,206 L1064,207 L1068,214 L1072,220 L1076,224 L1080,226 L1084,229 L1088,229 L1092,229 L1096,229 L1100,229 L1104,230 L1108,230 L1112,230 L1116,230 L1120,230 L1124,230 L1128,231 L1132,231 L1136,231 L1140,231 L1144,231 L1148,231 L1152,232 L1156,232 L1160,232 L1164,232 L1168,232 L1172,232 L1176,232 L1180,233 L1184,233 L1188,233 L1192,233 L1196,233 L1200,233 L1204,234 L1208,234 L1212,234 L1216,234 L1220,234 L1224,234 L1228,235 L1232,235 L1236,235 L1240,235 L1244,236 L1248,236 L1252,236 L1256,236 L1260,236 L1264,236 L1268,237 L1272,237 L1276,237 L1290,0 Z"/></clipPath>
+<clipPath id="arb-tabClip"><path d="M540,500 L870,500 L870,668 L540,668 Z"/></clipPath>
+<linearGradient id="arb-beamGrad" gradientUnits="userSpaceOnUse" x1="942" y1="104" x2="1002" y2="324">
+  <stop offset="0" stop-color="#f2d27f" stop-opacity=".85"/><stop offset=".55" stop-color="#f2d27f" stop-opacity=".45"/><stop offset="1" stop-color="#f2d27f" stop-opacity="0"/></linearGradient>
+        </defs>
+        <path class="dash" d="M631.76 509 L689.44 431 M732.33 373 L880.23 173" mask="url(#arb-revealL)"/>
+        <path class="dash" d="M867.24 584 L1010.29 462 M1078.3 404 L1274.12 237" mask="url(#arb-revealR)"/>
+        <g clip-path="url(#arb-tabClip)"><g transform="matrix(0.59221,0.04559,-0.00561,0.56882,97.267,399.062)" class="tabcopy"><g style="--lag:.15s"><g class="fx fx-carbon"><g transform="translate(900,247) scale(0.86)"><g class="grow" style="--i:0"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(974,249) scale(0.87)"><g class="grow" style="--i:1"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1008,251) scale(0.88)"><g class="grow" style="--i:2"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1112,255) scale(0.90)"><g class="grow" style="--i:3"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1174,263) scale(0.94)"><g class="grow" style="--i:4"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1222,265) scale(0.95)"><g class="grow" style="--i:5"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1024,285) scale(1.06)"><g class="grow" style="--i:6"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1186,297) scale(1.12)"><g class="grow" style="--i:7"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(850,303) scale(1.15)"><g class="grow" style="--i:8"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(898,307) scale(1.17)"><g class="grow" style="--i:9"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1158,315) scale(1.21)"><g class="grow" style="--i:10"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1018,321) scale(1.24)"><g class="grow" style="--i:11"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(926,325) scale(1.26)"><g class="grow" style="--i:12"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1198,325) scale(1.26)"><g class="grow" style="--i:13"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(956,335) scale(1.31)"><g class="grow" style="--i:14"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(874,339) scale(1.33)"><g class="grow" style="--i:15"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(826,341) scale(1.34)"><g class="grow" style="--i:16"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1162,347) scale(1.37)"><g class="grow" style="--i:17"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g class="grow" style="--i:18"><path class="tuft" d="M800,332 q-1,-5 -4.5,-8.5 M800,332 q0.5,-6 0.8,-11 M800,332 q2,-4 5,-7.5 M803,332 q1.8,-3 4,-5"/></g><g class="grow" style="--i:19"><path class="tuft" d="M832,338 q-1,-5 -4.5,-8.5 M832,338 q0.5,-6 0.8,-11 M832,338 q2,-4 5,-7.5 M835,338 q1.8,-3 4,-5"/></g><g class="grow" style="--i:20"><path class="tuft" d="M872,341 q-1,-5 -4.5,-8.5 M872,341 q0.5,-6 0.8,-11 M872,341 q2,-4 5,-7.5 M875,341 q1.8,-3 4,-5"/></g><g class="grow" style="--i:21"><path class="tuft" d="M916,342 q-1,-5 -4.5,-8.5 M916,342 q0.5,-6 0.8,-11 M916,342 q2,-4 5,-7.5 M919,342 q1.8,-3 4,-5"/></g><g class="grow" style="--i:22"><path class="tuft" d="M1150,302 q-1,-5 -4.5,-8.5 M1150,302 q0.5,-6 0.8,-11 M1150,302 q2,-4 5,-7.5 M1153,302 q1.8,-3 4,-5"/></g><g class="grow" style="--i:23"><path class="tuft" d="M1236,258 q-1,-5 -4.5,-8.5 M1236,258 q0.5,-6 0.8,-11 M1236,258 q2,-4 5,-7.5 M1239,258 q1.8,-3 4,-5"/></g><g class="grow" style="--i:24"><path class="tuft" d="M1190,330 q-1,-5 -4.5,-8.5 M1190,330 q0.5,-6 0.8,-11 M1190,330 q2,-4 5,-7.5 M1193,330 q1.8,-3 4,-5"/></g><g class="grow" style="--i:25"><path class="tuft" d="M986,344 q-1,-5 -4.5,-8.5 M986,344 q0.5,-6 0.8,-11 M986,344 q2,-4 5,-7.5 M989,344 q1.8,-3 4,-5"/></g><g class="grow" style="--i:26"><path class="tuft" d="M1128,338 q-1,-5 -4.5,-8.5 M1128,338 q0.5,-6 0.8,-11 M1128,338 q2,-4 5,-7.5 M1131,338 q1.8,-3 4,-5"/></g></g><g class="fx fx-water"><g transform="translate(880,322)"><ellipse class="rip" style="animation-delay:0.0s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:1.3s" rx="12" ry="4"/></g><g transform="translate(960,338)"><ellipse class="rip" style="animation-delay:0.7s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:2.0s" rx="12" ry="4"/></g><g transform="translate(1175,300)"><ellipse class="rip" style="animation-delay:1.4s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:2.7s" rx="12" ry="4"/></g><g transform="translate(1215,285)"><ellipse class="rip" style="animation-delay:2.1s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:3.4s" rx="12" ry="4"/></g><g transform="translate(830,336)"><ellipse class="rip" style="animation-delay:2.8s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:4.1s" rx="12" ry="4"/></g></g><g class="fx fx-light"><path class="spark" style="animation-delay:0.00s" d="M897,139.5 Q897,146 903.5,146 Q897,146 897,152.5 Q897,146 890.5,146 Q897,146 897,139.5 Z"/><path class="spark" style="animation-delay:0.45s" d="M962,144 Q962,149 967,149 Q962,149 962,154 Q962,149 957,149 Q962,149 962,144 Z"/><path class="spark" style="animation-delay:0.90s" d="M1040,179.5 Q1040,185 1045.5,185 Q1040,185 1040,190.5 Q1040,185 1034.5,185 Q1040,185 1040,179.5 Z"/><path class="spark" style="animation-delay:1.35s" d="M1093,242 Q1093,248 1099,248 Q1093,248 1093,254 Q1093,248 1087,248 Q1093,248 1093,242 Z"/><path class="spark" style="animation-delay:1.80s" d="M1160,253.5 Q1160,258 1164.5,258 Q1160,258 1160,262.5 Q1160,258 1155.5,258 Q1160,258 1160,253.5 Z"/><path class="spark" style="animation-delay:2.25s" d="M845,253.5 Q845,258 849.5,258 Q845,258 845,262.5 Q845,258 840.5,258 Q845,258 845,253.5 Z"/><path class="spark" style="animation-delay:2.70s" d="M1210,232 Q1210,236 1214,236 Q1210,236 1210,240 Q1210,236 1206,236 Q1210,236 1210,232 Z"/></g></g></g></g>
+        <g><g style="--lag:.75s"><g class="fx fx-carbon"><g transform="translate(900,247) scale(0.86)"><g class="grow" style="--i:0"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(974,249) scale(0.87)"><g class="grow" style="--i:1"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1008,251) scale(0.88)"><g class="grow" style="--i:2"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1112,255) scale(0.90)"><g class="grow" style="--i:3"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1174,263) scale(0.94)"><g class="grow" style="--i:4"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1222,265) scale(0.95)"><g class="grow" style="--i:5"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1024,285) scale(1.06)"><g class="grow" style="--i:6"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1186,297) scale(1.12)"><g class="grow" style="--i:7"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(850,303) scale(1.15)"><g class="grow" style="--i:8"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(898,307) scale(1.17)"><g class="grow" style="--i:9"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1158,315) scale(1.21)"><g class="grow" style="--i:10"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1018,321) scale(1.24)"><g class="grow" style="--i:11"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(926,325) scale(1.26)"><g class="grow" style="--i:12"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(1198,325) scale(1.26)"><g class="grow" style="--i:13"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(956,335) scale(1.31)"><g class="grow" style="--i:14"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(874,339) scale(1.33)"><g class="grow" style="--i:15"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g transform="translate(826,341) scale(1.34)"><g class="grow" style="--i:16"><path class="trunk" d="M0,0 V-7.5"/><path class="crown" d="M0,-6.5 c-6.5,0.5 -8.5,-5 -5.8,-8.6 c-1.2,-4.4 3.4,-7 5.9,-5.3 c2.8,-2.2 7.6,0 6.4,4.3 c3.2,2.3 1.4,9.9 -6.5,9.6 Z"/></g></g><g transform="translate(1162,347) scale(1.37)"><g class="grow" style="--i:17"><path class="trunk" d="M0,0 V-4"/><path class="crown" d="M-6,-4 L0,-13.5 L6,-4 Z M-4.6,-9.5 L0,-19 L4.6,-9.5"/></g></g><g class="grow" style="--i:18"><path class="tuft" d="M800,332 q-1,-5 -4.5,-8.5 M800,332 q0.5,-6 0.8,-11 M800,332 q2,-4 5,-7.5 M803,332 q1.8,-3 4,-5"/></g><g class="grow" style="--i:19"><path class="tuft" d="M832,338 q-1,-5 -4.5,-8.5 M832,338 q0.5,-6 0.8,-11 M832,338 q2,-4 5,-7.5 M835,338 q1.8,-3 4,-5"/></g><g class="grow" style="--i:20"><path class="tuft" d="M872,341 q-1,-5 -4.5,-8.5 M872,341 q0.5,-6 0.8,-11 M872,341 q2,-4 5,-7.5 M875,341 q1.8,-3 4,-5"/></g><g class="grow" style="--i:21"><path class="tuft" d="M916,342 q-1,-5 -4.5,-8.5 M916,342 q0.5,-6 0.8,-11 M916,342 q2,-4 5,-7.5 M919,342 q1.8,-3 4,-5"/></g><g class="grow" style="--i:22"><path class="tuft" d="M1150,302 q-1,-5 -4.5,-8.5 M1150,302 q0.5,-6 0.8,-11 M1150,302 q2,-4 5,-7.5 M1153,302 q1.8,-3 4,-5"/></g><g class="grow" style="--i:23"><path class="tuft" d="M1236,258 q-1,-5 -4.5,-8.5 M1236,258 q0.5,-6 0.8,-11 M1236,258 q2,-4 5,-7.5 M1239,258 q1.8,-3 4,-5"/></g><g class="grow" style="--i:24"><path class="tuft" d="M1190,330 q-1,-5 -4.5,-8.5 M1190,330 q0.5,-6 0.8,-11 M1190,330 q2,-4 5,-7.5 M1193,330 q1.8,-3 4,-5"/></g><g class="grow" style="--i:25"><path class="tuft" d="M986,344 q-1,-5 -4.5,-8.5 M986,344 q0.5,-6 0.8,-11 M986,344 q2,-4 5,-7.5 M989,344 q1.8,-3 4,-5"/></g><g class="grow" style="--i:26"><path class="tuft" d="M1128,338 q-1,-5 -4.5,-8.5 M1128,338 q0.5,-6 0.8,-11 M1128,338 q2,-4 5,-7.5 M1131,338 q1.8,-3 4,-5"/></g></g><g class="fx fx-water"><g class="riv-wrap"><path class="riv" style="--len:135;--i:0" d="M1070,261 L1055.5,264 L1052.5,275 L1045,282.5 L1039,290 L1041,300 L1044,307.5 L1041,322.5 L1039,337.5 L1027.5,342.5 L1012.5,350 L1002.5,354"/><path class="riv" style="--len:154;--i:1" d="M1067.5,287.5 L1072.5,295 L1092.5,305 L1120,310 L1135,314 L1139,322.5 L1130,330 L1120,337.5 L1110,342.5 L1090,350 L1077.5,355"/><path class="riv" style="--len:109;--i:2" d="M1210,242.5 L1200,260 L1187.5,267.5 L1162.5,269 L1145,275 L1130,277.5 L1115,272.5"/></g><path class="fall-sheet" d="M1053,207 Q1062,203 1073,204 L1073.5,257 Q1062,260 1052,260 Z"/><path class="fall" style="animation-delay:-0.00s" d="M1053,205.0 C1053.8,220 1052.2,240 1053.5,259"/><path class="fall" style="animation-delay:-0.37s" d="M1058,204.4 C1058.8,220 1057.2,240 1058.5,259"/><path class="fall" style="animation-delay:-0.74s" d="M1063,203.8 C1063.8,220 1062.2,240 1063.5,259"/><path class="fall" style="animation-delay:-1.11s" d="M1068,203.2 C1068.8,220 1067.2,240 1068.5,259"/><path class="fall" style="animation-delay:-1.48s" d="M1072,202.6 C1072.8,220 1071.2,240 1072.5,259"/><path class="flow" style="animation-delay:-0.0s" d="M1070,261 L1055.5,264 L1052.5,275 L1045,282.5 L1039,290 L1041,300 L1044,307.5 L1041,322.5 L1039,337.5 L1027.5,342.5 L1012.5,350 L1002.5,354"/><path class="flow" style="animation-delay:-0.5s" d="M1067.5,287.5 L1072.5,295 L1092.5,305 L1120,310 L1135,314 L1139,322.5 L1130,330 L1120,337.5 L1110,342.5 L1090,350 L1077.5,355"/><path class="flow" style="animation-delay:-1.0s" d="M1210,242.5 L1200,260 L1187.5,267.5 L1162.5,269 L1145,275 L1130,277.5 L1115,272.5"/><path class="foam" style="animation-delay:0.0s" d="M1050,262 q4,-4 8,0"/><path class="foam" style="animation-delay:0.4s" d="M1058,262 q4,-4 8,0"/><path class="foam" style="animation-delay:0.8s" d="M1066,262 q4,-4 8,0"/><g transform="translate(880,322)"><ellipse class="rip" style="animation-delay:0.0s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:1.3s" rx="12" ry="4"/></g><g transform="translate(960,338)"><ellipse class="rip" style="animation-delay:0.7s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:2.0s" rx="12" ry="4"/></g><g transform="translate(1175,300)"><ellipse class="rip" style="animation-delay:1.4s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:2.7s" rx="12" ry="4"/></g><g transform="translate(1215,285)"><ellipse class="rip" style="animation-delay:2.1s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:3.4s" rx="12" ry="4"/></g><g transform="translate(830,336)"><ellipse class="rip" style="animation-delay:2.8s" rx="12" ry="4"/><ellipse class="rip" style="animation-delay:4.1s" rx="12" ry="4"/></g></g><g class="fx fx-light"><g class="beams"><path class="beam" d="M942,104 L880,300 L935,330 Z"/><path class="beam" d="M942,104 L1010,300 L1075,332 Z"/><path class="beam" d="M942,104 L1150,268 L1215,300 Z"/></g><g clip-path="url(#arb-skyClip)"><g class="sun-rise"><g class="sun-rays"><line x1="965.0" y1="104.0" x2="975.0" y2="104.0"/><line x1="961.9" y1="115.5" x2="967.1" y2="118.5"/><line x1="953.5" y1="123.9" x2="958.5" y2="132.6"/><line x1="942.0" y1="127.0" x2="942.0" y2="133.0"/><line x1="930.5" y1="123.9" x2="925.5" y2="132.6"/><line x1="922.1" y1="115.5" x2="916.9" y2="118.5"/><line x1="919.0" y1="104.0" x2="909.0" y2="104.0"/><line x1="922.1" y1="92.5" x2="916.9" y2="89.5"/><line x1="930.5" y1="84.1" x2="925.5" y2="75.4"/><line x1="942.0" y1="81.0" x2="942.0" y2="75.0"/><line x1="953.5" y1="84.1" x2="958.5" y2="75.4"/><line x1="961.9" y1="92.5" x2="967.1" y2="89.5"/></g><circle class="sun" cx="942" cy="104" r="17"/><circle class="sun-core" cx="942" cy="104" r="10"/></g></g><path class="spark" style="animation-delay:0.00s" d="M897,139.5 Q897,146 903.5,146 Q897,146 897,152.5 Q897,146 890.5,146 Q897,146 897,139.5 Z"/><path class="spark" style="animation-delay:0.45s" d="M962,144 Q962,149 967,149 Q962,149 962,154 Q962,149 957,149 Q962,149 962,144 Z"/><path class="spark" style="animation-delay:0.90s" d="M1040,179.5 Q1040,185 1045.5,185 Q1040,185 1040,190.5 Q1040,185 1034.5,185 Q1040,185 1040,179.5 Z"/><path class="spark" style="animation-delay:1.35s" d="M1093,242 Q1093,248 1099,248 Q1093,248 1093,254 Q1093,248 1087,248 Q1093,248 1093,242 Z"/><path class="spark" style="animation-delay:1.80s" d="M1160,253.5 Q1160,258 1164.5,258 Q1160,258 1160,262.5 Q1160,258 1155.5,258 Q1160,258 1160,253.5 Z"/><path class="spark" style="animation-delay:2.25s" d="M845,253.5 Q845,258 849.5,258 Q845,258 845,262.5 Q845,258 840.5,258 Q845,258 845,253.5 Z"/><path class="spark" style="animation-delay:2.70s" d="M1210,232 Q1210,236 1214,236 Q1210,236 1210,240 Q1210,236 1206,236 Q1210,236 1210,232 Z"/></g></g></g>
+      </svg>
+      <div class="ar-cloud" style="left:63.6458%;top:7.6696%;width:3.2812%;--dx:48px;--dy:9px;--tx:19s;--ty:13s;--st:6.4s"><img src="ar-biosphere/assets/cloud0.png" alt=""><svg class="rain" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true"><line class="rl" x1="14" y1="0" x2="11" y2="12" style="animation-delay:-0.00s"/><line class="rl" x1="27" y1="0" x2="24" y2="12" style="animation-delay:-0.37s"/><line class="rl" x1="40" y1="0" x2="37" y2="12" style="animation-delay:-0.74s"/><line class="rl" x1="52" y1="0" x2="49" y2="12" style="animation-delay:-0.01s"/><line class="rl" x1="63" y1="0" x2="60" y2="12" style="animation-delay:-0.38s"/><line class="rl" x1="75" y1="0" x2="72" y2="12" style="animation-delay:-0.75s"/><line class="rl" x1="88" y1="0" x2="85" y2="12" style="animation-delay:-0.02s"/></svg></div>
+      <div class="ar-cloud" style="left:57.5000%;top:8.5546%;width:4.4271%;--dx:-62px;--dy:-12px;--tx:23s;--ty:15s;--st:5.8s"><img src="ar-biosphere/assets/cloud1.png" alt=""><svg class="rain" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true"><line class="rl" x1="14" y1="0" x2="11" y2="12" style="animation-delay:-0.00s"/><line class="rl" x1="27" y1="0" x2="24" y2="12" style="animation-delay:-0.37s"/><line class="rl" x1="40" y1="0" x2="37" y2="12" style="animation-delay:-0.74s"/><line class="rl" x1="52" y1="0" x2="49" y2="12" style="animation-delay:-0.01s"/><line class="rl" x1="63" y1="0" x2="60" y2="12" style="animation-delay:-0.38s"/><line class="rl" x1="75" y1="0" x2="72" y2="12" style="animation-delay:-0.75s"/><line class="rl" x1="88" y1="0" x2="85" y2="12" style="animation-delay:-0.02s"/></svg></div>
+      <div class="ar-cloud" style="left:61.7188%;top:12.5860%;width:3.3333%;--dx:-40px;--dy:14px;--tx:16s;--ty:11.5s;--st:7.0s"><img src="ar-biosphere/assets/cloud2.png" alt=""><svg class="rain" viewBox="0 0 100 120" preserveAspectRatio="none" aria-hidden="true"><line class="rl" x1="14" y1="0" x2="11" y2="12" style="animation-delay:-0.00s"/><line class="rl" x1="27" y1="0" x2="24" y2="12" style="animation-delay:-0.37s"/><line class="rl" x1="40" y1="0" x2="37" y2="12" style="animation-delay:-0.74s"/><line class="rl" x1="52" y1="0" x2="49" y2="12" style="animation-delay:-0.01s"/><line class="rl" x1="63" y1="0" x2="60" y2="12" style="animation-delay:-0.38s"/><line class="rl" x1="75" y1="0" x2="72" y2="12" style="animation-delay:-0.75s"/><line class="rl" x1="88" y1="0" x2="85" y2="12" style="animation-delay:-0.02s"/></svg></div>
+      
+      <div class="ar-glass"></div>
+      <svg class="ar-finder" viewBox="0 0 1920 1017" preserveAspectRatio="none" aria-hidden="true"><path class="br tl" d="M40,112 V40 H112"/><path class="br tr" d="M1808,40 H1880 V112"/><path class="br bl" d="M40,905 V977 H112"/><path class="br br_" d="M1808,977 H1880 V905"/><line class="tick" x1="951.0" y1="508.5" x2="969.0" y2="508.5"/><line class="tick" x1="960.0" y1="499.5" x2="960.0" y2="517.5"/></svg>
+      <div class="ar-tag" aria-live="polite"><i></i><span>AR</span><span class="sep">·</span><b>Standby</b></div>
+      <div class="ar-modes" role="group" aria-label="AR element">
+        <button type="button" data-m="carbon" aria-pressed="true"><i></i>Carbon</button>
+        <button type="button" data-m="water" aria-pressed="false"><i></i>Water</button>
+        <button type="button" data-m="light" aria-pressed="false"><i></i>Light</button>
+      </div>
+      <button class="ar-panel-hit" type="button" aria-label="Switch AR element"></button>
+    </figure>
+  </div>
+</section>
+
+<section id="design" class="bleed">
+  <div class="col">
+    <div class="sec-head">
+      <div><p class="eyebrow">Level &amp; game design</p><h2>From flowchart to device</h2></div>
+    </div>
+  </div>
+  <div class="stack">
+    <a href="img/levels.webp" target="_blank" rel="noopener"><img src="img/levels.webp" alt="Level design board: for each of the three levels, a game flowchart, a learning flowchart, a terrain sketch with the AR phone view, key numbers and an in-game render." width="2400" height="1744" loading="lazy"></a>
+    <a href="img/flow.webp" target="_blank" rel="noopener"><img src="img/flow.webp" alt="Game design storyboard of 22 in-game screens across three levels, linked by arrows, with the card scanned at each AR step." width="2400" height="1695" loading="lazy"></a>
+    <img src="img/scenes.webp" alt="Photos of hands holding cards and an iPhone running the game across the alien planet, glacier and mineral levels." width="2400" height="1707" loading="lazy">
+  </div>
+  <div class="col">
+    <div class="closing">
+      <p class="eyebrow">The outcome</p>
+      <h3>The final prototype connected physical cards, AR feedback, and scenario&#8209;based learning into one playable system.</h3>
+    </div>
+  </div>
+
+</section>
+
+   <div class="col">
+    <footer class="foot">
+      <span>Molecule Mythos · 2024</span>
+      <a href="https://ox.portfolio.site/">← All projects</a>
+    </footer>
+   </div>
+  </main>
+</div>
+
+<script>
+document.querySelectorAll('.card button').forEach(function(btn){
+  var card = btn.closest('.card');
+  var name = btn.getAttribute('aria-label').replace(/ card\..*$/,'');
+  btn.addEventListener('click', function(){
+    var on = card.classList.toggle('flipped');
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    btn.setAttribute('aria-label', name + ' card. ' + (on ? 'Show front.' : 'Show details.'));
+  });
+});
+</script>
+<script>
+(function(){
+  var fig=document.getElementById('mechLoop'); if(!fig) return;
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var tok=fig.querySelector('#tok'), fb=fig.querySelector('#fb'), fbt=fig.querySelector('.fbtext'), rip=fig.querySelector('.rip');
+  var n=[1,2,3,4].map(function(i){return fig.querySelector('#n'+i);});
+  var X=[125,375,625,875], R=46, running=false, visible=false, raf=0, timer=0;
+  function ease(t){return t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;}
+  function place(x,y){tok.setAttribute('cx',x);tok.setAttribute('cy',y);}
+  function wait(ms){return new Promise(function(r){timer=setTimeout(r,ms);});}
+  function tween(ms,fn){return new Promise(function(res){var t0=performance.now();
+    function f(now){var t=Math.min(1,(now-t0)/ms);fn(ease(t));if(t<1)raf=requestAnimationFrame(f);else res();}
+    raf=requestAnimationFrame(f);});}
+  function line(i,j,ms){var a=X[i]+R,b=X[j]-R;return tween(ms,function(t){place(a+(b-a)*t,90);});}
+  function arc(ms){var L=fb.getTotalLength();return tween(ms,function(t){var p=fb.getPointAtLength(L*t);place(p.x,p.y);});}
+  function clear(){n.forEach(function(e){e.classList.remove('on','ok','miss');});fb.classList.remove('on');fbt.classList.remove('on');rip.classList.remove('on');}
+  function on(i){n.forEach(function(e,k){e.classList.toggle('on',k===i);});}
+  async function cycle(){
+    clear(); tok.setAttribute('opacity','1'); place(X[0],90); on(0); await wait(700);
+    await line(0,1,800); on(1); await wait(500);
+    await line(1,2,800); on(2); n[2].classList.add('miss'); await wait(450);
+    fb.classList.add('on'); fbt.classList.add('on'); n[2].classList.remove('on','miss');
+    await arc(1300); on(1); await wait(600); fb.classList.remove('on'); fbt.classList.remove('on');
+    await line(1,2,800); on(2); n[2].classList.add('ok'); await wait(600);
+    await line(2,3,800); on(3); tok.setAttribute('opacity','0'); rip.classList.add('on'); await wait(3000);
+    rip.classList.remove('on'); clear(); await wait(700);
+  }
+  async function loop(){ if(running) return; running=true; fig.classList.add('run');
+    while(visible){ await cycle(); }
+    running=false; fig.classList.remove('run'); clear(); tok.setAttribute('opacity','0'); }
+  if(!('IntersectionObserver' in window)){ visible=true; loop(); return; }
+  new IntersectionObserver(function(es){ es.forEach(function(e){ visible=e.isIntersecting; if(visible) loop(); }); },{threshold:.4}).observe(fig);
+})();
+</script>
+<script src="ar-biosphere/ar-biosphere.js" defer></script>
+<script>window.CSN={"eyebrow": "AR game · 2024", "title": "Molecule Mythos", "accent": "#4A6FA5", "accentInk": "#FFFFFF", "theme": "light", "side": "#F4F4F2", "backLabel": "Playground", "next": {"href": "../index.html", "label": "Playground", "kicker": "Back to"}, "sections": [["learning", "Learning design"], ["deck", "The deck"], ["interaction", "Interaction scene"], ["design", "Level & game design"]], "home": "../../index.html", "back": "../index.html"};</script>
+<script src="../../assets/cs-nav.js"></script>
+</body>
+</html>

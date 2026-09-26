@@ -1,0 +1,163 @@
+/* AR Biosphere illustration — scoped styles (everything lives under .ar-illo) */
+.ar-illo.ar-offscreen, .ar-illo.ar-offscreen * { animation-play-state:paused !important; }
+.ar-illo { --ink:#1c1c1c; display:block; box-sizing:border-box; }
+.ar-illo *, .ar-illo *::before, .ar-illo *::after { box-sizing:border-box; }
+.ar-illo .ar-modes button { margin:0; line-height:1; }
+@property --r { syntax:"<percentage>"; inherits:false; initial-value:0%; }
+@property --cx { syntax:"<length>"; inherits:false; initial-value:0px; }
+@property --cy { syntax:"<length>"; inherits:false; initial-value:0px; }
+.ar-illo { position:relative; width:100%; aspect-ratio:1920/1017; margin:0; overflow:hidden; background:#fff;
+    --sym:#8e8e8e; }
+.ar-illo > * { position:absolute; }
+.ar-illo .ar-base, .ar-illo .ar-full { inset:0; width:100%; height:100%; display:block; }
+.ar-illo .ar-layer img { position:absolute; inset:0; width:100%; height:100%; display:block; }
+.ar-illo .ar-layer .m { opacity:0; transition:opacity 1.4s ease; }
+.ar-illo[data-mode=carbon] .m-carbon, .ar-illo[data-mode=water] .m-water, .ar-illo[data-mode=light] .m-light { opacity:1; }
+.ar-illo .ar-panel { left:23.2292%;top:50.3441%;width:6.7708%;height:13.1760%; opacity:0; }
+.ar-illo .ar-hand { left:23.2292%;top:50.3441%;width:6.7708%;height:13.1760%; pointer-events:none; }
+.ar-illo .ar-bloom { opacity:0; --r:0%; -webkit-mask-repeat:no-repeat; mask-repeat:no-repeat; }
+.ar-illo .ar-bloom.tab { left:28.1250%;top:49.1642%;width:16.6667%;height:16.2242%;
+    -webkit-mask-image:radial-gradient(ellipse var(--r) var(--r) at 28.9% 5.5%,#000 45%,transparent 100%),radial-gradient(ellipse var(--r) var(--r) at 99.4% 53.3%,#000 45%,transparent 100%);
+            mask-image:radial-gradient(ellipse var(--r) var(--r) at 28.9% 5.5%,#000 45%,transparent 100%),radial-gradient(ellipse var(--r) var(--r) at 99.4% 53.3%,#000 45%,transparent 100%); }
+.ar-illo .ar-bloom.phys { left:38.5417%;top:13.7660%;width:28.6458%;height:23.1072%;
+    -webkit-mask-image:radial-gradient(ellipse var(--r) var(--r) at 25.6% 14.0%,#000 40%,transparent 100%),radial-gradient(ellipse var(--r) var(--r) at 97.1% 41.3%,#000 40%,transparent 100%);
+            mask-image:radial-gradient(ellipse var(--r) var(--r) at 25.6% 14.0%,#000 40%,transparent 100%),radial-gradient(ellipse var(--r) var(--r) at 97.1% 41.3%,#000 40%,transparent 100%); }
+.ar-illo .ar-sym { color:var(--sym); pointer-events:none; }
+.ar-illo .ar-sym .sym { opacity:0; transform:scale(1.08); transform-origin:516px 582px;
+    transition:opacity .7s ease, transform .9s cubic-bezier(.3,.6,.3,1); }
+.ar-illo[data-mode=carbon] .s-carbon, .ar-illo[data-mode=water] .s-water, .ar-illo[data-mode=light] .s-light { opacity:1; transform:scale(1); }
+.ar-illo .ar-panel-hit { left:23.2292%;top:50.3441%;width:6.7708%;height:13.1760%; background:none; border:0; padding:0; cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.ar-illo .ar-panel-hit:focus-visible { outline:1.5px dashed #9ab; outline-offset:2px; }
+.ar-illo .ar-full { overflow:visible; pointer-events:none; }
+.ar-illo .dash { fill:none; stroke:var(--ink); stroke-width:1.25; stroke-dasharray:4.4 5; }
+.ar-illo .reveal { fill:none; stroke:#fff; stroke-width:8; stroke-linecap:round; }
+.ar-illo .reveal-l { stroke-dasharray:417.9; stroke-dashoffset:417.9; }
+.ar-illo .reveal-r { stroke-dasharray:534.7; stroke-dashoffset:534.7; }
+.ar-illo .fx { opacity:0; transition:opacity .6s ease; }
+.ar-illo.ready[data-mode=carbon] .fx-carbon, .ar-illo.ready[data-mode=water] .fx-water, .ar-illo.ready[data-mode=light] .fx-light {
+    opacity:1; transition:opacity .8s ease var(--lag); }
+.ar-illo .fx path, .ar-illo .fx line, .ar-illo .fx ellipse, .ar-illo .fx circle { vector-effect:non-scaling-stroke; }
+.ar-illo .tabcopy { --sw:.7; }
+.ar-illo .grow { transform-box:fill-box; transform-origin:50% 100%; transform:scale(0); transition:transform .45s ease-in; }
+.ar-illo.ready[data-mode=carbon] .grow { transform:scale(1);
+    transition:transform 1.2s cubic-bezier(.2,.8,.3,1.12) calc(var(--lag) + var(--i) * 70ms); }
+.ar-illo .trunk { fill:none; stroke:#2b2b2b; stroke-width:calc(1px * var(--sw,1)); stroke-linecap:round; }
+.ar-illo .crown { fill:#b2cc98; stroke:#2b2b2b; stroke-width:calc(1px * var(--sw,1)); stroke-linejoin:round; }
+.ar-illo .tuft { fill:none; stroke:#2f3a2c; stroke-width:calc(1px * var(--sw,1)); stroke-linecap:round; }
+.ar-illo .riv { fill:none; stroke:#7fb3cd; stroke-width:3.8; stroke-linecap:round; stroke-linejoin:round; vector-effect:none;
+    stroke-dasharray:var(--len); stroke-dashoffset:var(--len); transition:stroke-dashoffset .4s ease; }
+.ar-illo .riv-wrap, .ar-illo .fall-sheet { mix-blend-mode:multiply; }
+.ar-illo.ready[data-mode=water] .riv { stroke-dashoffset:0; transition:stroke-dashoffset 2s cubic-bezier(.3,.5,.3,1) calc(var(--lag) + .6s + var(--i) * .3s); }
+.ar-illo .flow { fill:none; stroke:#fff; stroke-width:1.2; stroke-linecap:round; stroke-dasharray:2.4 6; opacity:.95; animation:ar-flow 1.4s linear infinite; }
+@keyframes ar-flow { to { stroke-dashoffset:-16.8; } }
+.ar-illo .fall-sheet { fill:#d6e8f1; }
+.ar-illo .fall { fill:none; stroke:#4f86a5; stroke-width:1.1; stroke-dasharray:7 5; animation:ar-fall .8s linear infinite; }
+@keyframes ar-fall { to { stroke-dashoffset:-12; } }
+.ar-illo .foam { fill:none; stroke:#4f86a5; stroke-width:1; animation:ar-foam 1.2s ease-out infinite; opacity:0; }
+@keyframes ar-foam { 0% { opacity:0; transform:translateY(1px); } 30% { opacity:1; } 100% { opacity:0; transform:translateY(-3px); } }
+.ar-illo .rip { fill:none; stroke:#4f86a5; stroke-width:calc(1px * var(--sw,1)); transform-box:fill-box; transform-origin:center;
+    animation:ar-rip 2.6s ease-out infinite; opacity:0; }
+@keyframes ar-rip { 0% { transform:scale(.15); opacity:0; } 15% { opacity:.95; } 100% { transform:scale(1.25); opacity:0; } }
+.ar-illo .sun-rise { transform:translateY(64px); transition:transform .6s ease-in; }
+.ar-illo.ready[data-mode=light] .sun-rise { transform:translateY(0); transition:transform 2.2s cubic-bezier(.2,.7,.2,1) var(--lag); }
+.ar-illo .sun { fill:#f5dfa6; stroke:#2b2b2b; stroke-width:1.1; }
+.ar-illo .sun-core { fill:#eccb74; }
+.ar-illo .sun-rays line { stroke:#c49a45; stroke-width:1.6; stroke-linecap:round; }
+.ar-illo .sun-rays { transform-box:view-box; transform-origin:942px 104px; animation:ar-spin 40s linear infinite; }
+@keyframes ar-spin { to { transform:rotate(360deg); } }
+.ar-illo .beams { mix-blend-mode:multiply; opacity:0; }
+.ar-illo.ready[data-mode=light] .beams { animation:ar-breathe 5s ease-in-out calc(var(--lag) + 1s) infinite alternate both; }
+@keyframes ar-breathe { from { opacity:.45; } to { opacity:1; } }
+.ar-illo .beam { fill:url(#beamGrad); }
+.ar-illo .spark { fill:#c4953a; transform-box:fill-box; transform-origin:center; animation:ar-twinkle 2.8s ease-in-out infinite; }
+@keyframes ar-twinkle { 0%,100% { opacity:.2; transform:scale(.55) rotate(0deg); } 50% { opacity:1; transform:scale(1.1) rotate(45deg); } }
+.ar-illo .ar-cloud img { width:100%; height:auto; display:block; }
+.ar-illo .rain { position:absolute; left:0; top:75%; width:100%; height:115%; overflow:visible; opacity:0; transition:opacity .8s ease; }
+.ar-illo.ready[data-mode=water] .rain { opacity:1; transition:opacity 1s ease .9s; }
+.ar-illo .rl { stroke:#6f98b0; stroke-width:1.1; stroke-linecap:round; vector-effect:non-scaling-stroke; animation:ar-rain 1.1s linear infinite; }
+@keyframes ar-rain { 0% { transform:translate(0,-8px); opacity:0; } 15% { opacity:1; } 80% { opacity:.9; } 100% { transform:translate(-8px,100px); opacity:0; } }
+.ar-illo.ready .s-carbon .node { transform-box:fill-box; transform-origin:center; animation:ar-pulse 2.6s ease-in-out infinite; }
+@keyframes ar-pulse { 0%,100% { transform:scale(1); } 50% { transform:scale(1.35); } }
+.ar-illo.ready .s-water .wave { animation:ar-wave 1.6s ease-in-out infinite alternate; }
+@keyframes ar-wave { from { transform:translateX(-2.5px); } to { transform:translateX(2.5px); } }
+.ar-illo .drip { opacity:0; }
+.ar-illo.ready .s-water .drip { animation:ar-drip 1.8s ease-in infinite; }
+@keyframes ar-drip { 0% { opacity:0; transform:translateY(-4px); } 25% { opacity:1; } 85% { opacity:.9; } 100% { opacity:0; transform:translateY(18px); } }
+.ar-illo.ready .s-light .srays { transform-box:view-box; transform-origin:516px 582px; animation:ar-spin 18s linear infinite; }
+.ar-illo .ar-cloud { will-change:transform; transform:translate3d(var(--cx),var(--cy),0); pointer-events:none; }
+.ar-illo.is-in .reveal { transition:stroke-dashoffset 2.4s cubic-bezier(.4,0,.2,1) .5s; stroke-dashoffset:0; }
+.ar-illo.is-in .reveal-r { transition-delay:.85s; }
+.ar-illo.is-in .ar-panel { transition:opacity 1.2s ease 2.9s; opacity:1; }
+.ar-illo.is-in .ar-sym { transition:color 1.2s ease 2.9s; }
+.ar-illo.ready .ar-sym { transition:color .9s ease; }
+.ar-illo.is-in[data-mode=carbon] { --sym:#7f8d85; }
+.ar-illo.is-in[data-mode=water] { --sym:#7890a0; }
+.ar-illo.is-in[data-mode=light] { --sym:#a08f6c; }
+.ar-illo.is-in .ar-bloom.tab { animation:ar-bloom 2.6s cubic-bezier(.4,0,.3,1) 3.3s forwards; }
+.ar-illo.is-in .ar-bloom.phys { animation:ar-bloom 4s cubic-bezier(.4,0,.3,1) 4.6s forwards; }
+.ar-illo.is-in .ar-cloud { animation:
+      ar-cloud-x var(--tx) cubic-bezier(.45,0,.55,1) var(--st) infinite alternate,
+      ar-cloud-y var(--ty) cubic-bezier(.45,0,.55,1) var(--st) infinite alternate; }
+@keyframes ar-bloom { 0% { --r:0%; opacity:0; } 25% { opacity:1; } 100% { --r:230%; opacity:1; } }
+@keyframes ar-cloud-x { from { --cx:0px; } to { --cx:var(--dx); } }
+@keyframes ar-cloud-y { from { --cy:0px; } to { --cy:var(--dy); } }
+.ar-illo .ar-glass { inset:0; pointer-events:none;
+    /* light grey glass: faint tint everywhere, denser toward the edges */
+    background:
+      radial-gradient(ellipse 70% 68% at 50% 50%, rgba(216,216,219,0) 52%, rgba(216,216,219,.55) 88%, rgba(208,208,212,.72) 100%),
+      rgba(224,224,227,.22);
+    -webkit-backdrop-filter:blur(1.2px); backdrop-filter:blur(1.2px);
+    -webkit-mask-image:radial-gradient(ellipse 72% 70% at 50% 50%, rgba(0,0,0,.35) 55%, #000 90%);
+            mask-image:radial-gradient(ellipse 72% 70% at 50% 50%, rgba(0,0,0,.35) 55%, #000 90%);
+    opacity:0; transition:opacity 1.2s ease; }
+.ar-illo.is-in .ar-glass { opacity:1; }
+.ar-illo .ar-finder { inset:0; width:100%; height:100%; pointer-events:none; overflow:visible; }
+.ar-illo .ar-finder .br { fill:none; stroke:#333335; stroke-width:1.8; stroke-linecap:round; vector-effect:non-scaling-stroke;
+    opacity:0; transition:opacity .9s ease, transform 1.1s cubic-bezier(.2,.7,.2,1); }
+.ar-illo .ar-finder .br.tl { transform:translate(-10px,-10px); }
+.ar-illo .ar-finder .br.tr { transform:translate(10px,-10px); }
+.ar-illo .ar-finder .br.bl { transform:translate(-10px,10px); }
+.ar-illo .ar-finder .br.br_ { transform:translate(10px,10px); }
+.ar-illo.is-in .ar-finder .br { opacity:.85; transform:translate(0,0); }
+.ar-illo .ar-finder .tick { stroke:#3a3a3c; stroke-width:1; vector-effect:non-scaling-stroke; opacity:.35; }
+.ar-illo .ar-tag { left:3.3%; top:5.2%; display:flex; align-items:center; gap:.55em; pointer-events:none;
+    font:500 clamp(9px,.8vw,14px)/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace; letter-spacing:.08em; text-transform:uppercase; color:#3a3a3c;
+    opacity:0; transition:opacity .8s ease .3s; }
+.ar-illo.is-in .ar-tag { opacity:.8; }
+.ar-illo .ar-tag i { width:.62em; height:.62em; border-radius:50%; background:#bcbcbf; transition:background .6s ease; }
+.ar-illo .ar-tag .sep { opacity:.45; }
+.ar-illo .ar-tag b { font-weight:500; transition:opacity .25s ease; }
+.ar-illo .ar-tag b.swap { opacity:0; }
+.ar-illo.ready[data-mode=carbon] .ar-tag i { background:#8fa792; }
+.ar-illo.ready[data-mode=water]  .ar-tag i { background:#86a5b8; }
+.ar-illo.ready[data-mode=light]  .ar-tag i { background:#c2a66a; }
+.ar-illo.is-in:not(.ready) .ar-tag i { animation:ar-blink 1.2s ease-in-out infinite; background:#949498; }
+@keyframes ar-blink { 50% { opacity:.25; } }
+.ar-illo .ar-modes { right:3.6%; bottom:7%; display:flex; flex-direction:column; align-items:stretch; gap:.5em;
+    font:500 clamp(9px,.8vw,14px)/1 ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    opacity:0; transform:translateY(6px); transition:opacity .9s ease .4s, transform 1s cubic-bezier(.2,.7,.2,1) .4s; pointer-events:none; }
+.ar-illo.is-in .ar-modes { opacity:1; transform:none; pointer-events:auto; }
+.ar-illo .ar-modes button { font:inherit; letter-spacing:.08em; text-transform:uppercase; color:#555558; cursor:pointer;
+    display:flex; align-items:center; gap:.65em; padding:.62em 1em .62em .85em; border-radius:999px;
+    background:rgba(250,250,251,.55); border:1px solid rgba(60,60,64,.18);
+    -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+    transition:color .3s, border-color .3s, background .3s; }
+.ar-illo .ar-modes button:hover { color:#222; background:rgba(255,255,255,.8); }
+.ar-illo .ar-modes button:focus-visible { outline:1.5px dashed #888; outline-offset:2px; }
+.ar-illo .ar-modes button i { width:.62em; height:.62em; border-radius:50%; background:#c4c4c8; transition:background .3s; flex:none; }
+.ar-illo .ar-modes button[aria-pressed=true] { color:#1f1f21; background:rgba(255,255,255,.9); border-color:rgba(40,40,44,.45); }
+.ar-illo .ar-modes button[data-m=carbon][aria-pressed=true] i { background:#8fa792; }
+.ar-illo .ar-modes button[data-m=water][aria-pressed=true] i { background:#86a5b8; }
+.ar-illo .ar-modes button[data-m=light][aria-pressed=true] i { background:#c2a66a; }
+@media (max-width:600px) {
+.ar-illo .ar-modes { font-size:7.5px; gap:.35em; right:3%; bottom:6%; }
+.ar-illo .ar-modes button { padding:.5em .8em .5em .7em; }
+}
+@media (prefers-reduced-motion: reduce) {
+.ar-illo .reveal { stroke-dashoffset:0 !important; transition:none !important; }
+.ar-illo .ar-panel { opacity:1 !important; transition:none !important; }
+.ar-illo .ar-bloom { opacity:1 !important; --r:230% !important; animation:none !important; }
+.ar-illo .ar-tag i, .ar-illo .ar-cloud, .ar-illo .flow, .ar-illo .spark, .ar-illo .fall, .ar-illo .foam, .ar-illo .rip, .ar-illo .rl, .ar-illo .sun-rays, .ar-illo .node, .ar-illo .wave, .ar-illo .drip, .ar-illo .srays, .ar-illo .beams { animation:none !important; }
+.ar-illo .beams { opacity:.8 !important; }
+.ar-illo *, .ar-illo { transition-duration:0s !important; transition-delay:0s !important; }
+}

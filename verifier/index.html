@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Source-Grounded Answer Verifier</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Montserrat:wght@400;500;600&family=Playfair+Display:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#FFFFFF; --side:#F4F4F4; --ink:#171717; --muted:#5F5F5F; --line:#E6E6E6;
+  --red:#E3261C; --blue-soft:#E8F0F9; --blue:#2F5DA8;
+  --card-grey:#EBEBED; --card-blue:#E0ECF8; --stitch:#B9BDC4;
+  --back-bg:#4A5A92; --back-ink:#FFFFFF; --back-muted:#D3D9F0;
+  --display:"Poppins","Helvetica Neue",Arial,sans-serif;
+  --body:"Montserrat","Helvetica Neue",Arial,sans-serif;
+  --caption:"Playfair Display",Georgia,serif;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.7 var(--body);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+p{margin:0}
+h1,h2,h3{font-family:var(--display);font-weight:500;letter-spacing:-.01em;line-height:1.15;text-wrap:balance;margin:0}
+sub{font-size:.72em;line-height:0}
+.eyebrow{font:600 11.5px/1.4 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+
+/* shell: sidebar like the portfolio */
+.shell{display:grid;grid-template-columns:296px minmax(0,1fr);min-height:100%}
+.side{background:var(--side);padding:32px 30px;position:sticky;top:env(safe-area-inset-top,0px);height:100vh;display:flex;flex-direction:column;gap:28px}
+.side .brand{font:400 40px/1 var(--display);text-decoration:none;letter-spacing:.01em}
+.side nav{display:flex;flex-direction:column;gap:2px;font:400 17px/1.5 var(--body)}
+.side nav a{text-decoration:none}
+.side nav a:hover{color:var(--red)}
+.side .rule{width:20px;border-top:1px solid var(--ink)}
+.side .current{font:600 16px/1.35 var(--body);color:var(--red)}
+.side ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px;font-size:13px;line-height:1.4}
+.side ol a{text-decoration:none;color:var(--muted)}
+.side ol a:hover{color:var(--ink)}
+.side small{margin-top:auto;font-size:10px;color:var(--muted)}
+main{min-width:0;padding-inline:clamp(16px,4vw,56px);padding-block:0 64px}
+.col{max-width:980px;margin:0 auto}
+
+
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px 24px;margin:0;padding-block:12px 36px}
+.meta dt{font:600 11px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.meta dd{margin:0;font-size:14.5px;line-height:1.5}
+section{padding-block:clamp(40px,6vw,80px);border-top:1px solid var(--line)}
+.sec-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:clamp(16px,3vw,48px);margin-bottom:clamp(24px,3.5vw,40px)}
+.sec-head h2{font-size:clamp(28px,3.2vw,40px);margin-top:8px}
+.sec-head p{color:var(--muted);align-self:end;max-width:60ch}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(24px,4vw,48px)}
+.two h3{font-size:21px;margin:8px 0 10px}
+.foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding-top:32px;border-top:1px solid var(--line);font-size:14px;color:var(--muted)}
+.foot a{text-decoration:none;color:var(--ink);font-weight:500}
+.foot a:hover{color:var(--red)}
+.cases{gap:14px}
+.cases article{display:flex;flex-direction:column;gap:8px}
+.cases h3{margin:0}
+@media (max-width:900px){.meta{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* hero */
+.hero{padding-block:clamp(40px,6vw,80px) clamp(24px,3vw,36px)}
+.hero h1{font-size:clamp(40px,5.6vw,72px);font-weight:600;margin-block:12px 16px}
+.hero .lede{font-size:clamp(16px,1.5vw,19px);line-height:1.6;max-width:60ch}
+.compare{margin:clamp(32px,4vw,48px) 0 0}
+.ask{display:inline-flex;align-items:center;gap:10px;font:500 15px/1.3 var(--display);background:#F4F4F4;border-radius:999px;padding:8px 16px 8px 8px;margin-bottom:16px}
+.ask span{font:600 10.5px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;background:#171717;color:#fff;border-radius:999px;padding:6px 10px}
+.pair{display:grid;grid-template-columns:minmax(0,1fr) 88px minmax(0,1fr);align-items:stretch}
+.ans{border:1px solid var(--line);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;gap:12px;background:#fff}
+.ans.after{border-color:#D9C3D7;box-shadow:0 10px 30px -18px rgba(122,79,119,.45)}
+.ans header{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.ans header b{font:600 12px/1.3 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.ans .score{font:600 30px/1 var(--display);font-variant-numeric:tabular-nums}
+.ans .score small{font-size:14px;color:var(--muted);font-weight:500;margin-left:2px}
+.ans.after .score{color:#7A4F77}
+.ans p{font-size:14.5px;line-height:1.65;color:#333}
+mark{padding:1px 2px;border-radius:3px;color:inherit}
+mark.bad{background:#FBE3E1;text-decoration:line-through;text-decoration-color:#C9453C;text-decoration-thickness:1.5px}
+mark.good{background:#EDE0EC;box-shadow:inset 0 -2px 0 #9C6B98}
+.ans footer{margin-top:auto;font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.dot.bad{background:#C9453C}.dot.good{background:#9C6B98}
+.arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#7A4F77;text-align:center;font:600 10px/1.3 var(--body);letter-spacing:.1em;text-transform:uppercase;padding-inline:8px}
+.arrow svg{width:56px;height:16px}
+.compare figcaption{font:italic 400 14px/1.5 var(--caption);color:var(--muted);margin-top:14px}
+code{font:500 .92em/1 ui-monospace,Menlo,Consolas,monospace;background:#F4F4F4;padding:2px 5px;border-radius:4px}
+.gh{font-weight:600;text-decoration:none;border-bottom:1.5px solid var(--ink)}
+.gh:hover{color:var(--red);border-color:var(--red)}
+
+/* system */
+.flow{margin:0;overflow-x:auto}
+.flow svg{width:100%;height:auto;display:block}
+.specs{list-style:none;margin:clamp(20px,3vw,32px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--ink)}
+.specs li{padding:16px 18px 4px 0;display:flex;flex-direction:column;gap:4px}
+.specs li + li{padding-left:18px;border-left:1px solid var(--line)}
+.specs b{font:600 11px/1.4 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--red)}
+.specs span{font-size:14.5px;line-height:1.5}
+
+/* experiment */
+.qtypes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.qtypes article{border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:6px}
+.qtypes h3{font-size:19px}
+.qtypes article p:not(.eyebrow){font-size:14.5px;color:var(--muted);line-height:1.55}
+.note{margin-top:clamp(24px,3vw,36px);max-width:72ch;font-size:15px;line-height:1.7;color:#333;border-left:3px solid #9C6B98;padding-left:18px}
+.note b{color:var(--ink)}
+
+/* results */
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:clamp(24px,3vw,36px)}
+.stats div{background:#F7F5F8;border-radius:14px;padding:18px 18px 16px;display:flex;flex-direction:column;gap:6px}
+.stats b{font:600 clamp(22px,2.4vw,30px)/1.1 var(--display);font-variant-numeric:tabular-nums}
+.stats span{font-size:13px;line-height:1.45;color:var(--muted)}
+.chart{position:relative;margin:0;max-width:820px}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart .pt{cursor:default}
+.legend{display:flex;gap:18px;font-size:13px;margin-bottom:10px;padding-left:150px}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{width:10px;height:10px;border-radius:50%}
+.tip{position:absolute;transform:translate(-50%,-100%);background:#171717;color:#fff;font-size:12.5px;padding:6px 10px;border-radius:8px;white-space:nowrap;pointer-events:none}
+details.table{margin-top:14px;font-size:14px}
+details.table summary{cursor:pointer;color:var(--muted);font-weight:500}
+details.table table{border-collapse:collapse;margin-top:10px;font-variant-numeric:tabular-nums}
+details.table th,details.table td{padding:6px 18px 6px 0;text-align:left;border-bottom:1px solid var(--line)}
+
+/* cases */
+.cases article{border:1px solid var(--line);border-radius:16px;padding:22px}
+.cases h3{font-size:26px;display:flex;align-items:center;gap:12px;font-variant-numeric:tabular-nums}
+.cases article p:not(.eyebrow){font-size:15px;line-height:1.65;color:#333}
+.delta{font:600 13px/1 var(--body);padding:6px 10px;border-radius:999px}
+.delta.up{background:#EDE0EC;color:#6E4270}
+.delta.down{background:#FBE3E1;color:#9C2F28}
+
+/* recs */
+.recs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.recs div{border:1px solid var(--line);border-radius:14px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.recs h3{font-size:18px}
+.recs p{font-size:14.5px;color:var(--muted);line-height:1.55}
+.tag{align-self:flex-start;font:600 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;padding:6px 10px;border-radius:999px}
+.tag.yes{background:#EDE0EC;color:#6E4270}.tag.no{background:#EEF1F7;color:#3F5487}.tag.care{background:#F4F4F4;color:#444}
+.limits{margin-top:20px;font-size:14px;color:var(--muted);max-width:80ch}
+.limits b{color:var(--ink)}
+
+/* run */
+pre{background:#171717;color:#EDEDED;border-radius:14px;padding:20px 22px;overflow-x:auto;margin:0}
+pre code{background:none;padding:0;color:inherit;font-size:13.5px;line-height:1.8}
+.closing{margin-top:clamp(36px,5vw,64px);max-width:60ch}
+.closing h3{font-size:21px;margin:8px 0 0;text-wrap:balance}
+.foot{margin-top:clamp(40px,5vw,64px)}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:1fr}
+  .side{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px 20px;padding:18px clamp(16px,4vw,56px)}
+  .side .brand{font-size:24px}
+  .side nav{flex-direction:row;gap:18px;font-size:15px}
+  .side .rule,.side ol,.side small,.side .current{display:none}
+  .sec-head,.two{grid-template-columns:1fr}
+  .pair{grid-template-columns:1fr}
+  .arrow{flex-direction:row;padding:12px 0}
+  .arrow svg{transform:rotate(90deg);width:28px}
+  .specs,.stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .specs li:nth-child(3){padding-left:0;border-left:0}
+  .qtypes{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .recs,.specs{grid-template-columns:1fr}
+  .specs li,.specs li + li{padding-left:0;border-left:0;border-bottom:1px solid var(--line);padding-bottom:12px}
+  .legend{padding-left:0}
+  .flow svg{min-width:640px}
+}
+
+/* ===== dark theme (this project) ===== */
+:root{
+  --bg:#0D0E11; --side:#131519; --ink:#ECEDEF; --muted:#9A9EA8; --line:#25282F;
+  --red:#A98BF0; --surface:#15171C; --surface2:#1B1E24;
+  --acc:#A98BF0; --acc-soft:rgba(169,139,240,.16); --bad:#FF7B70; --bad-soft:rgba(255,123,112,.16);
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:dark;
+}
+body{background:var(--bg);color:var(--ink)}
+.eyebrow{font-family:var(--mono);font-weight:500;letter-spacing:.08em;color:var(--acc)}
+.sec-head p.eyebrow{color:var(--acc)}
+.side{border-right:1px solid var(--line)}
+.side .current{color:var(--acc)}
+.side nav a:hover,.foot a:hover,.gh:hover{color:var(--acc);border-color:var(--acc)}
+.hero h1{letter-spacing:-.02em}
+.ask{background:var(--surface2);color:var(--ink)}
+.ask span{background:var(--acc);color:#0D0E11}
+.ans{background:var(--surface);border-color:var(--line)}
+.ans.after{border-color:rgba(169,139,240,.45);box-shadow:0 0 0 1px rgba(169,139,240,.15),0 20px 50px -20px rgba(169,139,240,.35)}
+.ans p{color:#C9CBD1}
+.ans.after .score{color:var(--acc)}
+mark.bad{background:var(--bad-soft);text-decoration-color:var(--bad);color:#E6B7B2}
+mark.good{background:var(--acc-soft);box-shadow:inset 0 -2px 0 var(--acc);color:#E8E1FB}
+.dot.bad{background:var(--bad)}.dot.good{background:var(--acc)}
+.arrow{color:var(--acc)}
+code{background:var(--surface2);color:#D8DAE0}
+.gh{border-color:var(--ink)}
+.specs{border-top-color:var(--ink)}
+.specs b{color:var(--acc);font-family:var(--mono);font-weight:500}
+.qtypes article,.cases article,.recs div{background:var(--surface);border-color:var(--line)}
+.qtypes article p:not(.eyebrow),.recs p{color:var(--muted)}
+.note{color:#C9CBD1;border-left-color:var(--acc)}
+.stats div{background:var(--surface2)}
+.cases article p:not(.eyebrow){color:#C9CBD1}
+.delta.up,.tag.yes{background:var(--acc-soft);color:#CDBBF8}
+.delta.down{background:var(--bad-soft);color:#FFB0A8}
+.tag.no{background:rgba(28,159,163,.16);color:#7FD3D6}
+.tag.care{background:var(--surface2);color:#C9CBD1}
+.tip{background:#ECEDEF;color:#0D0E11}
+pre{background:#08090B;border:1px solid var(--line)}
+details.table th,details.table td{border-color:var(--line)}
+
+/* bigger meta */
+.meta{gap:22px 32px;padding-block:20px 44px}
+.meta dt{font-size:12.5px;font-family:var(--mono);font-weight:500;letter-spacing:.08em;color:var(--muted);margin-bottom:6px}
+.meta dd{font-size:clamp(17px,1.4vw,19px);line-height:1.5}
+.compare figcaption{font-size:15px}
+
+/* heavier body text + calmer purple */
+.meta dd{font-weight:500}
+.ans p{font-weight:500;color:#D2D4D9}
+:root{--acc:#9C8FD0;--acc-soft:rgba(156,143,208,.10)}
+.ans.after{border-color:rgba(156,143,208,.32);box-shadow:0 12px 32px -22px rgba(0,0,0,.6)}
+mark.good{background:var(--acc-soft);box-shadow:inset 0 -1.5px 0 rgba(156,143,208,.7);color:#E4E1F0}
+.delta.up,.tag.yes{color:#C6BEE6}
+
+/* section distinction: numbered labels + alternating bands */
+main{overflow-x:clip}
+.col{counter-reset:sec}
+section{counter-increment:sec;position:relative}
+section .sec-head > div > .eyebrow::before,
+#problem .two > div:first-child > .eyebrow::before{content:counter(sec,decimal-leading-zero);display:inline-block;margin-right:12px;padding-right:12px;border-right:1px solid var(--line);color:var(--muted)}
+section.band{background:#121419;box-shadow:0 0 0 100vmax #121419;clip-path:inset(0 -100vmax);border-top-color:transparent}
+section.band + section{border-top-color:transparent}
+.band .recs div{background:var(--bg)}
+.band .stats div{background:#1A1D23}
+.sec-head h2{padding-bottom:0}
+
+/* hero refinements */
+.hero{padding-block:clamp(24px,3.5vw,48px) clamp(24px,3vw,36px)}
+.hero .lede-q{font:500 clamp(19px,1.9vw,24px)/1.35 var(--display);color:var(--ink);letter-spacing:-.005em;margin-bottom:10px;max-width:none;text-wrap:balance}
+.hero .lede{color:#C9CBD1}
+.pair{grid-template-columns:minmax(0,1fr) 104px minmax(0,1fr)}
+.arrow{font-size:11px;gap:8px}
+.arrow svg{width:66px;height:18px}
+@media (max-width:900px){.pair{grid-template-columns:1fr}.arrow svg{width:30px}}
+</style>
+<link rel="stylesheet" href="../assets/cs-nav.css"><style>.shell{grid-template-columns:1fr!important}</style>
+</head>
+<body>
+
+<div class="shell">
+  <main>
+   <div class="col">
+    <header class="hero">
+      <p class="eyebrow">LLM evaluation pipeline</p>
+      <h1>Source-Grounded Answer Verifier</h1>
+      <p class="lede-q">When does verification actually make an LLM answer better?</p>
+      <p class="lede">I built a reproducible Python pipeline to compare direct answers with source-verified revisions — testing where a second pass improves grounding, and where it over-edits an answer that was already good.</p>
+
+      <figure class="compare" aria-label="Example A1-G: a direct answer scored 6.5 out of 12; after verification it scored 11.5.">
+        <div class="ask"><span>Reader asks</span>“What does this mean?”</div>
+        <div class="pair">
+          <article class="ans before">
+            <header><b>Direct draft</b><span class="score">6.5<small>/12</small></span></header>
+            <p>…After the assistant was removed, both groups completed three identical problems to measure their independent performance. The study aimed to assess how AI assistance affected motivation and persistence, as indicated by the choice to skip problems. <mark class="bad">The findings suggest that the presence of AI may influence how participants engage with the problems,</mark> but the study also acknowledges limitations in its design…</p>
+            <footer><i class="dot bad"></i>1 unsupported claim · 3 missing qualifications</footer>
+          </article>
+          <div class="arrow" aria-hidden="true"><span>verify against source</span><svg viewBox="0 0 60 16"><path d="M2 8 H54 M46 2 L56 8 L46 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <article class="ans after">
+            <header><b>After verification</b><span class="score">11.5<small>/12</small></span></header>
+            <p>…The study aimed to assess how AI assistance affected motivation and persistence, as indicated by the choice to skip problems. <mark class="good">The method supports causal comparison of AI access versus control within this experiment.</mark> However, <mark class="good">the interpretation of skipping as persistence is an operationalization chosen by the authors,</mark> and the study acknowledges limitations in its design, <mark class="good">particularly in Experiment 1</mark>…</p>
+            <footer><i class="dot good"></i>Unsupported claim removed · qualifications restored</footer>
+          </article>
+        </div>
+        <figcaption>Real output from the experiment (case A1-G, <code>gpt-4o-mini</code>). Highlights mark what the verifier flagged and what it restored.</figcaption>
+      </figure>
+    </header>
+
+    <dl class="meta">
+      <div><dt>Time</dt><dd>Summer 2026</dd></div>
+      <div><dt>Role</dt><dd>Solo: experiment design, Python pipeline, evaluation</dd></div>
+      <div><dt>Stack</dt><dd>Python · OpenAI / Anthropic APIs · pydantic · pandas · pytest</dd></div>
+      <div><dt>Code</dt><dd><a class="gh" href="https://github.com/zichunxia78-creator/final-project-17630-xia" target="_blank" rel="noopener">GitHub repo ↗</a></dd></div>
+    </dl>
+
+<section id="problem">
+  <div class="two">
+    <div>
+      <p class="eyebrow">The problem</p>
+      <h3>LLM explanations drift past their source</h3>
+      <p>Graduate students increasingly ask an LLM to explain a dense passage before they read it closely. The answers sound right, but they can quietly add claims the source never made, drop the authors' qualifications, or turn a correlation into a cause — exactly what a time-pressed reader won't catch.</p>
+    </div>
+    <div>
+      <p class="eyebrow">The approach</p>
+      <h3>Draft first, then check against the source</h3>
+      <p>Instead of asking for a better answer up front, the system lets the model answer directly, then runs a separate verifier that sees only the same source window and the exact draft. It either keeps the draft or makes the smallest possible repair. The question was whether that second pass earns its cost, and for which kinds of questions.</p>
+    </div>
+  </div>
+</section>
+
+<section id="system" class="band">
+  <div class="sec-head">
+    <div><p class="eyebrow">System</p><h2>Five stages, one command</h2></div>
+    <p>Every stage is a separate module with a structured output, so each step can be inspected, re-run, or swapped. The scorer never sees which workflow produced an answer.</p>
+  </div>
+  <figure class="flow" aria-label="Pipeline: source window and question, generate a draft, verify (keep or minimal revise), blind the outputs, score with an independent LLM judge, analyze.">
+    <svg viewBox="0 0 1000 300" role="img">
+      <defs>
+        <marker id="fa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8B8F99"/></marker>
+        <marker id="fm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#5F5A7A"/></marker>
+      </defs>
+      <g stroke="#8B8F99" stroke-width="1.5" fill="none">
+        <line x1="112" y1="92" x2="228" y2="92" marker-end="url(#fa)"/>
+        <line x1="312" y1="92" x2="428" y2="92" marker-end="url(#fa)"/>
+        <line x1="512" y1="92" x2="628" y2="92" marker-end="url(#fa)"/>
+        <line x1="712" y1="92" x2="828" y2="92" marker-end="url(#fa)"/>
+      </g>
+      <path d="M270,128 C270,200 670,200 670,132" fill="none" stroke="#5F5A7A" stroke-width="1.6" stroke-dasharray="5 6" marker-end="url(#fm)"/>
+      <text x="470" y="206" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#9A9EA8">Workflow A: direct draft goes straight to scoring</text>
+      <text x="470" y="40" text-anchor="middle" font-family="Montserrat, Arial, sans-serif" font-size="13" fill="#9A9EA8">Workflow B: same draft, verified</text>
+      <g font-family="Montserrat, Arial, sans-serif">
+        <g transform="translate(70,60)">
+          <rect width="64" height="64" rx="11" fill="#2A2F3A"/>
+          <g transform="translate(32,32)" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"><rect x="-13" y="-16" width="26" height="32" rx="3"/><path d="M-7,-7 H7 M-7,0 H7 M-7,7 H3"/></g>
+        </g>
+        <g transform="translate(270,60)">
+          <rect x="-32" width="64" height="64" rx="11" fill="#2A2F3A"/>
+          <g transform="translate(0,32)" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"><path d="M-12,12 L8,-8 L13,-3 L-7,17 Z"/><path d="M-14,-13 V-7 M-17,-10 H-11 M4,-16 V-12 M2,-14 H6"/></g>
+        </g>
+        <g transform="translate(470,60)">
+          <rect x="-32" width="64" height="64" rx="11" fill="#1E1B2B" stroke="#8A7FBF" stroke-width="1.5"/>
+          <g transform="translate(0,32)" stroke="#B3AAD9" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle r="13"/><path d="M-6,0 L-1,5 L7,-5"/></g>
+        </g>
+        <g transform="translate(670,60)">
+          <rect x="-32" width="64" height="64" rx="11" fill="#2A2F3A"/>
+          <g transform="translate(0,32)" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"><path d="M-15,0 C-9,-9 9,-9 15,0 C9,9 -9,9 -15,0 Z"/><circle r="4"/><path d="M-13,12 L13,-12"/></g>
+        </g>
+        <g transform="translate(870,60)">
+          <rect x="-32" width="64" height="64" rx="11" fill="#2A2F3A"/>
+          <g transform="translate(0,32)" stroke="#fff" stroke-width="1.8" fill="none" stroke-linecap="round"><path d="M-14,13 H14"/><path d="M-9,13 V2 M-1,13 V-7 M7,13 V-2"/></g>
+        </g>
+        <g font-size="16" font-weight="600" fill="#ECEDEF" font-family="Poppins, Arial, sans-serif">
+          <text x="102" y="262" text-anchor="middle">Source + question</text>
+          <text x="270" y="262" text-anchor="middle">Generate</text>
+          <text x="470" y="262" text-anchor="middle">Verify</text>
+          <text x="670" y="262" text-anchor="middle">Blind + judge</text>
+          <text x="870" y="262" text-anchor="middle">Analyze</text>
+        </g>
+        <g font-size="12.5" fill="#9A9EA8">
+          <text x="102" y="284" text-anchor="middle">fixed passage window</text>
+          <text x="270" y="284" text-anchor="middle">grounded draft</text>
+          <text x="470" y="284" text-anchor="middle">KEEP or minimal revise</text>
+          <text x="670" y="284" text-anchor="middle">independent LLM, /12</text>
+          <text x="870" y="284" text-anchor="middle">tables + charts</text>
+        </g>
+      </g>
+    </svg>
+  </figure>
+  <ul class="specs">
+    <li><b>Model</b><span><code>gpt-4o-mini</code>, temperature 0</span></li>
+    <li><b>Structured outputs</b><span>pydantic schemas, JSON repair, retries</span></li>
+    <li><b>Mock mode</b><span>runs end-to-end with no API key</span></li>
+    <li><b>Tests</b><span>18 pytest checks on the pipeline</span></li>
+  </ul>
+</section>
+
+<section id="experiment">
+  <div class="sec-head">
+    <div><p class="eyebrow">Experiment</p><h2>Same passage, three ways of asking</h2></div>
+    <p>How a reader phrases the question decides how much the model has to choose on its own. I held each passage fixed and varied only the question, then ran every version through both workflows: 10 passages × 3 question types × 2 workflows = 60 scored answers.</p>
+  </div>
+  <div class="qtypes">
+    <article><p class="eyebrow">Generic</p><h3>“What does this mean?”</h3><p>The model decides what matters. Most room to drift.</p></article>
+    <article><p class="eyebrow">Single concept</p><h3>Names one idea</h3><p>The question points at one claim in the passage.</p></article>
+    <article><p class="eyebrow">Relational</p><h3>Links two ideas</h3><p>The answer has to connect two source claims correctly.</p></article>
+  </div>
+  <p class="note"><b>A design decision worth noting.</b> My pilot added a planning step before answering. Planning didn't raise quality (9.8 vs 10.0 for direct), and it tangled planning and verification together, so I couldn't tell which one helped. The final design verifies the exact direct draft instead, so any change is attributable to verification alone.</p>
+</section>
+
+<section id="results" class="band">
+  <div class="sec-head">
+    <div><p class="eyebrow">Results</p><h2>Verification helped most where the question was vaguest</h2></div>
+    <p>Mean quality out of 12, scored blind. Descriptive results from a small exploratory study, not significance tests.</p>
+  </div>
+  <div class="stats">
+    <div><b>9.87 → 10.67</b><span>mean quality, direct → verified</span></div>
+    <div><b>2 → 0</b><span>boundary violations (unsupported, contradicted, overstated)</span></div>
+    <div><b>18 / 30</b><span>drafts revised; 12 kept as-is</span></div>
+    <div><b>1</b><span>regression: a strong draft made worse</span></div>
+  </div>
+  <figure class="chart" id="dumb">
+    <div class="legend" aria-hidden="true"><span><i style="background:#1C9FA3"></i>Direct</span><span><i style="background:#9486C8"></i>Verified</span></div>
+    <svg viewBox="0 0 760 230" role="img" aria-label="Mean quality by question type. Generic: 9.5 direct, 10.8 verified. Single concept: 10.4 direct, 10.8 verified. Relational: 9.7 direct, 10.4 verified."></svg>
+    <div class="tip" hidden></div>
+    <details class="table"><summary>View as table</summary>
+      <table><thead><tr><th>Question type</th><th>Direct</th><th>Verified</th><th>Δ</th></tr></thead>
+      <tbody><tr><td>Generic</td><td>9.5</td><td>10.8</td><td>+1.3</td></tr><tr><td>Single concept</td><td>10.4</td><td>10.8</td><td>+0.4</td></tr><tr><td>Relational</td><td>9.7</td><td>10.4</td><td>+0.7</td></tr><tr><td>All</td><td>9.87</td><td>10.67</td><td>+0.80</td></tr></tbody></table>
+    </details>
+  </figure>
+</section>
+
+<section id="cases">
+  <div class="sec-head">
+    <div><p class="eyebrow">Two cases</p><h2>A repair, and an over-edit</h2></div>
+    <p>A mean hides the interesting part. I tracked every change the verifier made, including the ones that hurt.</p>
+  </div>
+  <div class="two cases">
+    <article>
+      <p class="eyebrow">A1-G · Generic question</p>
+      <h3>6.5 → 11.5 <span class="delta up">+5.0</span></h3>
+      <p>The direct answer summarized the study correctly but softened a claim the source didn't support and dropped three of the authors' qualifications. The verifier listed each one against the passage and restored them with minimal edits (shown at the top of this page).</p>
+    </article>
+    <article>
+      <p class="eyebrow">M4-R · Relational question</p>
+      <h3>11.5 → 10.5 <span class="delta down">−1.0</span></h3>
+      <p>The direct answer already connected both metrics cleanly. The verifier still revised it, adding true but unnecessary limitations, and the judge docked it for concision. Verification can add correct content and still make a good answer worse.</p>
+    </article>
+  </div>
+</section>
+
+<section id="recs" class="band">
+  <div class="sec-head">
+    <div><p class="eyebrow">Recommendations</p><h2>When to verify, and when not to</h2></div>
+    <p>Each recommendation is tied to a specific result, not a general “always verify” rule.</p>
+  </div>
+  <div class="recs">
+    <div><b class="tag yes">Verify</b><h3>Generic or under-specified questions</h3><p>Biggest gain (+1.3); the model has the most room to drift.</p></div>
+    <div><b class="tag no">Skip</b><h3>Clear single-concept questions</h3><p>Only +0.4; the direct answer is usually already right.</p></div>
+    <div><b class="tag care">Verify with care</b><h3>Relational questions</h3><p>Removed both boundary violations, but produced the one regression.</p></div>
+    <div><b class="tag care">Report it all</b><h3>Not just the mean</h3><p>Keeps, fixes, unnecessary edits, and regressions, side by side.</p></div>
+  </div>
+  <p class="limits"><b>Limits.</b> 10 passages from 3 papers, one model setting, one LLM judge without human agreement checks, and question variants I wrote myself. This measures answer quality, not student learning.</p>
+</section>
+
+<section class="run">
+  <div class="sec-head">
+    <div><p class="eyebrow">Run it yourself</p><h2>No API key needed</h2></div>
+    <p>Mock mode runs the whole pipeline end-to-end with canned model responses, so anyone can inspect every stage in about a minute.</p>
+  </div>
+  <pre><code>git clone https://github.com/zichunxia78-creator/final-project-17630-xia
+cd final-project-17630-xia && pip install -r requirements.txt
+./run_pipeline.sh experiment --all --mock --fresh
+./run_pipeline.sh test</code></pre>
+  <div class="closing">
+    <p class="eyebrow">The outcome</p>
+    <h3>A reproducible evaluation that says not just whether a verifier helps, but for which questions, and at what cost.</h3>
+  </div>
+</section>
+
+    <footer class="foot">
+      <span>Source-Grounded Answer Verifier · 2026</span>
+      <a href="https://oreyxia.com/">← All projects</a>
+    </footer>
+   </div>
+  </main>
+</div>
+
+<script>
+(function(){
+  var rows=[["Generic",9.5,10.8],["Single concept",10.4,10.8],["Relational",9.7,10.4]];
+  var fig=document.getElementById('dumb'), svg=fig.querySelector('svg'), tip=fig.querySelector('.tip');
+  var L=150,R=690,T=20,rowH=56, lo=9,hi=11;
+  function x(v){return L+(v-lo)/(hi-lo)*(R-L);}
+  var NS='http://www.w3.org/2000/svg', h='';
+  [9,9.5,10,10.5,11].forEach(function(t){
+    h+='<line x1="'+x(t)+'" x2="'+x(t)+'" y1="'+T+'" y2="'+(T+rowH*3)+'" stroke="#23262D" stroke-width="1"/>';
+    h+='<text x="'+x(t)+'" y="'+(T+rowH*3+22)+'" text-anchor="middle" font-size="12" fill="#9A9EA8" font-family="Montserrat, Arial, sans-serif">'+t+'</text>';
+  });
+  rows.forEach(function(r,i){
+    var y=T+rowH*i+rowH/2;
+    h+='<text x="0" y="'+(y+5)+'" font-size="14" font-weight="500" fill="#ECEDEF" font-family="Montserrat, Arial, sans-serif">'+r[0]+'</text>';
+    h+='<line x1="'+x(r[1])+'" x2="'+x(r[2])+'" y1="'+y+'" y2="'+y+'" stroke="#4A4E58" stroke-width="2"/>';
+    h+='<circle class="pt" data-t="'+r[0]+' · Direct: '+r[1]+' / 12" cx="'+x(r[1])+'" cy="'+y+'" r="8" fill="#1C9FA3" stroke="#0D0E11" stroke-width="2"/>';
+    h+='<circle class="pt" data-t="'+r[0]+' · Verified: '+r[2]+' / 12" cx="'+x(r[2])+'" cy="'+y+'" r="8" fill="#9486C8" stroke="#0D0E11" stroke-width="2"/>';
+    var d=(r[2]-r[1]).toFixed(1);
+    h+='<text x="'+(x(r[2])+16)+'" y="'+(y+5)+'" font-size="13" font-weight="600" fill="#ECEDEF" font-family="Montserrat, Arial, sans-serif">+'+d+'</text>';
+  });
+  h+='<text x="'+L+'" y="'+(T+rowH*3+22)+'" text-anchor="end" dx="-24" font-size="12" fill="#9A9EA8" font-family="Montserrat, Arial, sans-serif">Score /12</text>';
+  svg.innerHTML=h;
+  svg.querySelectorAll('.pt').forEach(function(c){
+    function show(){var b=fig.getBoundingClientRect(),cb=c.getBoundingClientRect();tip.textContent=c.getAttribute('data-t');tip.hidden=false;tip.style.left=(cb.left-b.left+cb.width/2)+'px';tip.style.top=(cb.top-b.top-8)+'px';}
+    c.addEventListener('mouseenter',show);c.addEventListener('mouseleave',function(){tip.hidden=true;});
+  });
+})();
+</script>
+<script>window.CSN={"eyebrow": "LLM evaluation · 2026", "title": "Source-Grounded Answer Verifier", "accent": "#B9A6F0", "accentInk": "#16121F", "theme": "dark", "side": "#111216", "next": {"href": "../ancestor/index.html", "label": "Ancestor"}, "sections": [["problem", "Problem"], ["system", "System"], ["experiment", "Experiment"], ["results", "Results"], ["cases", "Two cases"], ["recs", "Recommendations"]], "home": "../index.html", "back": "../index.html#work"};</script>
+<script src="../assets/cs-nav.js"></script>
+</body>
+</html>

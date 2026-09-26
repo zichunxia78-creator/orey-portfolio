@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ancestor — Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#111111;--bg-card:#191919;--bg-card-2:#1f1f1f;
+  --indigo-deep:#141230;--indigo-mid:#1b1840;
+  --text:#ecebe6;--text-secondary:rgba(236,235,230,0.72);--text-tertiary:rgba(236,235,230,0.5);
+  --accent:#818CF8;--accent-strong:#a5adfb;--accent-soft:rgba(129,140,248,0.14);
+  --border:rgba(255,255,255,0.09);--border-strong:rgba(255,255,255,0.14);--border-accent:rgba(129,140,248,0.4);
+  --linen:#f5f4f0;--ink:#1a1a1a;--ink-2:#55514b;--ink-3:#8a857d;
+  --sans:'Inter',system-ui,sans-serif;--display:'Space Grotesk',sans-serif;--serif:'Playfair Display',Georgia,serif;
+  --max:1100px;--gap:24px;--text-col:660px;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+video,img{display:block;max-width:100%}
+
+/* Nav */
+.nav-pill{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:100;display:flex;align-items:center;gap:24px;padding:10px 12px 10px 18px;border-radius:999px;background:rgba(17,17,17,0.66);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid var(--border);max-width:600px;width:calc(100% - 32px);justify-content:space-between}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;padding:7px 12px 7px 6px;border-radius:999px;transition:all .2s;white-space:nowrap}
+.nav-back:hover{color:#fff;background:rgba(255,255,255,0.06)}
+.nav-back svg{width:16px;height:16px}
+.nav-links{display:flex;gap:2px}
+.nav-links a{text-decoration:none;font-size:13px;color:rgba(255,255,255,0.6);padding:7px 12px;border-radius:999px;transition:all .2s}
+.nav-links a:hover{color:#fff;background:rgba(255,255,255,0.06)}
+
+/* Shared */
+.wrap{max-width:var(--max);margin:0 auto;padding:0 var(--gap)}
+.section{padding:104px 0}
+.section-num{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--accent-strong);font-weight:600;margin-bottom:18px;display:flex;align-items:center;gap:10px}
+.section-num::before{content:'';width:24px;height:1px;background:currentColor}
+h2.section-title{font-family:var(--display);font-size:clamp(30px,4.2vw,48px);font-weight:600;line-height:1.08;letter-spacing:-0.03em;margin-bottom:18px;max-width:960px}
+.lede{font-size:18px;line-height:1.65;color:var(--text-secondary);font-weight:400;max-width:var(--text-col)}
+.kicker{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--text-tertiary)}
+.tag{display:inline-block;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;padding:4px 10px;border-radius:999px;border:1px solid var(--border-strong);color:var(--text-secondary)}
+.tag.ai{border-color:rgba(45,212,191,0.35);color:#7fe3d4}
+.tag.me{border-color:var(--border-accent);color:var(--accent-strong);background:var(--accent-soft)}
+
+/* Section backgrounds — narrative punctuation */
+.bg-hero{position:relative;overflow:hidden;background:linear-gradient(180deg,#1a1735 0%,#131127 55%,var(--bg) 100%)}
+.bg-neutral{background:var(--bg)}
+.bg-indigo{background:radial-gradient(120% 80% at 80% 0%,#262260 0%,transparent 60%),linear-gradient(180deg,var(--indigo-mid) 0%,var(--indigo-deep) 100%);border-top:1px solid rgba(129,140,248,0.18);border-bottom:1px solid rgba(129,140,248,0.18)}
+.bg-linen{background:var(--linen);color:var(--ink)}
+.bg-closing{background:radial-gradient(60% 35% at 30% 30%,rgba(120,135,160,0.1) 0%,transparent 70%),linear-gradient(180deg,#111111 0%,#141417 100%)}
+.bg-closing .section-num{color:rgba(199,203,253,0.75)}
+.bg-closing .pill{border-color:rgba(255,255,255,0.16);background:rgba(255,255,255,0.05)}
+.m-me span{color:rgba(199,203,253,0.8)}
+
+/* HERO — full-bleed cinematic background */
+.hero{position:relative;overflow:hidden;min-height:min(92vh,880px);display:flex;align-items:flex-end;padding:140px 0 72px;background:#000}
+.hero-bgvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.hero-shade{position:absolute;inset:0;background:
+  linear-gradient(90deg,rgba(8,7,20,0.88) 0%,rgba(8,7,20,0.62) 38%,rgba(8,7,20,0.12) 72%,rgba(8,7,20,0) 100%),
+  linear-gradient(180deg,rgba(17,17,17,0) 55%,var(--bg) 100%)}
+.hero-glow{position:absolute;left:-10%;bottom:-20%;width:900px;height:700px;background:radial-gradient(ellipse,rgba(129,140,248,0.28) 0%,transparent 64%);filter:blur(60px);pointer-events:none}
+.hero-content{position:relative;z-index:2;max-width:620px}
+.hero-eyebrow{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:#c7cbfd;font-weight:600;margin-bottom:22px;display:flex;align-items:center;gap:10px}
+.hero-eyebrow::before{content:'';width:32px;height:1px;background:currentColor}
+.hero h1{font-family:var(--display);font-size:clamp(60px,9vw,120px);font-weight:600;line-height:0.92;letter-spacing:-0.045em;margin-bottom:24px;color:#fff}
+.hero-sub{font-size:clamp(20px,2.2vw,27px);line-height:1.38;color:#fff;font-weight:400;letter-spacing:-0.01em;max-width:560px;text-shadow:0 2px 20px rgba(0,0,0,0.4)}
+.hero-thesis{margin-top:28px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-family:var(--display);font-size:clamp(16px,1.6vw,19px);font-weight:600;letter-spacing:-0.01em;color:#fff}
+.hero-thesis span{padding:8px 16px;border-radius:999px;border:1px solid rgba(255,255,255,0.28);background:rgba(255,255,255,0.08);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.hero-thesis span.on{border-color:rgba(165,173,251,0.7);background:rgba(129,140,248,0.28);color:#fff}
+.hero-thesis i{font-style:normal;color:rgba(255,255,255,0.6);font-weight:400}
+.hero-meta{margin-top:32px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.2);font-size:14px;color:rgba(255,255,255,0.78);line-height:1.7;max-width:560px}
+.hero-meta b{color:#fff;font-weight:500}
+
+/* 01 RESEARCH SIGNAL */
+.stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:48px}
+.stage{background:var(--bg-card);border:1px solid var(--border);border-radius:16px;padding:26px 24px;display:flex;flex-direction:column;gap:12px}
+.stage .kicker{color:var(--accent-strong)}
+.stage h3{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:-0.015em;line-height:1.3}
+.stage p{font-size:14px;line-height:1.6;color:var(--text-secondary)}
+.stage.q{background:linear-gradient(160deg,rgba(129,140,248,0.12),var(--bg-card) 70%);border-color:var(--border-accent)}
+.stage.q h3{font-family:var(--serif);font-style:italic;font-weight:400;font-size:21px;line-height:1.35}
+.insight-chip{margin-top:28px;display:flex;gap:14px;align-items:flex-start;max-width:760px;padding:16px 20px;border-radius:12px;background:var(--accent-soft);border:1px solid var(--border-accent)}
+.insight-chip .kicker{color:var(--accent-strong);white-space:nowrap;padding-top:3px}
+.insight-chip p{font-size:16px;line-height:1.55;color:var(--text)}
+
+/* 02 PRODUCT FOCUS */
+.bg-indigo .lede{color:rgba(236,235,230,0.78)}
+.focus-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;margin-top:48px}
+.panel{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:26px 24px}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}
+.panel-head .kicker{color:rgba(236,235,230,0.7)}
+.pills{display:flex;flex-wrap:wrap;gap:8px}
+.pills span{font-size:13px;padding:7px 13px;border-radius:999px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text)}
+.panel .note{margin-top:16px;font-size:14px;line-height:1.6;color:var(--text-secondary)}
+.panel .body{font-size:15px;line-height:1.65;color:var(--text-secondary)}
+.panel .hl{margin-top:16px;font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.35;color:var(--accent-strong)}
+.synth{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.synth .blk{border-radius:14px;padding:22px 22px;background:rgba(10,9,26,0.45);border:1px solid rgba(255,255,255,0.08)}
+.synth .blk .kicker{margin-bottom:10px;display:block}
+.synth .blk p{font-size:16px;line-height:1.5;color:var(--text)}
+.synth .blk.sig .kicker{color:#7fe3d4}
+.synth .blk.ten .kicker{color:#fbd38d}
+.synth .blk.opp{border-color:var(--border-accent);background:rgba(129,140,248,0.12)}
+.synth .blk.opp .kicker{color:var(--accent-strong)}
+.shift-row{margin-top:16px;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;padding:28px 28px;border-radius:16px;background:linear-gradient(90deg,rgba(129,140,248,0.2),rgba(129,140,248,0.06));border:1px solid var(--border-accent)}
+.shift-row .left{display:flex;flex-direction:column;gap:10px}
+.shift-row .shift{font-family:var(--display);font-size:clamp(28px,3.6vw,44px);font-weight:600;letter-spacing:-0.035em;line-height:1.05}
+.shift-row .shift .from{color:rgba(236,235,230,0.55)}
+.shift-row .shift .arrow{color:rgba(236,235,230,0.5);font-weight:400;margin:0 .15em}
+.shift-row .shift .to{color:#fff}
+.shift-row .own{font-size:14px;line-height:1.55;color:var(--text-secondary);max-width:320px}
+
+/* Unit chart — where the initial ideas landed */
+.landed{margin-top:16px;display:grid;grid-template-columns:minmax(0,0.9fr) minmax(0,1.6fr);gap:40px;align-items:center;padding:32px 32px;border-radius:16px;background:rgba(10,9,26,0.5);border:1px solid rgba(255,255,255,0.1)}
+.landed .big{font-family:var(--display);font-size:clamp(64px,8vw,96px);font-weight:600;letter-spacing:-0.05em;line-height:0.9;color:var(--accent-strong)}
+.landed .big small{font-size:0.42em;color:rgba(236,235,230,0.5);letter-spacing:-0.02em;font-weight:500}
+.landed .cap{margin-top:14px;font-size:16px;line-height:1.5;color:var(--text)}
+.landed .src{margin-top:10px;font-size:12px;line-height:1.5;color:var(--text-tertiary)}
+.lanes{display:grid;grid-template-columns:1fr 1.5fr 1fr;gap:14px;align-items:end}
+.lane .units{display:flex;flex-direction:column-reverse;gap:8px}
+.unit{border-radius:10px;padding:12px 12px;min-height:58px;display:flex;align-items:flex-end;font-size:12.5px;line-height:1.3;font-weight:500;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);color:rgba(236,235,230,0.8);
+  background-image:repeating-linear-gradient(135deg,rgba(255,255,255,0.05) 0 2px,transparent 2px 7px)}
+.lane.core .unit{background-color:#6f79f0;border-color:#a5adfb;color:#fff}
+.lane .lane-name{margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.18);font-size:11px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:rgba(236,235,230,0.6);display:flex;justify-content:space-between}
+.lane.core .lane-name{color:var(--accent-strong);border-color:var(--accent)}
+
+/* 03 STRATEGY */
+.principle{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:56px;align-items:center;padding:56px 0;border-top:1px solid var(--border)}
+.principles{margin-top:40px}
+.principle .verb{display:flex;align-items:baseline;gap:12px;margin-bottom:12px}
+.principle .verb .n{font-size:12px;font-weight:600;color:var(--accent-strong);letter-spacing:0.1em}
+.principle .verb h3{font-family:var(--display);font-size:clamp(30px,3.4vw,40px);font-weight:600;letter-spacing:-0.03em;line-height:1}
+.principle .intent{font-family:var(--serif);font-style:italic;font-size:22px;line-height:1.35;color:var(--text);margin-bottom:14px;max-width:460px}
+.principle .detail{font-size:15px;line-height:1.65;color:var(--text-secondary);max-width:460px}
+.principle .decisions{margin-top:20px}
+.principle .decisions .kicker{display:block;margin-bottom:10px}
+.principle .decisions ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.principle .decisions li{font-size:13px;padding:7px 13px;border-radius:999px;border:1px solid var(--border-strong);background:var(--bg-card);color:var(--text)}
+.flows{display:grid;gap:20px;justify-content:start;grid-template-columns:repeat(var(--n,1),minmax(0,300px))}
+.flow{max-width:300px}
+.flow video{width:100%;aspect-ratio:644/1344;background:var(--bg)}
+.flow .cap{margin-top:10px;font-size:13px;color:var(--text-tertiary)}
+
+/* 04 EMOTIONAL LANGUAGE */
+.bg-linen .section-num{color:#6b63d6}
+.bg-linen .lede{color:var(--ink-2)}
+.studies{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:56px}
+.study{margin:0}
+.study .frame{aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#111;box-shadow:0 1px 0 rgba(0,0,0,0.04),0 24px 48px rgba(40,30,20,0.14)}
+.study img{width:100%;height:100%;object-fit:cover}
+.study figcaption{margin-top:18px}
+.study .s-num{font-size:11px;letter-spacing:0.14em;text-transform:uppercase;color:var(--ink-3);font-weight:600;margin-bottom:6px}
+.study h4{font-family:var(--display);font-size:20px;font-weight:600;letter-spacing:-0.015em;margin-bottom:8px}
+.study p{font-size:14px;line-height:1.6;color:var(--ink-2)}
+.fingerprint{margin-top:48px;padding-top:20px;border-top:1px solid rgba(0,0,0,0.1);display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px}
+.fingerprint .kicker{color:var(--ink-3)}
+.fingerprint span{font-size:13px;color:var(--ink-2)}
+.fingerprint span+span::before{content:'·';margin-right:20px;color:var(--ink-3)}
+
+/* 05 WHAT AI CHANGED */
+.compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:48px}
+.col{border-radius:16px;padding:26px 24px;background:rgba(255,255,255,0.035);border:1px solid var(--border)}
+.col.me{background:rgba(129,140,248,0.1);border-color:var(--border-accent)}
+.col .col-head{margin-bottom:8px}
+.col .col-head .tag{font-size:11px}
+.row{padding:14px 0;border-top:1px solid var(--border)}
+.col-head + .row{border-top:none}
+.row h4{font-size:16px;font-weight:600;color:var(--text);margin-bottom:4px}
+.row p{font-size:14px;line-height:1.55;color:var(--text-secondary)}
+.process{margin-top:16px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.proc{border-radius:16px;padding:24px;border:1px solid var(--border);background:rgba(255,255,255,0.03)}
+.proc.after{border-color:var(--border-accent);background:rgba(129,140,248,0.08)}
+.proc .kicker{display:block;margin-bottom:12px}
+.proc.after .kicker{color:var(--accent-strong)}
+.steps{font-family:var(--display);font-size:clamp(17px,1.9vw,21px);font-weight:500;letter-spacing:-0.01em;line-height:1.4;margin-bottom:10px}
+.proc.before .steps{color:var(--text-secondary)}
+.steps i{font-style:normal;color:var(--text-tertiary);font-weight:400;margin:0 .25em}
+.steps b{font-weight:600;color:var(--accent-strong)}
+.proc p{font-size:14px;line-height:1.55;color:var(--text-secondary)}
+.closing{margin-top:64px;font-family:var(--display);font-size:clamp(26px,3.4vw,40px);font-weight:600;letter-spacing:-0.03em;line-height:1.15;max-width:780px}
+.closing span{color:var(--accent-strong)}
+
+/* Footer */
+.case-footer{padding:72px 0 112px;background:#141417}
+.case-footer .inner{border-top:1px solid rgba(255,255,255,0.1);padding-top:56px}
+.case-footer h2{font-family:var(--display);font-size:clamp(24px,3vw,34px);font-weight:600;letter-spacing:-0.025em;margin-bottom:12px}
+.case-footer p{font-size:15px;color:var(--text-secondary);margin-bottom:28px;max-width:var(--text-col)}
+.footer-links{display:flex;gap:12px;flex-wrap:wrap}
+.footer-link{padding:12px 28px;border-radius:999px;font-size:14px;font-weight:500;text-decoration:none;transition:all .25s}
+.footer-link.primary{background:var(--accent);color:#0e0e0e}
+.footer-link.primary:hover{filter:brightness(1.12)}
+.footer-link.ghost{border:1px solid var(--border-strong);color:var(--text-secondary)}
+.footer-link.ghost:hover{border-color:rgba(255,255,255,0.3);color:#fff}
+
+/* Responsive */
+@media(max-width:960px){
+  .hero-shade{background:linear-gradient(180deg,rgba(8,7,20,0.35) 0%,rgba(8,7,20,0.7) 55%,var(--bg) 100%)}
+  .stages,.synth{grid-template-columns:1fr}
+  .focus-row,.compare,.process{grid-template-columns:1fr}
+  .landed{grid-template-columns:1fr;gap:28px;padding:26px 22px}
+  .principle{grid-template-columns:1fr;gap:32px}
+  .studies{gap:16px}
+  .study p{font-size:13px}
+}
+@media(max-width:600px){
+  :root{--gap:16px}
+  .section{padding:72px 0}
+  .hero{padding:120px 0 48px;min-height:640px}
+  .hero-bgvid{object-position:62% 30%}
+  .nav-links a:not(:first-child){display:none}
+  .flows{grid-template-columns:repeat(var(--n,1),minmax(0,1fr));gap:12px}
+  .studies{grid-template-columns:1fr;gap:36px;max-width:380px}
+  .insight-chip{flex-direction:column;gap:6px}
+  .shift-row{padding:22px 20px}
+  .lanes{gap:8px}
+  .unit{font-size:11px;padding:10px 8px;min-height:52px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* Pill system — matches hero Capture / Curate / Preserve */
+.pill{display:inline-flex;align-items:center;padding:6px 14px;border-radius:999px;border:1px solid rgba(255,255,255,0.22);background:rgba(255,255,255,0.06);font-family:var(--display);font-size:13px;font-weight:600;letter-spacing:-0.005em;color:#fff;white-space:nowrap;line-height:1.2}
+.pill.on{border-color:rgba(165,173,251,0.7);background:rgba(129,140,248,0.26)}
+.note-r{font-size:12px;color:var(--text-tertiary)}
+.stage.q{background:var(--bg-card);border-color:var(--border)}
+.stage.q h3{font-family:var(--display);font-style:normal;font-weight:600;font-size:20px;line-height:1.3}
+.insight-chip{background:var(--bg-card);border-color:var(--border);align-items:center;padding:18px 22px;border-radius:16px}
+.synth .blk{background:rgba(10,9,26,0.45)}
+.synth .blk .pill{margin-bottom:14px}
+.synth .blk.opp{border-color:rgba(165,173,251,0.45);background:rgba(129,140,248,0.1)}
+.principle .verb{display:block;margin-bottom:16px}
+.principle h3.intent{font-family:var(--display);font-style:normal;font-weight:600;font-size:clamp(26px,3vw,34px);letter-spacing:-0.025em;line-height:1.15;color:var(--text);margin-bottom:14px}
+.col .col-head{margin-bottom:12px}
+.proc .pill{margin-bottom:14px}
+.shift-row .left{gap:14px}
+@media(max-width:600px){.pill{white-space:normal}}
+.panel .hl{font-family:var(--display);font-style:normal;font-weight:600;font-size:21px;letter-spacing:-0.015em;color:#fff}
+.principle .decisions li{border-color:rgba(255,255,255,0.22);background:rgba(255,255,255,0.06);font-family:var(--display);font-weight:500;color:#fff}
+.bg-indigo{background:radial-gradient(120% 80% at 80% 0%,rgba(60,56,120,0.35) 0%,transparent 60%),linear-gradient(180deg,#16152a 0%,#121121 100%);border-top:1px solid rgba(129,140,248,0.1);border-bottom:1px solid rgba(129,140,248,0.1)}
+.lane.core .unit{background-color:rgba(129,140,248,0.32);border-color:rgba(165,173,251,0.5)}
+.landed .big{color:#c7cbfd}
+.shift-row{background:linear-gradient(90deg,rgba(129,140,248,0.12),rgba(129,140,248,0.03))}
+.synth .blk.opp{background:rgba(129,140,248,0.07)}
+
+/* 05 Working with AI — intervention moments */
+.moments{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:56px;border-top:1px solid rgba(255,255,255,0.12)}
+.moment{padding:28px 28px 8px 0}
+.moment + .moment{padding-left:28px;border-left:1px solid rgba(255,255,255,0.12)}
+.moment .pill{margin-bottom:18px;white-space:normal;border-radius:12px}
+.m-frame{aspect-ratio:4/5;border-radius:14px;overflow:hidden;background:#0b0b0b;border:1px solid rgba(255,255,255,0.08);box-shadow:0 30px 60px rgba(0,0,0,0.4)}
+.m-frame img{width:100%;height:100%;object-fit:cover}
+.m-ai,.m-me{font-size:15px;line-height:1.6;margin-top:6px}
+.m-ai{color:var(--text-tertiary)}
+.m-me{color:var(--text);margin-top:10px;padding-top:12px;border-top:1px solid rgba(255,255,255,0.1)}
+.m-ai span,.m-me span{display:block;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;margin-bottom:4px}
+.m-ai span{color:var(--text-tertiary)}
+.m-me span{color:var(--accent-strong)}
+.ending{margin-top:112px;max-width:820px}
+.end-title{font-family:var(--display);font-size:clamp(30px,4.2vw,50px);font-weight:600;letter-spacing:-0.035em;line-height:1.08}
+.end-sub{margin-top:20px;font-size:18px;line-height:1.65;color:var(--text-secondary);max-width:620px}
+.bg-closing{padding-bottom:120px}
+.final-shot{position:relative;margin:0;background:#000}
+.final-shot img{width:100%;aspect-ratio:1920/1068;height:auto;max-height:100vh;object-fit:cover;object-position:center 45%;display:block}
+.final-shot::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#141417 0%,rgba(20,20,23,0) 18%),linear-gradient(90deg,rgba(8,7,20,0.7) 0%,rgba(8,7,20,0) 55%);pointer-events:none;z-index:1}
+.final-shot figcaption{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);z-index:2}
+.thesis-end{font-family:var(--display);font-size:clamp(24px,3.4vw,42px);font-weight:600;letter-spacing:-0.03em;line-height:1.18;color:rgba(255,255,255,0.7);max-width:560px;text-shadow:0 2px 24px rgba(0,0,0,0.5)}
+.thesis-end span{color:#fff}
+@media(max-width:960px){.moments{grid-template-columns:1fr;gap:0}.moment,.moment + .moment{padding:28px 0 20px;border-left:none;border-top:1px solid rgba(255,255,255,0.12)}.moment:first-child{border-top:none}}
+@media(max-width:600px){.final-shot{display:flex;flex-direction:column-reverse;background:#141417}.final-shot::before{display:none}.final-shot img{height:auto}.final-shot figcaption{position:static;transform:none;padding-top:8px;padding-bottom:40px}.thesis-end{text-shadow:none}.ending{margin-top:80px}}
+
+/* 04 interactions */
+.study{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+.study.in{opacity:1;transform:none}
+.studies .study:nth-child(2){transition-delay:.1s}
+.studies .study:nth-child(3){transition-delay:.2s}
+.study .frame img,.study .frame video{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s cubic-bezier(.2,.7,.2,1)}
+.study:hover .frame img,.study:hover .frame video{transform:scale(1.025)}
+.study .s-num,.study h4{transition:color .3s}
+.study:hover .s-num{color:#6b63d6}
+.study:hover h4{color:#000}
+.no-js .study{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){.study{opacity:1;transform:none;transition:none}.study .frame img,.study .frame video{transition:none}.study:hover .frame img,.study:hover .frame video{transform:none}}
+
+/* 04 — warm dark paper instead of beige */
+.bg-linen{position:relative;color:#ece6da;background:radial-gradient(70% 50% at 50% 45%,rgba(214,190,150,0.05) 0%,transparent 70%),linear-gradient(180deg,#111111 0%,#1a1816 22%,#1a1816 78%,#111111 100%)}
+.bg-linen .section-num{color:#d8c7a6}
+.bg-linen h2.section-title{color:#f3eee4}
+.bg-linen .lede{color:rgba(236,230,218,0.66)}
+.bg-linen .study .s-num{color:rgba(236,230,218,0.45)}
+.bg-linen .study h4{color:#f3eee4}
+.bg-linen .study p{color:rgba(236,230,218,0.62)}
+.bg-linen .study:hover .s-num{color:#d8c7a6}
+.bg-linen .study:hover h4{color:#fff}
+.bg-linen .study .frame{border:1px solid rgba(236,230,218,0.1);box-shadow:0 30px 60px rgba(0,0,0,0.45)}
+.bg-linen .fingerprint{border-top-color:rgba(236,230,218,0.12)}
+.bg-linen .fingerprint .kicker{color:rgba(236,230,218,0.45)}
+.bg-linen .fingerprint span{color:rgba(236,230,218,0.66)}
+.bg-linen .fingerprint span+span::before{color:rgba(236,230,218,0.3)}
+.bg-linen::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 0.95  0 0 0 0 0.85  0 0 0 0.05 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 78%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 22%,#000 78%,transparent 100%);pointer-events:none}
+.bg-linen > .wrap{position:relative;z-index:1}
+</style>
+<link rel="stylesheet" href="../assets/cs-nav.css">
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero" id="overview">
+  <video class="hero-bgvid" src="ancestor-hero-bg.mp4" poster="ancestor-hero-bg-poster.jpg" autoplay muted loop playsinline preload="auto" aria-hidden="true"></video>
+  <div class="hero-shade"></div>
+  <div class="hero-glow"></div>
+  <div class="wrap" style="width:100%">
+    <div class="hero-content">
+      <p class="hero-eyebrow">AI Product Design · 2026</p>
+      <h1>Ancestor</h1>
+      <p class="hero-sub">Turning fragmented family memories into a curated, living archive.</p>
+      <p class="hero-thesis"><span>Capture</span><i>→</i><span class="on">Curate</span><i>→</i><span>Preserve</span></p>
+      <p class="hero-meta"><b>Solo Product Design</b> · 3 weeks · CMU HCII<br>Gemini / AI Studio · React</p>
+    </div>
+  </div>
+</header>
+
+<!-- 01 RESEARCH SIGNAL -->
+<section class="bg-neutral section" id="signal">
+  <div class="wrap">
+    <p class="section-num">01 — Research Signal</p>
+    <h2 class="section-title">“I wish I had asked more.”</h2>
+    <p class="lede">I began by using Claude to scan Reddit conversations for recurring emotional pain points around family memory and loss. One pattern kept resurfacing: people regretted the questions they never asked while older relatives were still alive.</p>
+
+    <div class="stages">
+      <div class="stage">
+        <p><span class="pill">01 · Source</span></p>
+        <h3>AI-assisted scan of Reddit conversations</h3>
+        <p>I used AI to accelerate the search across many fragmented conversations rather than manually browsing one thread at a time.</p>
+      </div>
+      <div class="stage">
+        <p><span class="pill">02 · Signal</span></p>
+        <h3>Stories disappear before families realize what they wanted to ask.</h3>
+        <p>The recurring pain was not simply losing photos or recordings. It was losing context, voice, and the chance to ask follow-up questions.</p>
+      </div>
+      <div class="stage q">
+        <p><span class="pill on">03 · Design question</span></p>
+        <h3>How might fragmented family memories become something people can actually keep and return to?</h3>
+      </div>
+    </div>
+
+    <div class="insight-chip">
+      <p><span class="pill on">Judgment</span></p>
+      <p>AI surfaced the signal. Choosing which signal mattered was the first design decision.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 02 FROM SIGNAL TO PRODUCT FOCUS -->
+<section class="bg-indigo section" id="focus">
+  <div class="wrap">
+    <p class="section-num">02 — From Signal to Product Focus</p>
+    <h2 class="section-title">The opportunity wasn’t recording. It was curation.</h2>
+    <p class="lede">My first concept treated every promising feature as part of the product. AI made it easy to generate breadth; the harder work was deciding what the product should actually stand for.</p>
+
+    <div class="focus-row">
+      <div class="panel">
+        <div class="panel-head"><span class="pill">Initial breadth</span><span class="note-r">AI-generated</span></div>
+        <div class="pills">
+          <span>Guided voice interviews</span><span>Text-to-memory generation</span><span>Intelligent photo matching</span><span>Cinematic playback</span><span>Family sharing</span><span>Story generation</span>
+        </div>
+        <p class="note">Useful ideas individually, but together they described a feature set rather than a focused product.</p>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span class="pill">Second lens</span><span class="note-r">Gemini analysis</span></div>
+        <p class="body">I brought the feature set to Gemini as a second product and market-analysis perspective. That reframed the opportunity: recording and content generation already had many existing solutions. The harder problem was what happened after capture.</p>
+        <p class="hl">More memories do not automatically create meaning.</p>
+      </div>
+    </div>
+
+    <div class="synth">
+      <div class="blk sig"><span class="pill">Signal</span><p>Families lose stories they wish they had captured.</p></div>
+      <div class="blk ten"><span class="pill">Tension</span><p>Capturing more creates even more photos, audio, and fragments to organize.</p></div>
+      <div class="blk opp"><span class="pill on">Opportunity</span><p>Help people turn fragments into a coherent family artifact.</p></div>
+    </div>
+
+    <div class="landed" aria-label="Unit chart: the six initial feature ideas grouped by the product job they ended up serving">
+      <div>
+        <p><span class="pill on">Where the initial ideas landed</span></p>
+        <p class="big" style="margin-top:14px">3<small> / 6</small></p>
+        <p class="cap">of the initial feature ideas ended up serving curation, the job the product was rebuilt around.</p>
+        <p class="src">Each block is one idea from the initial feature set, grouped by the product job it maps to in the final strategy.</p>
+      </div>
+      <div class="lanes">
+        <div class="lane"><div class="units"><div class="unit">Guided voice interviews</div></div><p class="lane-name"><span>Capture</span><span>1</span></p></div>
+        <div class="lane core"><div class="units"><div class="unit">Text-to-memory generation</div><div class="unit">Intelligent photo matching</div><div class="unit">Cinematic playback</div></div><p class="lane-name"><span>Curate</span><span>3</span></p></div>
+        <div class="lane"><div class="units"><div class="unit">Family sharing</div><div class="unit">Story generation</div></div><p class="lane-name"><span>Preserve</span><span>2</span></p></div>
+      </div>
+    </div>
+
+    <div class="shift-row">
+      <div class="left">
+        <p><span class="pill on">The shift</span></p>
+        <p class="shift"><span class="from">Capture more</span><span class="arrow">→</span><span class="to">Curate meaning</span></p>
+      </div>
+      <div>
+        <span class="pill">My decision</span>
+        <p class="own" style="margin-top:10px">AI contributed breadth and analysis. Making curation the center of the product was my call.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 PRODUCT STRATEGY -->
+<section class="bg-neutral section" id="strategy">
+  <div class="wrap">
+    <p class="section-num">03 — Product Strategy</p>
+    <h2 class="section-title">Three jobs shaped the experience.</h2>
+    <p class="lede">Once curation became the core idea, I used one simple filter for feature decisions: does this interaction help a memory move from fragment to story?</p>
+
+    <div class="principles">
+      <div class="principle">
+        <div>
+          <p class="verb"><span class="pill">01 · Capture</span></p>
+          <h3 class="intent">Help people remember, not fill out a form.</h3>
+          <p class="detail">The experience begins with the person rather than the database: who the story is for, the relationship, and a topic that feels natural to talk about. During recording, the interface stays deliberately sparse so attention remains on the conversation.</p>
+          <div class="decisions"><span class="kicker">Design decisions</span>
+            <ul><li>Recipient-first setup</li><li>AI-guided sensory prompts</li><li>One question at a time</li></ul>
+          </div>
+        </div>
+        <div class="flows" style="--n:2">
+          <figure class="flow"><video src="ancestor-onboarding.mp4" poster="ancestor-poster-onboarding.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption class="cap">Recipient setup</figcaption></figure>
+          <figure class="flow"><video src="ancestor-capture.mp4" poster="ancestor-poster-capture.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption class="cap">Guided recording</figcaption></figure>
+        </div>
+      </div>
+
+      <div class="principle">
+        <div>
+          <p class="verb"><span class="pill on">02 · Curate</span></p>
+          <h3 class="intent">Surface the moments worth keeping.</h3>
+          <p class="detail">The product does not treat every transcript, photo, or quote equally. Recorded material is reorganized into stronger moments, matched with relevant imagery, and shaped into narrative sequences that feel intentional rather than chronological by default.</p>
+          <div class="decisions"><span class="kicker">Design decisions</span>
+            <ul><li>Semantic highlights</li><li>Photo-memory matching</li><li>Cinematic memoir generation</li></ul>
+          </div>
+        </div>
+        <div class="flows">
+          <figure class="flow"><video src="ancestor-memory.mp4" poster="ancestor-poster-memory.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption class="cap">Analyzing → cinematic memoir → photo matching</figcaption></figure>
+        </div>
+      </div>
+
+      <div class="principle">
+        <div>
+          <p class="verb"><span class="pill">03 · Preserve</span></p>
+          <h3 class="intent">Turn memories into an artifact families can return to.</h3>
+          <p class="detail">The final output is designed less like cloud storage and more like an heirloom: collected volumes, chapter structures, page turns, bookmarks, and storybook layouts give the archive a sense of permanence.</p>
+          <div class="decisions"><span class="kicker">Design decisions</span>
+            <ul><li>Collected volumes</li><li>Narrative chapters</li><li>Digital / physical storybook</li></ul>
+          </div>
+        </div>
+        <div class="flows">
+          <figure class="flow"><video src="ancestor-result.mp4" poster="ancestor-poster-result.jpg" autoplay muted loop playsinline preload="metadata"></video><figcaption class="cap">Writing → chapters → family book</figcaption></figure>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 EMOTIONAL LANGUAGE -->
+<section class="bg-linen section" id="language">
+  <div class="wrap">
+    <p class="section-num">04 — Designing the Emotional Language</p>
+    <h2 class="section-title">Making digital memory feel tangible</h2>
+    <p class="lede">A family archive shouldn’t feel like a productivity app. I borrowed from objects people already associate with keeping, rereading, and passing stories down.</p>
+
+    <div class="studies">
+      <figure class="study">
+        <div class="frame"><img src="ancestor-study-archive.jpg" alt="The Ancestor Archive: a Childhood Memories volume with a mounted photo and an Inspect Volume button" loading="eager"></div>
+        <figcaption><p class="s-num">Study 01</p><h4>Skeuomorphic archive</h4>
+          <p>Recorded memories appear as collected volumes rather than files in a list. The bound-book metaphor gives each story a sense of weight and completion.</p></figcaption>
+      </figure>
+      <figure class="study">
+        <div class="frame"><img src="ancestor-study-bread.jpg" alt="Chapter 2 title card, Rosa’s Sunday Bread, with a pull quote over a dark forest photo" loading="eager"></div>
+        <figcaption><p class="s-num">Study 02</p><h4>Editorial storytelling</h4>
+          <p>Serif type, chapter openings, pull quotes, and full-bleed imagery turn generated content into something closer to a memoir than a transcript.</p></figcaption>
+      </figure>
+      <figure class="study">
+        <div class="frame"><video class="study-vid" src="ancestor-study-memoir.mp4" poster="ancestor-study-memoir.jpg" muted loop playsinline preload="metadata" aria-label="Cinematic memoir playback: a grandmother with two granddaughters and a narrated caption"></video></div>
+        <figcaption><p class="s-num">Study 03</p><h4>Memory as film</h4>
+          <p>Cinematic playback uses photography, pacing, and restrained captions to make a recorded memory feel experienced rather than merely summarized.</p></figcaption>
+      </figure>
+    </div>
+
+    <div class="fingerprint">
+      <p class="kicker">Design fingerprint</p>
+      <span>Linen &amp; paper texture</span><span>Bookmarks</span><span>Page turns</span><span>Progress earned through recording</span><span>Editorial imagery</span>
+    </div>
+  </div>
+</section>
+
+<!-- 05 WORKING WITH AI -->
+<section class="bg-closing section" id="ai">
+  <div class="wrap">
+    <p class="section-num">05 — Working With AI</p>
+    <h2 class="section-title">AI expanded the search space. I decided what deserved to survive.</h2>
+
+    <div class="moments">
+      <article class="moment">
+        <p><span class="pill">01 · Feature list → archive object</span></p>
+        <p class="m-ai"><span>AI</span>Helped generate many ways to organize memories.</p>
+        <p class="m-me"><span>My intervention</span>I rejected the productivity-app framing and turned recordings into collected volumes.</p>
+      </article>
+      <article class="moment">
+        <p><span class="pill">02 · Categorized content → narrative pacing</span></p>
+        <p class="m-ai"><span>AI</span>Could assemble and rewrite memory fragments quickly.</p>
+        <p class="m-me"><span>My intervention</span>I reorganized them into chapters, openings, pull quotes, and cinematic sequences.</p>
+      </article>
+      <article class="moment">
+        <p><span class="pill">03 · Generated UI → designed artifact</span></p>
+        <p class="m-ai"><span>AI</span>Accelerated prototypes and implementation.</p>
+        <p class="m-me"><span>My intervention</span>When prompting stopped improving hierarchy, typography, or pacing, I moved into Figma and code and finished the interaction directly.</p>
+      </article>
+    </div>
+
+    <div class="ending">
+      <p class="end-title">Judgment, not generation, became the bottleneck.</p>
+      <p class="end-sub">AI let me explore more directions, faster. The design work was deciding which ones belonged in the product — and knowing when to stop prompting and start making.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL ARTIFACT -->
+<figure class="final-shot">
+  <img src="ancestor-final.jpg" alt="A grandfather and child walking hand in hand" loading="eager">
+  <figcaption class="wrap">
+    <p class="thesis-end">The tool made more directions possible.<br><span>The product came from choosing.</span></p>
+  </figcaption>
+</figure>
+
+<script>
+(function(){
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var studies=[].slice.call(document.querySelectorAll('.study'));
+  var sv=document.querySelector('.study-vid');
+  if(reduce||!('IntersectionObserver' in window)){studies.forEach(function(s){s.classList.add('in')});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}})},{threshold:0.2});
+  studies.forEach(function(s){io.observe(s)});
+  if(sv){var vo=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){var p=sv.play();if(p&&p.catch)p.catch(function(){});}else{sv.pause();}})},{threshold:0.5});vo.observe(sv);}
+})();
+</script>
+<script>
+(function(){
+  var vids=[].slice.call(document.querySelectorAll('video'));
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(reduce){vids.forEach(function(v){v.removeAttribute('autoplay');v.pause();v.controls=true;});return;}
+  if(!('IntersectionObserver' in window))return;
+  var io=new IntersectionObserver(function(es){es.forEach(function(e){
+    if(e.isIntersecting){var p=e.target.play();if(p&&p.catch)p.catch(function(){});}else{e.target.pause();}
+  });},{threshold:0.25});
+  vids.forEach(function(v){io.observe(v);});
+})();
+</script>
+<script>window.CSN={"eyebrow": "AI product design · 2026", "title": "Ancestor", "accent": "#E3B35C", "accentInk": "#1A1408", "theme": "dark", "side": "#161513", "line": "#26241F", "next": {"href": "../learnvia/index.html", "label": "Learnvia"}, "sections": [["signal", "Research signal"], ["focus", "Product focus"], ["strategy", "Strategy"], ["language", "Emotional language"], ["ai", "Working with AI"]], "home": "../index.html", "back": "../index.html#work"};</script>
+<script src="../assets/cs-nav.js"></script>
+</body>
+</html>

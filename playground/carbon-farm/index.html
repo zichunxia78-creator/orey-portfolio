@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hysteresis Progenitorial · Carbon Farm</title>
+<meta name="description" content="An interactive installation where a visitor's breath is measured, captured, and fed to living algae, with the numbers shown in real time.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000'/><g fill='%23F3EFE8'><rect x='44' y='12' width='12' height='76' rx='6'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(60 50 50)'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(120 50 50)'/></g><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#0A0B0B; --band:#101212; --card:#151717; --line:#232626;
+  --ink:#F1F0EA; --muted:#8F928C; --dim:#5F625E;
+  --algae:#9BD36A; --algae-ink:#10190A; --lcd:#DDEBD6;
+  --sans:"Schibsted Grotesk","Helvetica Neue",Arial,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+p,h1,h2,h3,figure{margin:0}
+h1,h2,h3{font-weight:600;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:clamp(20px,5vw,64px)}
+
+/* hero */
+.hero{position:relative;min-height:min(86vh,820px);display:flex;align-items:flex-end;overflow:hidden;background:#000}
+.hero img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 45%}
+.hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,11,11,.15) 0%,rgba(10,11,11,0) 35%,rgba(10,11,11,.75) 78%,var(--bg) 100%)}
+.hero .wrap{position:relative;z-index:1;width:100%;padding-block:0 clamp(40px,6vw,72px)}
+.k{font:500 12px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--algae)}
+.hero h1{font-size:clamp(44px,7.4vw,104px);letter-spacing:-.045em;margin-top:18px;max-width:11ch}
+.hero h1 span{display:block;color:var(--muted);font-weight:500;font-size:.42em;letter-spacing:-.02em;margin-top:.35em}
+.lede{margin-top:22px;max-width:52ch;font-size:clamp(17px,1.6vw,21px);color:#D4D3CC}
+
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;padding-block:36px;border-bottom:1px solid var(--line)}
+.meta dt{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.meta dd{margin:10px 0 0;font-size:15.5px;line-height:1.4}
+
+section{padding-block:clamp(64px,9vw,120px);border-bottom:1px solid var(--line)}
+section.band{background:var(--band)}
+.sh{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:clamp(24px,5vw,72px);align-items:start}
+.sh h2{font-size:clamp(32px,4.2vw,56px);margin-top:16px}
+.sh .body{display:flex;flex-direction:column;gap:16px;color:#BDBCB5;max-width:58ch}
+.sh .body b{color:var(--ink);font-weight:600}
+
+.bleed{margin:0;padding-block:clamp(40px,6vw,72px) 0}
+.bleed img{width:100%;max-height:92vh;object-fit:cover}
+.bleed figcaption{max-width:1120px;margin:12px auto 0;padding-inline:clamp(20px,5vw,64px)}
+.photo{margin-top:clamp(36px,5vw,56px);border-radius:8px;overflow:hidden;border:1px solid var(--line);background:#000}
+figcaption{margin-top:12px;font:400 12.5px/1.5 var(--mono);color:var(--dim)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:clamp(36px,5vw,56px)}
+.grid2 figure .photo{margin-top:0}
+.grid2 .photo img{aspect-ratio:1/1;object-fit:cover;width:100%}
+
+/* system */
+.diagram{margin-top:clamp(36px,5vw,56px);background:#fff;border-radius:8px;padding:clamp(12px,2vw,24px)}
+.flow{list-style:none;padding:0;margin:clamp(36px,5vw,56px) 0 0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;counter-reset:s}
+.flow li{position:relative;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 18px 18px}
+.flow li::before{counter-increment:s;content:"0" counter(s);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;font:500 11px/1 var(--mono);color:var(--algae);border:1px solid color-mix(in srgb,var(--algae) 55%,transparent);background:color-mix(in srgb,var(--algae) 12%,var(--card))}
+.flow h3{font-size:18px;margin-top:14px}
+.flow p{margin-top:8px;font-size:14.5px;line-height:1.55;color:var(--muted)}
+
+/* interaction: LCD readout */
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(20px,4vw,48px);align-items:center;margin-top:clamp(36px,5vw,56px)}
+.lcd{border-radius:18px;padding:clamp(20px,3vw,32px);background:#1B2019;border:1px solid #2C3529;box-shadow:inset 0 0 0 6px #121611}
+.lcd .scr{border-radius:10px;background:var(--lcd);color:#1F2A1B;padding:clamp(18px,2.6vw,28px);font:500 clamp(13px,1.2vw,15px)/1.7 var(--mono)}
+.lcd .brand{font:700 13px/1 var(--mono);letter-spacing:.24em;text-transform:uppercase;color:#2F6A34;margin-bottom:14px}
+.lcd .row{display:flex;justify-content:space-between;gap:12px;border-bottom:1px dashed rgba(31,42,27,.25);padding-block:6px;font-variant-numeric:tabular-nums}
+.lcd .row b{font-weight:700}
+.lcd .note{margin-top:14px;color:#2F6A34}
+.lcd small{display:block;margin-top:12px;font:400 11.5px/1.4 var(--mono);color:#7F8F78}
+.badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.badges span{width:52px;height:52px;display:grid;place-items:center;border-radius:14px;background:#EDEAE2;color:#2A2723;font:600 22px/1 "Noto Serif SC","Songti SC",serif;box-shadow:0 1px 0 #fff inset,0 8px 16px -8px rgba(0,0,0,.6);transform:rotate(var(--r,0deg))}
+
+/* algae species */
+.species{list-style:none;padding:0;margin:clamp(36px,5vw,56px) 0 0;display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}
+.species li{display:flex;flex-direction:column;gap:14px;align-items:flex-start;padding:18px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.tube{width:18px;height:88px;border-radius:9px;border:0;background:linear-gradient(0deg,color-mix(in srgb,var(--c) 55%,transparent) 0%,color-mix(in srgb,var(--c) 55%,transparent) var(--f),rgba(255,255,255,.05) var(--f))}
+.species i{font:italic 500 15px/1.3 var(--sans);color:var(--ink)}
+
+.next{padding-block:clamp(56px,7vw,88px)}
+.next a{display:flex;justify-content:space-between;align-items:center;gap:20px;color:inherit;text-decoration:none;padding:clamp(22px,3vw,34px);border:1px solid var(--line);border-radius:22px;background:var(--card);transition:border-color .2s}
+.next a:hover{border-color:#3A3D3B}
+.next small{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.next h3{font-size:clamp(24px,3vw,36px);margin-top:10px}
+.go{flex:none;width:46px;height:46px;border-radius:50%;background:#3A2A9C;display:grid;place-items:center;transition:transform .25s}
+.next a:hover .go{transform:rotate(-45deg)}
+footer{padding-block:0 28px;color:var(--dim);font:400 12px/1 var(--mono)}
+a:focus-visible{outline:2px solid var(--algae);outline-offset:3px}
+
+@media (max-width:900px){
+  .meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .sh,.split{grid-template-columns:1fr}
+  .flow{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .species{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:520px){.flow,.grid2{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}.go{transition:none}}
+</style>
+<link rel="stylesheet" href="../../assets/cs-nav.css">
+</head>
+<body>
+
+<header class="hero">
+  <img src="img/night.webp" alt="The installation at night: a steel cone reactor on acrylic legs, surrounded by lit algae columns on a black floor, with the breath microphone on the left." fetchpriority="high">
+  <div class="wrap">
+    <p class="k">Interactive installation · Real-time data visualization</p>
+    <h1>Hysteresis Progenitorial<span>Carbon Farm</span></h1>
+    <p class="lede">A visitor breathes into a bioplastic mouthpiece. The machine measures the CO₂ in that breath, feeds it to living algae, and shows on a small screen how much carbon one person just gave, and how little it is.</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <dl class="meta">
+    <div><dt>Type</dt><dd>Interactive installation</dd></div>
+    <div><dt>Team</dt><dd>UT-Austin Eco Centric Future Lab</dd></div>
+    <div><dt>Lead engineer</dt><dd>Ben Evanson</dd><dt style="margin-top:14px">Project lead</dt><dd>Jiabao Li</dd></div>
+    <div><dt>Date</dt><dd>Dec 2023 – Mar 2024</dd><dt style="margin-top:14px">Location</dt><dd>Duande Art Museum</dd></div>
+  </dl>
+</div>
+
+<figure class="bleed">
+  <img src="img/window.webp" alt="The installation seen from outside through the gallery's glass wall, with the city's apartment towers reflected over the reactor and algae columns." loading="lazy">
+  <figcaption>From the street: the reactor behind the gallery glass, with the city reflected over it.</figcaption>
+</figure>
+
+<section id="concept">
+  <div class="wrap">
+    <div class="sh">
+      <div><p class="k">01 · Concept</p><h2>One breath, measured</h2></div>
+      <div class="body">
+        <p>Carbon numbers are usually too large to feel. Carbon Farm shrinks them to the size of a single exhale: <b>you breathe out, and the machine tells you exactly what that breath contained and where it went.</b></p>
+        <p>The CO₂ doesn’t disappear. It is absorbed, released into the water of five algae photobioreactors, and turned into biomass you can see growing in the columns around the machine.</p>
+      </div>
+    </div>
+    <figure>
+      <div class="photo"><img src="img/breath.webp" alt="A visitor in a green dress breathes into the bioplastic mouthpiece on a microphone stand, with the reactor and algae columns on the black floor beside her." loading="lazy"></div>
+      <figcaption>A visitor breathing into the bioplastic mouthpiece. The tube carries the breath to the reactor.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="system" class="band">
+  <div class="wrap">
+    <div class="sh">
+      <div><p class="k">02 · System</p><h2>From breath to biomass</h2></div>
+      <div class="body">
+        <p>The installation has two air inputs. <b>The Crown</b>, a fan at the top, pulls in ambient air. The <b>breath station</b> takes in a visitor’s exhale through a bioplastic straw and mouthpiece.</p>
+        <p>Both pass through a metal hourglass where the air meets a chemical sorbent, and flow and CO₂ concentration sensors report what came in.</p>
+      </div>
+    </div>
+    <ol class="flow">
+      <li><h3>Intake</h3><p>A fan in The Crown draws ambient air. The breath station adds a visitor’s exhale, picked up through the mouthpiece and microphone.</p></li>
+      <li><h3>Absorption</h3><p>Inside the metal hourglass, air contacts a chemical sorbent. An electric resistive heater sits inside the hourglass.</p></li>
+      <li><h3>Measurement</h3><p>Flow and CO₂ concentration sensors read the air, and a CO₂-saturated sponge links the sorbent to the water loop.</p></li>
+      <li><h3>Growth</h3><p>The CO₂ is delivered to five algae photobioreactors, where it becomes algae biomass.</p></li>
+    </ol>
+    <figure>
+      <div class="diagram"><img src="img/diagram.webp" alt="Flow and machine components diagram: breath input with bioplastic ornaments, LCD screen and microphone on a stand; the Crown fan, metal hourglass with heater and sorbent, flow and CO2 sensors; five labelled algae photobioreactors; the LCD readout and surname badge rewards." loading="lazy"></div>
+      <figcaption>Flow and machine components. Stage 1: absorption.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="interaction">
+  <div class="wrap">
+    <div class="sh">
+      <div><p class="k">03 · Interaction</p><h2>A number you can hold</h2></div>
+      <div class="body">
+        <p>After each breath, an LCD on the microphone stand shows the result in real time: how many grams of CO₂ the visitor contributed, an estimate of how much algae biomass that becomes, and a comparison that makes the scale land.</p>
+        <p>Contributions are recognized with a badge carrying the visitor’s last name.</p>
+      </div>
+    </div>
+    <div class="split">
+      <div class="lcd" role="img" aria-label="Example LCD readout: CO2 contributed 0.4 grams, algae biomass produced 0.2 grams, blowing 20,127 more times would offset one hamburger.">
+        <div class="scr">
+          <p class="brand">Carbon Farm</p>
+          <p class="row"><span>CO₂ contributed</span><b>0.4 g</b></p>
+          <p class="row"><span>Algae biomass produced</span><b>0.2 g</b></p>
+          <p class="note">Blowing 20,127 more times would offset one hamburger.</p>
+        </div>
+        <small>Example readout from the design documentation.</small>
+        <div class="badges" aria-hidden="true"><span style="--r:-6deg">王</span><span style="--r:4deg">李</span><span style="--r:-2deg">张</span><span style="--r:7deg">徐</span></div>
+      </div>
+      <figure>
+        <div class="photo"><img src="img/mic.webp" alt="Black and white: the breath microphone with its bioplastic ornament and LCD screen in front of the steel reactor." loading="lazy"></div>
+        <figcaption>The breath station: bioplastic ornament, microphone, and the LCD that shows each result.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="algae" class="band">
+  <div class="wrap">
+    <div class="sh">
+      <div><p class="k">04 · Living part</p><h2>Five photobioreactors</h2></div>
+      <div class="body">
+        <p>Each acrylic column holds a different microalgae species, lit from below. As CO₂ bubbles through, the columns are where the carbon from visitors’ breath ends up.</p>
+      </div>
+    </div>
+    <ul class="species">
+      <li><span class="tube" style="--c:#C9E27A;--f:62%"></span><i>Isochrysis galbana</i></li>
+      <li><span class="tube" style="--c:#8FD6B0;--f:48%"></span><i>Dunaliella primolecta</i></li>
+      <li><span class="tube" style="--c:#B8C9F0;--f:70%"></span><i>Phaeodactylum tricornutum</i></li>
+      <li><span class="tube" style="--c:#E4E6DA;--f:55%"></span><i>Emiliania huxleyi</i></li>
+      <li><span class="tube" style="--c:#9BD36A;--f:40%"></span><i>Agmenellum quadruplicatum</i></li>
+    </ul>
+    <figure>
+      <div class="photo"><img src="img/algae.webp" alt="Close-up of the base of an algae column: CO2 bubbles stream up from the diffuser through clear water, with green algae balls below." loading="lazy"></div>
+      <figcaption>CO₂ diffusing into a photobioreactor column.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section id="build">
+  <div class="wrap">
+    <div class="sh">
+      <div><p class="k">05 · Build</p><h2>Wiring it on site</h2></div>
+      <div class="body">
+        <p>The reactor, sensors, and control box were assembled, wired, and tested in the exhibition space.</p>
+      </div>
+    </div>
+    <div class="grid2">
+      <figure><div class="photo"><img src="img/assembly.webp" alt="Two team members assembling the steel cone reactor on its clear acrylic frame, with empty algae columns around them." loading="lazy"></div><figcaption>Fitting the reactor onto its acrylic frame.</figcaption></figure>
+      <figure><div class="photo"><img src="img/wiring.webp" alt="A team member wearing headphones, sitting on the floor and connecting cables to the control box under the reactor." loading="lazy"></div><figcaption>Connecting the control box under the reactor.</figcaption></figure>
+      <figure><div class="photo"><img src="img/control.webp" alt="The open control box full of wiring, with a multimeter and the LCD module on the floor beside it." loading="lazy"></div><figcaption>Testing the control box with a multimeter.</figcaption></figure>
+      <figure><div class="photo"><img src="img/detail.webp" alt="Black and white detail under the reactor: the valve and motor between clear acrylic legs, algae columns bubbling in the background." loading="lazy"></div><figcaption>Under the reactor: valve, motor, and tubing to the columns.</figcaption></figure>
+    </div>
+    <figure>
+      <div class="photo"><img src="img/team.webp" alt="Three members of the team standing together at the exhibition, in front of a white wall with two screens." loading="lazy"></div>
+      <figcaption>The team at the exhibition.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<div class="wrap next">
+  <a href="../molecule-mythos/index.html">
+    <div><small>Next in Playground</small><h3>Molecule Mythos</h3></div>
+    <i class="go" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i>
+  </a>
+</div>
+<footer class="wrap">© 2026 Orey Xia</footer>
+
+<script>window.CSN={"eyebrow":"Installation · 2023–24","title":"Carbon Farm","accent":"#9BD36A","accentInk":"#10190A","theme":"dark","side":"#0F1111","line":"#232626","backLabel":"Playground","next":{"href":"../molecule-mythos/index.html","label":"Molecule Mythos","kicker":"Next in Playground"},"sections":[["concept","Concept"],["system","System"],["interaction","Interaction"],["algae","Photobioreactors"],["build","Build"]],"home":"../../index.html","back":"../index.html"};</script>
+<script src="../../assets/cs-nav.js"></script>
+</body>
+</html>
