@@ -314,6 +314,15 @@ footer{color:var(--dim)}
 .mitem:hover .mimg img{transform:scale(1.03)}
 .mitem .mt{margin-top:14px}
 .mmeta{font:400 13px/1.3 var(--sans);color:var(--dim);margin-top:4px}
+/* live demo cover */
+.pvis.demo .dframe{border-radius:20px;overflow:hidden;border:1px solid var(--line);background:#1C1C1E}
+.dbar{height:40px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#141416;border-bottom:1px solid #26262A;font:400 13px/1 var(--sans);color:#8A8A86}
+.dbar i{width:11px;height:11px;border-radius:50%;background:#3A3A3E}
+.dbar span{margin-left:8px}
+.dbar a{margin-left:auto;color:#C4C4C0}.dbar a:hover{color:#fff}
+.dview{position:relative;width:100%;aspect-ratio:1280/600;overflow:hidden}
+.dview iframe{position:absolute;left:0;top:0;width:1280px;height:600px;border:0;transform-origin:0 0}
+@media (max-width:560px){.dbar a{display:none}}
 </style>
 </head><body>
 
@@ -368,7 +377,7 @@ footer{color:var(--dim)}
             <div class="pctas"><a class="pbtn" href="learnvia/">Read the case study</a><a class="pbtn ghost" href="learnvia/tutor-demo.html">Try the prototype <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a></div>
           </div>
         </div>
-        <a class="pvis" href="learnvia/" tabindex="-1" aria-hidden="true"><div class="shot"><div class="live"><div class="win"><div class="win-bar"><i></i><i></i><i></i>Interactive prototype — Adaptive AI Tutor</div><iframe src="learnvia/tutor-demo.html?autoplay=1" title="" tabindex="-1" loading="lazy" scrolling="no"></iframe></div></div></div></a>
+        <div class="pvis demo"><div class="dframe"><div class="dbar"><i></i><i></i><i></i><span>Live prototype · Adaptive AI tutor</span><a href="learnvia/tutor-demo.html" target="_blank" rel="noopener">Open full screen ↗</a></div><div class="dview"><iframe src="learnvia/tutor-demo.html" title="Interactive Learnvia AI tutor prototype" loading="lazy"></iframe></div></div></div>
       </article>
       <article class="proj">
         <div class="ptop">
@@ -455,4 +464,8 @@ var t=false;window.addEventListener('scroll',function(){if(!t){t=true;requestAni
 <script>document.querySelectorAll('.copy').forEach(function(b){b.addEventListener('click',function(){var t=b.dataset.copy,done=function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1600)};
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){sel(b)})}else sel(b);});});
 function sel(b){var a=b.parentNode.querySelector('.addr'),r=document.createRange();r.selectNodeContents(a);var g=getSelection();g.removeAllRanges();g.addRange(r);b.textContent='Selected';}</script>
+<script>/* scale live demo to fit */
+(function(){document.querySelectorAll('.dview').forEach(function(v){var f=v.querySelector('iframe');
+function fit(){f.style.transform='scale('+(v.clientWidth/1280)+')';}fit();if(window.ResizeObserver)new ResizeObserver(fit).observe(v);});})();
+</script>
 </body></html>
