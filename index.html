@@ -203,15 +203,6 @@ footer{padding-block:18px 28px;color:var(--dim);font:400 12px/1 var(--mono);disp
 .topbar a:focus-visible{outline:2px solid var(--lav);outline-offset:2px}
 @media (max-width:560px){.topbar{padding:0 4px 0 14px}.topbar .links{gap:0}.topbar .links a{padding:8px 7px;font-size:13px;white-space:nowrap}}
 
-/* ambient flowing light */
-body::before,body::after{content:"";position:fixed;z-index:-1;pointer-events:none;border-radius:50%;filter:blur(80px);will-change:transform}
-body::before{width:58vw;height:58vw;left:-8vw;top:-22vw;background:radial-gradient(circle,rgba(245,198,214,.20) 0%,rgba(245,198,214,0) 65%);animation:auraA 36s ease-in-out infinite alternate}
-body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradient(circle,rgba(92,78,200,.30) 0%,rgba(92,78,200,0) 65%);animation:auraB 44s ease-in-out infinite alternate}
-@keyframes auraA{0%{transform:translate(0,0) scale(1)}50%{transform:translate(20vw,8vh) scale(1.12)}100%{transform:translate(38vw,-2vh) scale(.95)}}
-@keyframes auraB{0%{transform:translate(0,0) scale(1)}50%{transform:translate(-24vw,10vh) scale(1.08)}100%{transform:translate(-10vw,4vh) scale(1)}}
-.topbar{background:#111112!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
-.btn.ghost{background:#000}
-@media (prefers-reduced-motion:reduce){body::before,body::after{animation:none}}
 /* btnsys2 */
 .cbtn.ext{gap:8px!important;padding:0 18px!important}
 .cbtn.ext svg{opacity:.6;transition:transform .2s,opacity .2s}
@@ -228,30 +219,102 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
 .cbtn.mail{gap:10px!important;padding:0 5px 0 18px!important;font-weight:500!important;color:#CFCBC3!important}
 .cbtn.mail .copy{height:34px!important;padding:0 16px!important;font:600 14px/34px var(--sans)!important}
 .cbtn:focus-visible,.copy:focus-visible{outline:2px solid var(--lav);outline-offset:2px}
-/* ctglow */
-.tile.contact{background:radial-gradient(38% 70% at 22% 18%,rgba(245,198,214,.13),transparent 70%),radial-gradient(45% 80% at 88% 100%,rgba(92,78,200,.12),transparent 70%),#141416!important}
 .contact h2{font-size:clamp(26px,3.2vw,44px)!important;letter-spacing:-.03em!important}
-/* barglow */
-.topbar{background:radial-gradient(30% 140% at 8% 0%,rgba(245,198,214,.18),transparent 70%),radial-gradient(35% 160% at 92% 100%,rgba(110,92,230,.26),transparent 70%),#121214!important;border-color:#26262B!important}
-.topbar .links a{color:#B4B1AB!important}
-.topbar .links a:hover{color:var(--ink)!important;background:rgba(255,255,255,.06)!important}
-.topbar .links a[aria-current="page"]{color:#FBE3EC!important;background:rgba(245,198,214,.24)!important;box-shadow:none!important}
-.topbar .links a[aria-current="page"]:hover{background:rgba(245,198,214,.22)!important}
-/* btnC: translucent pink buttons -> option A (pink 75%) */
-.btn:not(.ghost){background:rgba(245,198,214,.86)!important;color:#16121F!important;transition:background .2s}
-.btn:not(.ghost):hover{background:rgba(245,198,214,.95)!important}
-.btn.ghost{background:#000!important;border:1px solid rgba(243,239,232,.5)!important}
-.btn.ghost span{background:rgba(245,198,214,.74)!important;color:#16121F!important}
-.btn.ghost:hover span{background:rgba(245,198,214,.86)!important}
-.copy{background:rgba(245,198,214,.86)!important;color:#16121F!important}
-.copy:hover{background:rgba(245,198,214,.95)!important}
+/* calm: one quiet system */
+:root{--accent:#F3EFE8}
+.hero{display:block;margin-block:clamp(24px,5vw,72px) 0}
+.hero.tile{background:none!important}
+.hero.tile::before{display:none}
+.intro{min-height:0;padding:clamp(32px,6vw,88px) 0 clamp(8px,2vw,24px)}
+.hi{font-weight:400;color:var(--muted)}
+.state,.state.sm{font:600 clamp(40px,5.6vw,80px)/1.02 var(--sans);letter-spacing:-.035em;max-width:16ch;margin-top:18px}
+.intro .tag{font:400 clamp(16px,1.4vw,19px)/1.6 var(--sans);letter-spacing:0;color:#B4B1AB;max-width:52ch;margin-top:24px}
+.intro .roles{display:block;font:400 13px/1.4 var(--mono);color:var(--dim);margin-top:18px}
+.ctas{margin-top:32px;gap:10px}
+.btn{height:44px;padding:0 22px;gap:0;background:var(--accent);color:#111;font:600 15px/1 var(--sans);transition:opacity .2s}
+.btn:hover{opacity:.88}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid #3A3A40;padding:0 22px}
+.btn.ghost:hover{border-color:#5A5A60;opacity:1}
+.topbar{background:#111112;border-color:#232326}
+.topbar .links a{color:#A9A6A0}
+.topbar .links a:hover{color:var(--ink);background:rgba(255,255,255,.05)}
+.topbar .links a[aria-current="page"]{color:var(--ink);background:rgba(255,255,255,.09)}
+.topbar .links a[aria-current="page"]:hover{color:var(--ink);background:rgba(255,255,255,.12)}
+.card .go{background:#1F1F23;border:1px solid #2E2E33}
+.card:hover .go{background:#2A2A2F}
+.tile.contact{background:var(--tile)}
+.copy{background:var(--accent);color:#111}
+.copy:hover{background:#fff}
+.cbtn.primary{background:var(--accent)}
+/* mono: black and white, dark */
+:root{--bg:#000;--tile:#111111;--tile2:#1C1C1C;--line:#262626;--ink:#F5F5F3;--muted:#9A9A96;--dim:#666663;--accent:#F5F5F3}
+body{background:#000;color:var(--ink)}
+.bar{padding-top:8px}
+.topbar{background:rgba(0,0,0,.85)!important;border:0!important;border-radius:0;padding:0;-webkit-backdrop-filter:blur(10px)!important;backdrop-filter:blur(10px)!important}
+.topbar .nm{font:600 17px/1 var(--sans);letter-spacing:-.02em;color:var(--ink);white-space:nowrap}
+.topbar .links a{color:#A3A3A0}
+.topbar .links a:hover{color:var(--ink);background:var(--tile2)}
+.topbar .links a[aria-current="page"],.topbar .links a[aria-current="page"]:hover{color:var(--ink);background:var(--tile2)}
+.hi{color:var(--muted);display:block}.hi b{color:var(--ink);font-weight:600}
+.state,.state.sm{color:var(--ink);max-width:17ch}
+.intro .tag{color:#C4C4C0}
+.intro .roles{color:var(--dim)}
+.btn{background:#F5F5F3;color:#000}
+.btn.ghost{background:#000;color:var(--ink);border:1px solid #3A3A3A}
+.btn.ghost:hover{border-color:#F5F5F3}
+.btn:focus-visible{outline-color:#F5F5F3}
+.tile{background:var(--tile);border-color:var(--line)}
+.card:hover{border-color:#3A3A3A}
+.card .sum{color:var(--muted)}
+.card .tags span{background:transparent;color:#C4C4C0;border:1px solid #2E2E2E}
+.card .go{background:#F5F5F3;border:0}
+.card .go svg{stroke:#000}
+.card:hover .go{background:#fff}
+.card.wip{background:transparent;border:1px dashed #333}
+.status{color:#C4C4C0;border-color:#333}
+.tile.contact{background:#F5F5F3;color:#000;--ink:#000;--muted:#555;--tile2:#E6E6E3}
+.tile.contact .kicker{color:#555}
+.tile.contact .cbtn.resume,.tile.contact .cbtn.mail{border-color:#C8C8C4!important;color:#000!important}
+.tile.contact .cbtn.resume:hover{background:#E6E6E3!important;border-color:#000!important}
+.tile.contact .copy{background:#000;color:#fff}
+.tile.contact .copy:hover{background:#333}
+footer{color:var(--dim)}
+/* lede-style project blocks */
+#work,#contact{scroll-margin-top:80px}
+.projects{display:flex;flex-direction:column;gap:clamp(72px,9vw,128px);margin-top:clamp(24px,4vw,48px)}
+.proj .ptop{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.9fr);gap:clamp(24px,5vw,80px);align-items:start}
+.plabel{font:400 14px/1.4 var(--sans);color:var(--muted)}
+.ptitle{font:600 clamp(28px,3.4vw,46px)/1.08 var(--sans);letter-spacing:-.03em;margin-top:12px;max-width:18ch}
+.ptitle mark{background:none;color:inherit;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:.14em;text-decoration-color:var(--muted)}
+.pmeta{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding-top:14px;border-top:1px solid var(--line)}
+.pmeta dt{font:400 13px/1.3 var(--sans);color:var(--muted)}
+.pmeta dd{margin:4px 0 0;font:500 14.5px/1.4 var(--sans)}
+.pblock{margin-top:22px}
+.pblock h4{margin:0;font:600 14.5px/1.3 var(--sans)}
+.pblock p{margin-top:4px;color:#B8B8B4;font-size:15px;line-height:1.55}
+.pctas{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.pbtn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border-radius:999px;background:#F5F5F3;color:#000;font:600 14px/1 var(--sans);transition:opacity .2s}
+.pbtn:hover{opacity:.88}
+.pbtn.ghost{background:transparent;color:var(--ink);border:1px solid #3A3A3A}
+.pbtn.ghost:hover{border-color:var(--ink);opacity:1}
+.pvis{display:block;margin-top:clamp(24px,3vw,40px)}
+.pvis .shot{border-radius:20px;overflow:hidden;aspect-ratio:16/9;background:#111;position:relative;border:1px solid var(--line)}
+.pvis .shot img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s ease}
+.pvis:hover .shot img{transform:scale(1.015)}
+.more{margin-top:clamp(72px,9vw,128px);border-top:1px solid var(--line);padding-top:16px}
+.more-h{font:500 14px/1 var(--sans);color:var(--muted)}
+.more-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;margin-top:20px}
+.mt{font:600 17px/1.3 var(--sans);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.md{color:var(--muted);font-size:14.5px;margin-top:6px}
+@media (max-width:900px){.proj .ptop{grid-template-columns:1fr}.more-row{grid-template-columns:1fr}}
+@media (max-width:560px){.pmeta{grid-template-columns:1fr 1fr}.pvis .shot{aspect-ratio:4/3}}
 </style>
 </head><body>
 
 <header class="bar">
   <div class="wrap">
     <nav class="topbar" aria-label="Main">
-      <a class="me" href="#top" aria-label="Orey Xia, home"><svg class="mark" viewBox="0 0 100 100" width="26" height="26" aria-hidden="true"><g fill="#F3EFE8"><rect x="44" y="6" width="12" height="88" rx="6" transform="rotate(0 50 50)"/><rect x="44" y="6" width="12" height="88" rx="6" transform="rotate(60 50 50)"/><rect x="44" y="6" width="12" height="88" rx="6" transform="rotate(120 50 50)"/></g><circle cx="50" cy="50" r="7" fill="#000"/></svg></a>
+      <a class="me" href="#top" aria-label="Orey Xia, home"><span class="nm">Orey Xia</span></a>
       <div class="links">
         <a href="#top" aria-current="page">Home</a>
         <a href="#work">Projects</a>
@@ -266,32 +329,17 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
   <div class="hero tile">
     <div class="intro">
       <div>
-        <p class="hi"><span class="avatar" aria-hidden="true">OX</span>Hi, I'm Orey — somewhere between design, systems, and learning.</p>
-        <h1 class="state" id="state"></h1>
-        <p class="tag">I translate messy requirements into working prototypes, then test and iterate against real workflows.</p>
-        <div class="roles"><span class="chip">Design Engineering</span><span class="chip">AI Prototyping</span><span class="chip">LLM Evaluation</span></div>
+        <p class="hi"><b>Product designer</b> · Pittsburgh, open to relocate</p>
+        <h1 class="state">I turn ambiguous AI ideas into testable prototypes.</h1>
+        <p class="tag">I start with how people actually use AI, design the experience around it, and build a working prototype to test it with real users.</p>
+        <p class="roles">Product Design · User Research · AI Prototyping</p>
       </div>
       <div class="ctas">
-        <a class="btn" href="#work">See my work <i><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></a>
-        <a class="btn ghost" href="#contact"><span>Get in touch</span></a>
+        <a class="btn" href="#work">See my work</a>
+        <a class="btn ghost" href="#contact">Get in touch</a>
       </div>
     </div>
 
-    <div class="orbit" aria-hidden="true">
-      <svg class="rings" viewBox="0 0 600 600" preserveAspectRatio="none">
-        <ellipse cx="300" cy="320" rx="250" ry="150" fill="none" stroke="#2A2A2E" stroke-width="1"/>
-        <ellipse cx="300" cy="300" rx="175" ry="245" fill="none" stroke="#1F1F22" stroke-width="1" transform="rotate(-18 300 300)"/>
-        <circle r="3.5" fill="#F2D35B"><animateMotion dur="24s" repeatCount="indefinite" path="M550,320 A250,150 0 1,1 50,320 A250,150 0 1,1 550,320"/></circle><circle cx="130" cy="210" r="2" fill="#F3EFE8" opacity=".6"/><circle cx="360" cy="468" r="2.5" fill="#F5C6D6"/>
-      </svg>
-      <div class="ico" style="left:14%;top:20%;background:var(--green);--r:-7deg"><svg viewBox="0 0 40 40" fill="none" stroke="#DFF5E7" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 13l7 7-7 7M20 28h11"/></svg><b>pipelines</b></div>
-      <div class="ico" style="left:56%;top:8%;background:var(--pink);animation-delay:-2s;--r:4deg"><svg viewBox="0 0 40 40"><rect x="7" y="9" width="26" height="22" rx="7" fill="#fff" stroke="#16121F" stroke-width="2"/><rect x="11" y="13" width="18" height="12" rx="4" fill="var(--blue)"/><circle cx="16" cy="19" r="1.8" fill="#fff"/><circle cx="24" cy="19" r="1.8" fill="#fff"/><path d="M20 4v5" stroke="#16121F" stroke-width="2"/><circle cx="20" cy="4" r="2" fill="var(--tomato)"/></svg><b>AI products</b></div>
-      <div class="ico" style="left:40%;top:38%;background:linear-gradient(90deg,var(--pink) 50%,var(--blue) 50%);animation-delay:-4s;--r:0deg"><svg viewBox="0 0 40 40" fill="none" stroke="#16121F" stroke-width="2" stroke-linecap="round"><circle cx="14" cy="15" r="2" fill="#fff"/><circle cx="26" cy="15" r="2" fill="#fff"/><path d="M20 17l-3 8h6z" fill="#16121F"/><path d="M14 29c3 3 9 3 12 0"/></svg><b>user research</b></div>
-      <div class="ico" style="left:76%;top:34%;background:var(--lav);animation-delay:-1s;--r:8deg"><svg viewBox="0 0 40 40"><rect x="14" y="7" width="20" height="13" rx="6" fill="var(--tomato)"/><circle cx="20" cy="13.5" r="1.3" fill="#fff"/><circle cx="24" cy="13.5" r="1.3" fill="#fff"/><circle cx="28" cy="13.5" r="1.3" fill="#fff"/><rect x="5" y="18" width="21" height="14" rx="7" fill="#fff" stroke="#16121F" stroke-width="2"/><circle cx="11" cy="25" r="1.4" fill="#16121F"/><circle cx="15.5" cy="25" r="1.4" fill="#16121F"/><circle cx="20" cy="25" r="1.4" fill="#16121F"/></svg><b>conversations</b></div>
-      <div class="ico" style="left:10%;top:58%;background:var(--yellow);animation-delay:-3s;--r:-5deg"><svg viewBox="0 0 40 40" fill="none" stroke="#16121F" stroke-width="2.4" stroke-linecap="round"><path d="M9 29V17a4 4 0 0 1 4-4h14a4 4 0 0 1 4 4v12"/><path d="M13 29v-6M20 29V16M27 29v-9"/></svg><b>evaluation</b></div>
-      <div class="ico" style="left:58%;top:68%;background:var(--green);animation-delay:-5s;--r:11deg"><svg viewBox="0 0 40 40"><rect x="12" y="6" width="16" height="28" rx="4" fill="var(--pink)" stroke="#16121F" stroke-width="2" transform="rotate(12 20 20)"/><circle cx="24" cy="13" r="2.6" fill="#fff" stroke="#16121F" stroke-width="1.5"/></svg><b>prototypes</b></div>
-      <div class="ico" style="left:28%;top:78%;background:#EDEAE3;animation-delay:-2.6s;--r:-3deg"><svg viewBox="0 0 40 40"><path d="M9 14h9l3 3h10v14H9z" fill="var(--yellow)" stroke="#16121F" stroke-width="2" stroke-linejoin="round"/></svg><b>case studies</b></div>
-      
-    </div>
   </div>
 
 
@@ -300,36 +348,72 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
       <div><span class="kicker">01 — Selected work</span><h2>Work</h2></div>
       <p>Research, design, and engineering on real problems, each with the evidence of what worked and what didn't.</p>
     </div>
-    <div class="work">
-      <a class="tile card" href="verifier/">
-        <div class="shot"><img src="img/verifier-dark.webp" alt="Before and after: a direct LLM answer scored 6.5 out of 12; after source verification, 11.5." loading="lazy"></div>
-        <div class="meta"><div><h3>Source-Grounded Answer Verifier</h3><p class="sum">When does a second, source-checking LLM pass make an answer better — and when does it over-edit?</p><div class="tags"><span>Build</span><span>Eval</span><span>Python</span></div></div><i class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></div>
-      </a>
-      <a class="tile card" href="ancestor/">
-        <div class="shot"><img src="img/ancestor.webp" alt="Ancestor app screens: a guided recording prompt and the chapter opening Rosa's Sunday Bread." loading="lazy"></div>
-        <div class="meta"><div><h3>Ancestor</h3><p class="sum">An AI-augmented app for recording family stories.</p><div class="tags"><span>Design</span><span>Build</span><span>React</span></div></div><i class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></div>
-      </a>
-      <a class="tile card" href="learnvia/">
-        <div class="shot"><div class="live" aria-hidden="true"><div class="win"><div class="win-bar"><i></i><i></i><i></i>Interactive prototype — Adaptive AI Tutor</div><iframe src="learnvia/tutor-demo.html?autoplay=1" title="" tabindex="-1" loading="lazy" scrolling="no"></iframe></div></div></div>
-        <div class="meta"><div><h3>Learnvia</h3><p class="sum">How students and an AI tutor interact, in lesson and homework modes.</p><div class="tags"><span>Research</span><span>Design</span></div></div><i class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></div>
-      </a>
-      <a class="tile card" href="a-grain-of/">
-        <div class="shot"><img src="img/grain.jpg" alt="Translucent 3D-printed form made from Shenzhen material and sound data, close-up." loading="lazy"></div>
-        <div class="meta"><div><h3>A Grain Of</h3><p class="sum">Turning Shenzhen's soil, concrete, and sound into data, then back into matter.</p><div class="tags"><span>Research</span><span>Prototype</span><span>Installation</span></div></div><i class="go"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></div>
-      </a>
-      <div class="tile card wip" aria-label="n8n Reasoning Pipeline, in progress">
-        <div class="shot" aria-hidden="true">
-          <svg viewBox="0 0 240 120" fill="none">
-            <g stroke="#3A3A40" stroke-width="1.5"><path d="M46 60h40M126 38h28M126 82h28M194 38c14 0 14 22 0 22M194 82c14 0 14-22 0-22"/><path d="M86 60c14 0 14-22 40-22M86 60c14 0 14 22 40 22"/></g>
-            <rect x="14" y="46" width="32" height="28" rx="8" fill="#18181A" stroke="#34343A"/>
-            <rect x="94" y="24" width="32" height="28" rx="8" fill="#18181A" stroke="#34343A"/>
-            <rect x="94" y="68" width="32" height="28" rx="8" fill="#18181A" stroke="#34343A"/>
-            <rect x="154" y="24" width="32" height="28" rx="8" fill="#B9A6F0" fill-opacity=".18" stroke="#B9A6F0" stroke-opacity=".6"/>
-            <rect x="154" y="68" width="32" height="28" rx="8" fill="#18181A" stroke="#34343A"/>
-            <circle cx="210" cy="60" r="10" fill="#F2D35B" fill-opacity=".85"/>
-          </svg>
+    <div class="projects">
+      <article class="proj">
+        <div class="ptop">
+          <div class="plead">
+            <p class="plabel">Learnvia AI tutor · CMU × Learnvia, 2026</p>
+            <h3 class="ptitle">Showed that scaffolding beats answers: <mark>38% vs. 14%</mark> learner recovery</h3>
+          </div>
+          <div class="pinfo">
+            <dl class="pmeta"><div><dt>Role</dt><dd>Design lead</dd></div><div><dt>Team</dt><dd>5 designers, with Learnvia</dd></div><div><dt>Time</dt><dd>Jan–Aug 2026 · 8 months</dd></div></dl>
+            <div class="pblock"><h4>The decision</h4><p>We narrowed a larger codebook to five learner behaviors that raters could code reliably (α ≈ 0.82), then mapped 21,891 turn transitions.</p></div>
+            <div class="pblock"><h4>What it cost</h4><p>Coarser codes. Behaviors raters couldn’t agree on were left out, so the tutor only reacts to what we could measure.</p></div>
+            <div class="pctas"><a class="pbtn" href="learnvia/">Read the case study</a><a class="pbtn ghost" href="learnvia/tutor-demo.html">Try the prototype <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a></div>
+          </div>
         </div>
-        <div class="meta"><div><h3>n8n Reasoning Pipeline</h3><p class="sum">A multi-step reasoning workflow built in n8n. Case study coming soon.</p><div class="tags"><span>n8n</span><span>LLM</span><span>Agents</span></div></div><span class="status"><i></i>In progress</span></div>
+        <a class="pvis" href="learnvia/" tabindex="-1" aria-hidden="true"><div class="shot"><div class="live"><div class="win"><div class="win-bar"><i></i><i></i><i></i>Interactive prototype — Adaptive AI Tutor</div><iframe src="learnvia/tutor-demo.html?autoplay=1" title="" tabindex="-1" loading="lazy" scrolling="no"></iframe></div></div></div></a>
+      </article>
+      <article class="proj">
+        <div class="ptop">
+          <div class="plead">
+            <p class="plabel">Source-grounded answer verifier, 2026</p>
+            <h3 class="ptitle">A source-checking pass cut unsupported claims <mark>from 2 to 0</mark></h3>
+          </div>
+          <div class="pinfo">
+            <dl class="pmeta"><div><dt>Role</dt><dd>Solo: experiment, pipeline, evaluation</dd></div><div><dt>Team</dt><dd>Solo</dd></div><div><dt>Time</dt><dd>Summer 2026</dd></div></dl>
+            <div class="pblock"><h4>The decision</h4><p>Verify the exact direct draft instead of adding a planning step, so any change can be traced to verification alone.</p></div>
+            <div class="pblock"><h4>What it cost</h4><p>One regression: the verifier made a strong answer worse (11.5 → 10.5), so it isn’t worth running on every question.</p></div>
+            <div class="pctas"><a class="pbtn" href="verifier/">Read the case study</a><a class="pbtn ghost" href="https://github.com/zichunxia78-creator/final-project-17630-xia" target="_blank" rel="noopener">Code on GitHub <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M8 7h9v9"/></svg></a></div>
+          </div>
+        </div>
+        <a class="pvis" href="verifier/" tabindex="-1" aria-hidden="true"><div class="shot"><img src="img/verifier-dark.webp" alt="" loading="lazy"></div></a>
+      </article>
+      <article class="proj">
+        <div class="ptop">
+          <div class="plead">
+            <p class="plabel">Ancestor · AI family-memory app, 2026</p>
+            <h3 class="ptitle">Rebuilt a family-memory app around <mark>curation, not capture</mark></h3>
+          </div>
+          <div class="pinfo">
+            <dl class="pmeta"><div><dt>Role</dt><dd>Solo product designer</dd></div><div><dt>Team</dt><dd>Solo</dd></div><div><dt>Time</dt><dd>3 weeks, 2026</dd></div></dl>
+            <div class="pblock"><h4>The decision</h4><p>Recording tools already exist. I made turning fragments into a story the center of the product.</p></div>
+            <div class="pblock"><h4>What it cost</h4><p>A narrower pitch: capture and generation became supporting steps instead of headline features.</p></div>
+            <div class="pctas"><a class="pbtn" href="ancestor/">Read the case study</a></div>
+          </div>
+        </div>
+        <a class="pvis" href="ancestor/" tabindex="-1" aria-hidden="true"><div class="shot"><img src="img/ancestor.webp" alt="" loading="lazy"></div></a>
+      </article>
+      <article class="proj">
+        <div class="ptop">
+          <div class="plead">
+            <p class="plabel">A Grain Of · SUSTech, 2024</p>
+            <h3 class="ptitle">Turned <mark>160 material samples</mark> from Shenzhen into an installation at Shenzhen Design Week</h3>
+          </div>
+          <div class="pinfo">
+            <dl class="pmeta"><div><dt>Role</dt><dd>Prototype engineer</dd></div><div><dt>Team</dt><dd>4 researchers, 2 lead professors</dd></div><div><dt>Time</dt><dd>Mar–Jul 2024</dd></div></dl>
+            <div class="pblock"><h4>The decision</h4><p>Translate each sample into sound and 3D form, then print it in resin, so visitors could hold the data.</p></div>
+            <div class="pblock"><h4>What it cost</h4><p>Eight weeks of field sampling before a single form could be made.</p></div>
+            <div class="pctas"><a class="pbtn" href="a-grain-of/">Read the case study</a></div>
+          </div>
+        </div>
+        <a class="pvis" href="a-grain-of/" tabindex="-1" aria-hidden="true"><div class="shot"><img src="img/grain.jpg" alt="" loading="lazy"></div></a>
+      </article>
+    </div>
+    <div class="more">
+      <p class="more-h">More work</p>
+      <div class="more-row">
+        <div class="mitem"><p class="mt">n8n Reasoning Pipeline <span class="status"><i></i>In progress</span></p><p class="md">A multi-step reasoning workflow built in n8n. Case study coming soon.</p></div>
       </div>
     </div>
   </section>
@@ -360,56 +444,7 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
 })();
 </script>
 
-<script>
-(function(){
-  var SETS={
-    a:{pre:'I design, build, and ',words:['evaluate','deploy','stress-test','ship'],post:' AI products.',sm:false,br:false,label:'I design, build, and evaluate AI products.'},
-    c:{pre:'I design, build, and evaluate ',words:['LLM pipelines.','AI tutors.','agent workflows.','learning tools.'],post:'',sm:true,br:true,label:'I design, build, and evaluate LLM pipelines, AI tutors, agent workflows, and learning tools.'},
-    b:{pre:'I turn ambiguous AI ideas into ',words:['testable prototypes.','agent workflows.','evaluation pipelines.','AI tutors.'],post:'',sm:true,br:true,label:'I turn ambiguous AI ideas into testable prototypes, agent workflows, evaluation pipelines, and AI tutors.'}
-  };
-  var h=document.getElementById('state'), reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var timer=0, i=0, cur=null;
-  function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;');}
-  function render(k){
-    clearTimeout(timer); cur=SETS[k]; i=0;
-    h.classList.toggle('sm',cur.sm);
-    h.setAttribute('aria-label',cur.label);
-    h.innerHTML='<span aria-hidden="true">'+esc(cur.pre)+(cur.br?'<br>':'')+'<span class="rot"><span class="rot-track">'+cur.words.map(function(w){return '<span>'+esc(w)+'</span>';}).join('')+'</span></span>'+esc(cur.post)+'</span>';
-    size(); if(!reduce) timer=setTimeout(step,3400);
-  }
-  function size(){
-    var rot=h.querySelector('.rot'), items=h.querySelectorAll('.rot-track span'), track=h.querySelector('.rot-track');
-    var pad=parseFloat(getComputedStyle(rot).paddingLeft)*2;
-    rot.style.width=(items[i].scrollWidth+pad)+'px';
-    track.style.transform='translateY(-'+(i*items[0].offsetHeight)+'px)';
-  }
-  function step(){
-    if(document.hidden){timer=setTimeout(step,1000);return;}
-    i=(i+1)%cur.words.length; size();
-    timer=setTimeout(step,i===0?3400:2200);
-  }
-  window.addEventListener('resize',function(){if(cur)size();});
-  (document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(function(){render('b');});
-  render('b');
-})();
-</script>
 
-<script>
-(function(){
-  var box=document.querySelector('.orbit'); if(!box) return;
-  var icos=[].slice.call(box.querySelectorAll('.ico')), i=-1, hovering=false, t=0;
-  icos.forEach(function(el){var c=getComputedStyle(el).backgroundColor, m=c.match(/\d+(\.\d+)?/g);
-    if(m&&(m[3]===undefined||+m[3]>0)) el.style.setProperty('--g','rgba('+m[0]+','+m[1]+','+m[2]+',.3)');});
-  function clear(){icos.forEach(function(el){el.classList.remove('show');});}
-  function next(){
-    if(!hovering && !document.hidden){clear(); i=(i+1)%icos.length; icos[i].classList.add('show');}
-    t=setTimeout(next,2500);
-  }
-  box.addEventListener('mouseenter',function(){hovering=true;clear();});
-  box.addEventListener('mouseleave',function(){hovering=false;});
-  t=setTimeout(next,900);
-})();
-</script>
 <script>
 (function(){
 function fit(l){var f=l.firstElementChild,w=l.clientWidth,h=l.clientHeight,s=w*.84/900;
