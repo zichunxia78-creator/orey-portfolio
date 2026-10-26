@@ -323,6 +323,10 @@ footer{color:var(--dim)}
 .dview{position:relative;width:100%;aspect-ratio:1280/600;overflow:hidden}
 .dview iframe{position:absolute;left:0;top:0;width:1280px;height:600px;border:0;transform-origin:0 0}
 @media (max-width:560px){.dbar a{display:none}}
+/* memoji */
+.hero.tile{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:24px}
+.memoji{width:132px;height:auto;margin:0 clamp(8px,4vw,64px) clamp(8px,2vw,24px) 0;user-select:none;-webkit-user-drag:none}
+@media (max-width:700px){.hero.tile{grid-template-columns:1fr}.memoji{display:none}}
 </style>
 </head><body>
 
@@ -354,6 +358,7 @@ footer{color:var(--dim)}
         <a class="btn ghost" href="#contact">Get in touch</a>
       </div>
     </div>
+    <img class="memoji" src="img/memoji.png" alt="Orey's memoji with a light bulb idea" width="108" height="146">
 
   </div>
 
