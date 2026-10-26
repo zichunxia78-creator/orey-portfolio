@@ -345,6 +345,15 @@ footer{color:var(--dim)}
 .hero .sticker .arrow{position:absolute;top:16px;left:-6px;width:46px;height:40px}
 .hero .sticker .memoji{display:block;width:clamp(126px,11.7vw,180px);height:auto;margin:0}
 @media (max-width:900px){.hero .card{grid-template-columns:1fr}.hero .sticker{justify-self:start;padding-top:0;margin-top:8px}.hero .sticker .cap{position:static;display:block;margin-bottom:8px}.hero .sticker .arrow{display:none}}
+/* memoji eyes follow the cursor */
+.hero .face{position:relative;display:block;width:clamp(126px,11.7vw,180px)}
+.hero .face .memoji{width:100%!important}
+.hero .face .iris,.hero .face .front{position:absolute;pointer-events:none;user-select:none;-webkit-user-drag:none}
+.hero .face .front{inset:0;width:100%;height:auto}
+.hero .face .iris{width:11.905%;height:auto;top:49.577%;transition:transform .18s ease-out;will-change:transform}
+.hero .face .iris.l{left:28.571%}
+.hero .face .iris.r{left:59.722%}
+@media (prefers-reduced-motion:reduce){.hero .face .iris{transition:none}}
 </style>
 </head><body>
 
@@ -377,7 +386,12 @@ footer{color:var(--dim)}
       <div class="sticker">
         <span class="cap">(that's me, building)</span>
         <svg class="arrow" viewBox="0 0 46 40" fill="none" aria-hidden="true"><path d="M4 4c14 2 26 10 34 26" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/><path d="M31 28l7 3 1-8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        <img class="memoji" src="img/memoji.png" alt="Orey's memoji peeking over a laptop" width="504" height="710">
+        <div class="face" role="img" aria-label="Orey's memoji peeking over a laptop">
+          <img class="memoji" src="img/memoji-base.png" alt="" width="504" height="710">
+          <img class="iris l" src="img/memoji-iris-l.png" alt="">
+          <img class="iris r" src="img/memoji-iris-r.png" alt="">
+          <img class="front" src="img/memoji-front.png" alt="" width="504" height="710">
+        </div>
       </div>
     </div>
   </div>
@@ -491,5 +505,31 @@ function sel(b){var a=b.parentNode.querySelector('.addr'),r=document.createRange
 <script>/* scale live demo to fit */
 (function(){document.querySelectorAll('.dview').forEach(function(v){var f=v.querySelector('iframe');
 function fit(){f.style.transform='scale('+(v.clientWidth/1280)+')';}fit();if(window.ResizeObserver)new ResizeObserver(fit).observe(v);});})();
+</script>
+<script>/* memoji eyes */
+(function(){
+  var face=document.querySelector('.hero .face'); if(!face) return;
+  var irises=[].slice.call(face.querySelectorAll('.iris'));
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var MAXX=6, MAXY=1.6, W=504; /* limits in source-image pixels */
+  function look(px,py){
+    var r=face.getBoundingClientRect(), s=r.width/W;
+    irises.forEach(function(el){
+      var e=el.getBoundingClientRect(), cx=e.left+e.width/2, cy=e.top+e.height/2;
+      var dx=px-cx, dy=py-cy, d=Math.hypot(dx,dy)||1, k=Math.min(1,d/260);
+      el.style.transform='translate('+(dx/d*k*MAXX*s).toFixed(2)+'px,'+(dy/d*k*MAXY*s).toFixed(2)+'px)';
+    });
+  }
+  var idle=null, last=0;
+  if(!reduce){
+    window.addEventListener('pointermove',function(ev){last=Date.now();look(ev.clientX,ev.clientY);},{passive:true});
+    /* touch screens and idle visitors: glance around now and then */
+    idle=setInterval(function(){
+      if(Date.now()-last<3000||document.hidden) return;
+      var r=face.getBoundingClientRect(), a=Math.random()*Math.PI*2;
+      look(r.left+r.width/2+Math.cos(a)*400, r.top+r.height/2+Math.sin(a)*200);
+    },2200);
+  }
+})();
 </script>
 </body></html>
