@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000'/><g fill='%23F3EFE8'><rect x='44' y='12' width='12' height='76' rx='6'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(60 50 50)'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(120 50 50)'/></g><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@700&family=Playfair+Display:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@700&family=Playfair+Display:wght@700&family=Figtree:wght@400;500&display=swap">
 <link rel="stylesheet" href="../assets/cs-nav.css">
 <style>
 /* Zine system: black ground, cream paper panels, condensed caps, pink accent, ruled menu lists. */
@@ -66,10 +66,11 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 .duo .phone:last-child{transform:rotate(3deg)}
 .duo .note{position:absolute;left:-8px;top:-34px;transform:rotate(-6deg)}
 @media (max-width:860px){.hero .top{grid-template-columns:1fr}.duo{justify-self:start;max-width:380px;margin-top:28px}}
-.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 28px;margin:clamp(40px,5vw,64px) 0 0;padding-top:18px;border-top:2px solid var(--paper)}
-.meta dt{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
-.meta dd{margin:4px 0 0;font-weight:700}
-@media (max-width:720px){.meta{grid-template-columns:1fr 1fr}}
+.hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin:clamp(40px,5vw,64px) 0 0;padding-block:32px 8px;border-top:1px solid rgba(246,240,226,.18)}
+.hm-label{display:block;font:500 11px/1.2 "Figtree",ui-sans-serif,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7A7874;margin-bottom:10px}
+.hm-col p{font-family:"Figtree",ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.5;color:var(--paper);font-weight:400}
+@media (max-width:760px){.hero-meta{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.hero-meta{grid-template-columns:1fr;gap:20px}}
 .tldr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:28px;border:2px solid rgba(246,240,226,.9)}
 .tldr div{padding:18px 20px;display:grid;gap:8px;align-content:start}
 .tldr div+div{border-left:2px solid rgba(246,240,226,.9)}
@@ -265,12 +266,12 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
     </div>
   </div>
   <div class="in">
-    <dl class="meta">
-      <div><dt>Role</dt><dd>Solo product designer</dd></div>
-      <div><dt>Context</dt><dd>CMU HCII course · 3 weeks</dd></div>
-      <div><dt>Users</dt><dd>College &amp; grad students</dd></div>
-      <div><dt>Tools</dt><dd>Figma Make, Gemini · 60+ versions</dd></div>
-    </dl>
+    <div class="hero-meta">
+      <div class="hm-col"><span class="hm-label">Context</span><p>CMU HCII · The AI Augmented Designer<br>with Nik Martelaro &amp; John Zimmerman</p></div>
+      <div class="hm-col"><span class="hm-label">Role focus</span><p>Product design · AI-assisted research · Rapid prototyping</p></div>
+      <div class="hm-col"><span class="hm-label">Timeline</span><p>3 weeks · 2026</p></div>
+      <div class="hm-col"><span class="hm-label">Team</span><p>Independent project</p></div>
+    </div>
     <div class="tldr">
       <div><span class="tag">Problem</span><p>Meal planners assume a perfect week. Students buy for 7 days, cook 2, order takeout, and throw the rest out.</p></div>
       <div><span class="tag">Bet</span><p>Plan less and plan for failure: 3 shared-ingredient meals, a budget cap, and takeout as part of the plan.</p></div>
