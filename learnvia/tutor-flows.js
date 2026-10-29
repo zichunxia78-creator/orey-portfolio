@@ -1,9 +1,10 @@
 /* 07 · The tutor in context: three annotated flows inside a Learnvia-style course page */
 (function(){
-var root=document.getElementById('tf'); if(!root) return;
-var chat=document.getElementById('tfChat'), notesEl=document.getElementById('tfNotes'),
-    wires=document.getElementById('tfWires'), stage=document.getElementById('tfStage'),
-    outcome=document.getElementById('tfOutcome'), tabs=[].slice.call(root.querySelectorAll('[role="tab"]'));
+function init(root){
+var Q=function(c){return root.querySelector(c);};
+var chat=Q('.tf-chat'), notesEl=Q('.tf-notes'),
+    wires=Q('.tf-wires'), stage=Q('.tf-stage'),
+    outcome=Q('.tf-outcome'), tabs=[].slice.call(root.querySelectorAll('[role="tab"]'));
 var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function chips(list,on){return '<div class="tf-chips">'+list.map(function(c){return '<span'+(c===on?' class="on"':'')+'>'+c+'</span>';}).join('')+'</div>';}
@@ -100,7 +101,7 @@ tabs.forEach(function(b,i){
   b.addEventListener('click',function(){render(i);});
   b.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(!d)return;e.preventDefault();var j=(i+d+tabs.length)%tabs.length;tabs[j].focus();render(j);});
 });
-document.getElementById('tfReplay').addEventListener('click',function(){var i=0;tabs.forEach(function(b,j){if(b.getAttribute('aria-selected')==='true')i=j;});render(i);});
+Q('.tf-replay').addEventListener('click',function(){var i=0;tabs.forEach(function(b,j){if(b.getAttribute('aria-selected')==='true')i=j;});render(i);});
 window.addEventListener('resize',draw);
 notesEl.addEventListener('transitionend',draw);chat.addEventListener('transitionend',draw);
 chat.addEventListener('scroll',draw,{passive:true});
@@ -115,4 +116,6 @@ root.addEventListener('focusin',function(){hold=true;sync();});
 root.addEventListener('focusout',function(){hold=false;sync();});
 if(!('IntersectionObserver' in window)){visible=true;start();}
 else{new IntersectionObserver(function(es){es.forEach(function(e){visible=e.isIntersecting;sync();if(visible)start();});},{threshold:.25}).observe(root);}
+}
+[].forEach.call(document.querySelectorAll('.tf'),init);
 })();

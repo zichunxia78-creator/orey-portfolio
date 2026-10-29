@@ -953,3 +953,6 @@ details.rp-r p { margin:0 0 12px; padding-left:calc(52px); font-size:14px; line-
 .tf-paused .tf-tabs button.run::after { animation-play-state:paused; }
 @keyframes tfrun { to { transform:scaleX(1); } }
 @media (prefers-reduced-motion:reduce) { .tf-tabs button::after { display:none; } }
+/* preview copy of the 07 tutor demo, shown before the problem */
+.sec-preview{padding-top:56px;padding-bottom:24px}
+.sec-preview .sec-eyebrow{margin-bottom:20px}
