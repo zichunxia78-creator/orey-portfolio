@@ -189,6 +189,41 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 @media (max-width:640px){.rest .menu .r{grid-template-columns:auto minmax(0,1fr)}.rest .menu .p{grid-column:2}}
 .kept{color:#2B2B2B;max-width:80ch}
 
+/* process pipeline */
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.legend span{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.legend .ai,.node.ai{background:var(--pink)}
+.legend .me,.node.me{background:var(--paper-ink);color:var(--paper)}
+.legend .out{box-shadow:inset 0 0 0 1.5px var(--paper-ink)}
+.pipe{list-style:none;margin:clamp(36px,5vw,56px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:2px solid var(--paper-ink)}
+.pipe .col{display:flex;flex-direction:column;gap:22px;padding:18px clamp(10px,1.4vw,18px) 0;position:relative}
+.pipe .col+.col{border-left:1.5px solid var(--rule)}
+.pipe .col+.col::before{content:"→";position:absolute;left:-10px;top:14px;background:var(--paper);font-family:var(--display);font-weight:700;line-height:1;padding:2px 2px}
+.phase{font-family:var(--display);font-weight:700;font-stretch:72%;text-transform:uppercase;font-size:clamp(1.3rem,2.2vw,1.7rem);line-height:1}
+.node{position:relative;border-radius:14px;padding:12px 14px;display:grid;gap:4px}
+.node b{font-weight:800;font-size:.95rem;line-height:1.2}
+.node p{font-size:.85rem;line-height:1.35;opacity:.85}
+.node.out{box-shadow:inset 0 0 0 1.5px var(--paper-ink);background:transparent}
+.node+.node::before{content:"";position:absolute;left:50%;top:-22px;width:1.5px;height:22px;background:var(--paper-ink)}
+.node .with{font-family:var(--hand);font-size:1.15rem;line-height:1.05;color:var(--paper-ink);margin-top:4px}
+@media (max-width:900px){.pipe{grid-template-columns:1fr 1fr;row-gap:28px}.pipe .col:nth-child(3){border-left:0}.pipe .col:nth-child(3)::before{display:none}}
+@media (max-width:560px){.pipe{grid-template-columns:1fr}.pipe .col+.col{border-left:0;border-top:1.5px solid var(--rule);padding-top:22px}.pipe .col+.col::before,.pipe .col:nth-child(3)::before{display:block;content:"↓";left:50%;top:-12px;transform:translateX(-50%)}.pipe .col:nth-child(3){border-top:1.5px solid var(--rule)}}
+.prompts{margin-top:clamp(48px,6vw,72px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:start}
+@media (max-width:860px){.prompts{grid-template-columns:1fr}}
+.prompts>.kept{grid-column:1/-1}
+.pcards{display:grid;grid-template-columns:1fr 1.3fr;gap:16px}
+@media (max-width:560px){.pcards{grid-template-columns:1fr}}
+.pc{border-radius:18px;padding:18px;display:grid;gap:12px;align-content:start}
+.pc p{font-weight:600;line-height:1.55;font-size:clamp(1rem,1.4vw,1.15rem)}
+.pc-h{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.pc.naive{background:#E2D8C2;color:#5A5650}
+.pc.grounded{background:var(--paper-ink);color:var(--paper)}
+.pc mark{padding:1px 3px;border-radius:3px;color:var(--paper-ink)}
+.pc mark.g{background:#9FE0A8}.pc mark.r{background:#FF8C7A}.pc mark.b{background:#8EC5FF}.pc mark.m{background:var(--pink)}
+.keys{display:flex;gap:8px;flex-wrap:wrap}
+.keys span{font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;color:var(--paper-ink)}
+.keys .g{background:#9FE0A8}.keys .r{background:#FF8C7A}.keys .b{background:#8EC5FF}.keys .m{background:var(--pink)}
+
 /* learned */
 .learn{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px);margin-top:36px}
 .learn div{border-top:2px solid var(--paper-ink);padding-top:14px;display:grid;gap:10px}
@@ -228,7 +263,7 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
   <div class="in">
     <dl class="meta">
       <div><dt>Role</dt><dd>Solo product designer</dd></div>
-      <div><dt>Context</dt><dd>Course project · competitive product</dd></div>
+      <div><dt>Context</dt><dd>Course project · 3 weeks</dd></div>
       <div><dt>Users</dt><dd>College &amp; grad students</dd></div>
       <div><dt>Tools</dt><dd>Figma Make, Gemini · 60+ versions</dd></div>
     </dl>
@@ -405,16 +440,57 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 
 <!-- PROCESS -->
 <section class="paper" id="process">
-  <div class="in split">
-    <div class="stack">
-      <span class="tag">08 · Process</span>
-      <h2>Fast drafts, careful edits</h2>
-      <p class="hand">AI made drafts cheap. Choosing what to keep took the time.</p>
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">08 · Process</span>
+        <h2>Designing with an AI pipeline</h2>
+        <p class="hand">AI widened the options. I chose what got through each step.</p>
+      </div>
+      <div class="stack">
+        <p class="lead">Pivot was a 3-week course project, <i>Design a Competitive Product</i>. The goal was to use AI across the whole Double Diamond and work out where it helps and where it doesn’t. I chained AI generators so each one’s output fed the next. I set the priorities going in and reviewed every output.</p>
+        <div class="legend" aria-hidden="true"><span class="ai">AI</span><span class="me">Me</span><span class="out">Output</span></div>
+      </div>
     </div>
-    <div class="menu">
-      <div class="r"><span class="k">Research</span><span class="v">App reviews and Reddit, synthesized into themes and personas</span><span class="p"></span></div>
-      <div class="r"><span class="k">Define</span><span class="v">Feature specs and flows, pressure-tested</span><span class="p"></span></div>
-      <div class="r"><span class="k">Prototype</span><span class="v">Built and iterated in Figma Make</span><span class="p">60+ versions</span></div>
+
+    <ol class="pipe" role="list">
+      <li class="col">
+        <span class="phase">Discover</span>
+        <div class="node ai"><b>Deep research</b><p>As a UX research lead, searched Reddit and meal-app reviews for students’ complaints</p></div>
+        <div class="node ai"><b>Synthetic users</b><p>Personas built from that research, not from a generic role-play prompt</p></div>
+        <div class="node out"><b>Research summary</b><p>Themes and personas</p></div>
+      </li>
+      <li class="col">
+        <span class="phase">Define</span>
+        <div class="node ai"><b>Need statement generator</b><p>User · Need · Goal · Measurement</p></div>
+        <div class="node out"><b>Need statement</b></div>
+        <div class="node ai duo-node"><b>Requirement generator</b><p>What it achieves for the user · what it must do · constraints · priority</p><span class="with">Built with me, from the research summary and my priorities</span></div>
+        <div class="node out"><b>Prioritized requirements &amp; constraints</b></div>
+      </li>
+      <li class="col">
+        <span class="phase">Develop</span>
+        <div class="node ai"><b>Feature ideator</b><p>Functions · Screens · Databases · User flows</p></div>
+        <div class="node out"><b>Feature list</b></div>
+        <div class="node ai"><b>Spec writer</b><p>Functional and technical specs</p></div>
+        <div class="node out"><b>Specifications</b></div>
+      </li>
+      <li class="col">
+        <span class="phase">Deliver</span>
+        <div class="node me"><b>Prototype in Figma Make</b><p>60+ versions</p></div>
+        <div class="node ai"><b>AI as critiquer</b><p>Reviewed flows between versions</p></div>
+        <div class="node me"><b>Peer review</b><p>3 classmates, 4.89/5</p></div>
+      </li>
+    </ol>
+
+    <div class="prompts">
+      <div class="stack" style="gap:10px">
+        <span class="tag">Synthetic users · prompt pattern</span>
+        <h3>Research first, personas second</h3>
+        <p class="kept">A naive prompt (“You are a 21-year-old student…”) gives you a made-up character. Instead, I had the AI do the research first, then build personas from what it found, so they carried real student complaints.</p>
+        <div class="keys" style="margin-top:6px"><span class="g">Give AI a persona</span><span class="r">Find real sources</span><span class="b">Focus on your goal</span><span class="m">Use research as context</span></div>
+      </div>
+      <div class="pc grounded"><span class="pc-h">Advanced prompt · deep research</span><p>“<mark class="g">You are a professional UX research lead.</mark> <mark class="r">Search Reddit, app-store reviews of Mealime and other meal planners, and student forums</mark> for <mark class="b">complaints</mark> students have about planning meals on a budget. <mark class="m">Based on your research</mark>, create a set of personas we can use to design a better meal planner.”</p></div>
+      <p class="kept" style="font-size:.85rem;opacity:.75">Pattern paraphrased from the method I used, not the exact prompt.</p>
     </div>
   </div>
 </section>
