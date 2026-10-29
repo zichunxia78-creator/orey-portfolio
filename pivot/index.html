@@ -136,7 +136,16 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 @media (max-width:480px){.support{grid-template-columns:1fr}}
 
 /* problem */
-.loop5{list-style:none;margin:0;padding:0}
+.loopviz{position:relative;width:100%;max-width:520px;aspect-ratio:1;justify-self:center;color:var(--paper-ink)}
+.loopviz svg{position:absolute;inset:0;width:100%;height:100%}
+.lv-node{position:absolute;transform:translate(-50%,-50%);width:31%;background:var(--paper);border:2px solid var(--paper-ink);padding:8px 10px;display:grid;gap:2px;text-align:center}
+.lv-node b{font-family:var(--display);font-weight:700;font-stretch:72%;text-transform:uppercase;font-size:clamp(1.05rem,2vw,1.45rem);line-height:1}
+.lv-node span{font-size:clamp(.72rem,1.1vw,.85rem);line-height:1.25;color:#2B2B2B}
+.lv-node.hot{background:var(--pink)}
+.lv-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;text-align:center;font-family:var(--display);font-weight:700;font-stretch:72%;text-transform:uppercase;font-size:clamp(1rem,2.2vw,1.6rem);line-height:.95}
+.lv-center .pk{color:var(--pink-deep);font-size:1.6em}
+@media (max-width:860px){.loopviz{max-width:440px;margin-top:12px}}
+@media (max-width:420px){.lv-node{width:36%;padding:6px}.lv-node span{font-size:.66rem}}
 .stats.paperstats{border-top-color:var(--paper-ink)}
 .stats.paperstats p{color:#2B2B2B}
 .paperstats a{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-deep);text-decoration:none}
@@ -298,21 +307,31 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 <!-- PROBLEM -->
 <section class="paper" id="problem">
   <div class="in">
-    <div class="split">
+    <div class="split" style="align-items:center">
       <div class="stack">
         <span class="tag">01 · Problem</span>
         <h2>I kept throwing my groceries away</h2>
         <p class="hand">this one started with my own fridge.</p>
+        <p class="lead">Every grocery run went the same way, and each step made the next one worse. Then the next run started from zero again.</p>
       </div>
-      <div class="stack">
-        <p class="lead">Every grocery run went the same way. Each step made the next one worse:</p>
-        <ol class="menu loop5" role="list">
-          <li class="r"><span class="k">Shop</span><span class="v">I’d overbuy without noticing and go over budget.</span><span class="p">$↑</span></li>
-          <li class="r"><span class="k">Store</span><span class="v">Food went into the fridge and spoiled before I used it.</span><span class="p"></span></li>
-          <li class="r"><span class="k">Cook?</span><span class="v">I didn’t know what I could make with what was left.</span><span class="p"></span></li>
-          <li class="r"><span class="k">Toss</span><span class="v">So most of it ended up in the trash.</span><span class="p">waste</span></li>
-          <li class="r"><span class="k">Repeat</span><span class="v">And I never knew how long a shop should actually last.</span><span class="p">↺</span></li>
-        </ol>
+      <div class="loopviz" role="img" aria-label="A loop: Shop, overbuy and go over budget. Store, food spoils in the fridge. Cook, no idea what to make with what is left. Toss, most of it gets thrown out. Repeat, the next shop starts from zero, back to Shop.">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+          <marker id="ahp" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#B8336A"/></marker></defs>
+          <g fill="none" stroke="currentColor" stroke-width=".6" stroke-linecap="round">
+            <path d="M 61.11 13.66 A 38 38 0 0 1 81.13 28.20" marker-end="url(#ah)"/>
+            <path d="M 87.99 49.34 A 38 38 0 0 1 80.35 72.87" marker-end="url(#ah)"/>
+            <path d="M 62.37 85.93 A 38 38 0 0 1 37.63 85.93" marker-end="url(#ah)"/>
+            <path d="M 19.65 72.87 A 38 38 0 0 1 12.01 49.34" marker-end="url(#ah)"/>
+            <path d="M 18.87 28.20 A 38 38 0 0 1 38.89 13.66" marker-end="url(#ahp)" stroke="#B8336A" stroke-dasharray="1.6 1.4"/>
+          </g>
+        </svg>
+        <div class="lv-center"><span>Every run</span><span>starts from</span><span class="pk">zero</span></div>
+        <div class="lv-node" style="left:50%;top:12%"><b>Shop</b><span>Overbuy, go over budget</span></div>
+        <div class="lv-node" style="left:86.1%;top:38.3%"><b>Store</b><span>Spoils in the fridge</span></div>
+        <div class="lv-node" style="left:72.3%;top:80.7%"><b>Cook?</b><span>No idea what to make</span></div>
+        <div class="lv-node hot" style="left:27.7%;top:80.7%"><b>Toss</b><span>Most of it goes in the trash</span></div>
+        <div class="lv-node" style="left:13.9%;top:38.3%"><b>Repeat</b><span>Next shop starts from zero</span></div>
       </div>
     </div>
 
@@ -345,9 +364,11 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
     <div class="stack">
       <span class="tag">02 · Competitor</span>
       <h2>Mealime vs. Pivot</h2>
-      <p class="lead">Mealime is great at recipes. It assumes you’ll cook every planned night, and nothing in it tracks what you spend.</p>
+      <p class="lead">Mealime has a huge recipe library, and that’s part of the problem. Every plan means scrolling and deciding again, and it doesn’t know what’s already in your fridge, so each check-in starts from scratch. Pivot takes decisions off your plate by planning from what you already own.</p>
     </div>
     <div class="menu vs">
+      <div class="r"><span class="v old">Endless recipes to choose from</span><span class="arrow" aria-label="becomes">→</span><span class="k">A few picks, chosen for you</span></div>
+      <div class="r"><span class="v old">Every check-in starts from zero</span><span class="arrow" aria-label="becomes">→</span><span class="k">Starts from your fridge</span></div>
       <div class="r"><span class="v old">Rigid 7-day plan</span><span class="arrow" aria-label="becomes">→</span><span class="k">3 flexible meals</span></div>
       <div class="r"><span class="v old">No spending cap</span><span class="arrow" aria-label="becomes">→</span><span class="k">Budget first</span></div>
       <div class="r"><span class="v old">Assumes you always cook</span><span class="arrow" aria-label="becomes">→</span><span class="k">Takeout in the plan</span></div>
