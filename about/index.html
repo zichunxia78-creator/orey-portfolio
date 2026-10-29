@@ -290,6 +290,9 @@ body::before{background:radial-gradient(circle,rgba(245,198,214,.26) 0%,rgba(245
 .tile.contact .cbtn.resume:hover{background:#E6E6E3!important;border-color:#9A9A96!important}
 .tile.contact .cbtn.mail{color:#000!important}
 .tile.contact .copy,.tile.contact .copy:hover{background:#000!important;color:#fff!important}
+footer{align-items:baseline;gap:16px;flex-wrap:wrap}
+footer .sign{font:400 14px/1.4 var(--sans);color:var(--muted)}
+footer .sign i{font-family:var(--serif);font-style:italic;font-size:1.12em;color:var(--ink)}
 </style>
 </head>
 <body>
@@ -393,7 +396,7 @@ body::before{background:radial-gradient(circle,rgba(245,198,214,.26) 0%,rgba(245
       </div>
     </div>
   </div>
-  <footer><span>© 2026 Orey Xia</span><span>Built by hand · HTML/CSS/JS</span></footer>
+  <footer><span>© 2026 Orey Xia</span><span class="sign">Somewhere between Figma, code, and a little <i>creative chaos.</i></span></footer>
 </main>
 <script>document.querySelectorAll(".portrait").forEach(function(b){b.addEventListener("click",function(){b.classList.toggle("on");});});</script>
 <script>(function(){var ol=document.querySelector('.path'),svg=ol&&ol.querySelector('.path-line'),pth=svg&&svg.querySelector('path');if(!pth)return;
