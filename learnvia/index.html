@@ -80,9 +80,17 @@
     <h2 class="sec-heading rv">The tutor couldn't tell productive struggle from disengagement.</h2>
     <p class="sec-desc rv">Learnvia's AI tutor serves Calculus I students, but treats every learner state the same. One-size-fits-all responses fail when user needs change across a conversation — without detecting whether a student is struggling productively, disengaging, or seeking shortcuts, the tutor can't adapt and sometimes reinforces the wrong behavior.</p>
 
-    <div class="stats rv">
-      <div class="stat"><span class="stat-n">42.7%</span><span class="stat-l">of conversations contained at least one struggle turn</span></div>
-      <div class="stat"><span class="stat-n">42.5%</span><span class="stat-l">ended while the learner was still struggling</span></div>
+    <div class="stats pstats rv">
+      <div class="stat">
+        <span class="pst-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5z"/><path d="M7.5 9.6c1-1.2 2-1.2 3 0s2 1.2 3 0 2-1.2 3 0"/></svg></span>
+        <span class="stat-n">42.7%</span><span class="stat-l">of conversations contained at least one struggle turn</span>
+        <span class="pst-bar" role="img" aria-label="42.7 percent"><i style="--p:42.7%"></i></span>
+      </div>
+      <div class="stat">
+        <span class="pst-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5z"/><path d="M8 9.5h5"/><circle cx="16" cy="9.5" r="1.6" fill="currentColor" stroke="none"/></svg></span>
+        <span class="stat-n">42.5%</span><span class="stat-l">ended while the learner was still struggling</span>
+        <span class="pst-bar" role="img" aria-label="42.5 percent"><i style="--p:42.5%"></i></span>
+      </div>
     </div>
   </div>
 </section>
@@ -317,85 +325,103 @@
   </div>
 </section>
 
-<!-- ═══ 05 THE RESPONSE ═══ -->
+<!-- ═══ 05 PROPOSED RESPONSE POLICY ═══ -->
 <section id="response" class="sec">
-  <div class="wrap">
-    <span class="sec-eyebrow rv">05 · The Response</span>
-    <h2 class="sec-heading rv">From confusion signals to tutor actions.</h2>
-    <p class="sec-desc rv">We translated recurring learner behavior patterns into six tutor recommendations designed to support persistence, active participation, and recovery from unproductive struggle.</p>
+  <div class="wrap-wide">
+    <span class="sec-eyebrow rv">05 · Proposed Response Policy</span>
+    <h2 class="sec-heading rv">Designing how the tutor responds to learner signals.</h2>
+    <p class="sec-desc rv">We translated recurring learner behavior patterns into six tutor recommendations, then designed them into the product: four response states, each paired with the interface the learner sees.</p>
 
-    <div class="rec-stages rv">
-      <div class="rec-stage">
-        <div class="rec-stage-header">
-          <span class="rec-sn">01</span>
-          <h3 class="rec-st">Intervene before the loop forms</h3>
-          <p class="rec-sd">Respond when confusion first appears, before it develops into repetition, prolonged struggle, or answer-seeking.</p>
-        </div>
-        <div class="rec-cards">
-          <article class="rec-card">
-            <span class="rec-num">01</span>
-            <h4>Intervene at the first sign of confusion</h4>
-            <p>Respond to early signals of uncertainty before they develop into repeated input, prolonged confusion, or requests for the complete solution.</p>
-            <span class="rec-trans">Confusion → Timely support</span>
-          </article>
-          <article class="rec-card">
-            <span class="rec-num">02</span>
-            <h4>Prompt learners to take the next step</h4>
-            <p>Direct learners toward one manageable next action that keeps them actively involved in the reasoning process.</p>
-            <span class="rec-trans">Uncertainty → Active attempt</span>
-          </article>
-        </div>
-      </div>
-
-      <div class="rec-stage">
-        <div class="rec-stage-header">
-          <span class="rec-sn">02</span>
-          <h3 class="rec-st">Guide without taking over</h3>
-          <p class="rec-sd">Provide enough structure to move the learner forward without removing their role in the problem-solving process.</p>
-        </div>
-        <div class="rec-cards">
-          <article class="rec-card">
-            <span class="rec-num">03</span>
-            <h4>Reduce direct answering during struggle</h4>
-            <p>Prioritize targeted questions, hints, and scaffolding before revealing a complete solution, particularly when learners are confused or seeking the answer.</p>
-            <span class="rec-trans">Answer-seeking → Participation</span>
-          </article>
-          <article class="rec-card">
-            <span class="rec-num">04</span>
-            <h4>Continue using step-by-step guidance</h4>
-            <p>Break complex problems into smaller, sequenced actions so learners can remain active in the problem-solving process without becoming overwhelmed.</p>
-            <span class="rec-trans">Complex task → Guided progress</span>
-          </article>
-        </div>
-      </div>
-
-      <div class="rec-stage">
-        <div class="rec-stage-header">
-          <span class="rec-sn">03</span>
-          <h3 class="rec-st">Support recovery when struggle persists</h3>
-          <p class="rec-sd">When learners remain stuck, combine instructional guidance with encouragement and recognition of partial progress.</p>
-        </div>
-        <div class="rec-cards">
-          <article class="rec-card">
-            <span class="rec-num">05</span>
-            <h4>Provide encouragement during sustained struggle</h4>
-            <p>Pair instructional guidance with brief encouragement that acknowledges difficulty and supports continued effort.</p>
-            <span class="rec-trans">Sustained struggle → Re-engagement</span>
-          </article>
-          <article class="rec-card">
-            <span class="rec-num">06</span>
-            <h4>Affirm what the learner has right</h4>
-            <p>Identify correct or partially correct thinking before redirecting the learner toward revision, a different representation, or another approach.</p>
-            <span class="rec-trans">Repetition → Revised attempt</span>
-          </article>
-        </div>
-      </div>
+    <div class="rp rv">
+      <ol class="rp-rows">
+        <li class="rp-seg">
+          <div class="rp-seg-h"><span class="rp-n">1</span><span class="rp-state">First confusion</span><span class="rp-arrow" aria-hidden="true">→</span><span class="rp-pname">Clarify before explaining</span></div>
+          <div class="rp-row">
+            <div class="rp-pol">
+              <div class="rp-saidrow"><p class="rp-said">“I don’t get it.”</p></div>
+              <p class="rp-int"><b>Interpretation</b>Confusion is expressed, but its source is unclear.</p>
+            </div>
+            <div class="rp-ui">
+              <div class="rp-card" data-rotate="chips">
+                <p class="rp-t">Let’s pinpoint what feels unclear.</p>
+                <div class="rp-hl"><div class="rp-chips" role="radiogroup" aria-label="What feels unclear">
+                  <button type="button" role="radio" aria-checked="false" data-say="What does the ∫ symbol ask you to find?">Problem goal</button>
+                  <button type="button" role="radio" aria-checked="false" data-say="Which rule lets us integrate the two terms separately?">Which rule</button>
+                  <button type="button" role="radio" aria-checked="false" data-say="What would you do first?">First step</button>
+                  <button type="button" role="radio" aria-checked="false" data-say="Which part is unfamiliar: ∫, sin(x), cos(x), or the − sign?">Specific term</button>
+                </div></div>
+                <p class="rp-follow" aria-live="polite"></p>
+              </div>
+              <p class="rp-note">Learner choice shows where support is needed.</p>
+            </div>
+          </div>
+          <div class="rp-recs"><div class="rp-r"><span class="rp-rn">Rec 01</span><h4>Intervene at the first sign of confusion</h4><p>Respond to early signals of uncertainty before they develop into repeated input, prolonged confusion, or requests for the complete solution.</p><span class="rp-tr">Confusion → Timely support</span></div></div>
+        </li>
+        <li class="rp-branch"><span>Still unclear</span></li>
+        <li class="rp-seg">
+          <div class="rp-seg-h"><span class="rp-n">2</span><span class="rp-state">Repeated confusion</span><span class="rp-arrow" aria-hidden="true">→</span><span class="rp-pname">Change the scaffold</span></div>
+          <div class="rp-row">
+            <div class="rp-pol">
+              <div class="rp-saidrow"><p class="rp-said">“I still don’t get it.”</p></div>
+              <p class="rp-int"><b>Interpretation</b>Still confused after the first support move.</p>
+            </div>
+            <div class="rp-ui">
+              <div class="rp-card">
+                <div class="rp-work">∫ (3 sin(x) − 2 cos(x)) dx = <mark>∫ 3 sin(x) dx</mark> − ∫ 2 cos(x) dx</div>
+                <p class="rp-t">Let’s isolate one part.</p>
+                <div class="rp-hl"><span class="rp-math">∫ 3 sin(x) dx = ?</span><form class="rp-field" data-ans="s1" novalidate><input type="text" placeholder="Try −3cos(x), or 3cos(x)" aria-label="Your answer" autocomplete="off" spellcheck="false"><button type="submit">Check</button></form><p class="rp-fb" aria-live="polite"></p></div>
+              </div>
+              <p class="rp-note">Smaller scope, and the learner still does the work.</p>
+            </div>
+          </div>
+          <div class="rp-recs"><div class="rp-r"><span class="rp-rn">Rec 02</span><h4>Prompt learners to take the next step</h4><p>Direct learners toward one manageable next action that keeps them actively involved in the reasoning process.</p><span class="rp-tr">Uncertainty → Active attempt</span></div><div class="rp-r"><span class="rp-rn">Rec 04</span><h4>Continue using step-by-step guidance</h4><p>Break complex problems into smaller, sequenced actions so learners can remain active without becoming overwhelmed.</p><span class="rp-tr">Complex task → Guided progress</span></div></div>
+        </li>
+        <li class="rp-branch"><span>Difficulty persists</span></li>
+        <li class="rp-seg">
+          <div class="rp-seg-h"><span class="rp-n">3</span><span class="rp-state">Sustained struggle</span><span class="rp-arrow" aria-hidden="true">→</span><span class="rp-pname">Offer graduated support</span></div>
+          <div class="rp-row">
+            <div class="rp-pol">
+              <div class="rp-saidrow"><p class="rp-said">“I don’t know — I’ve been struggling with this.”</p></div>
+              <p class="rp-int"><b>Interpretation</b>Continued difficulty calls for more support.</p>
+            </div>
+            <div class="rp-ui">
+              <div class="rp-card" data-rotate="levels">
+                <p class="rp-t">You’ve been working through a difficult step. Let’s make it smaller.</p>
+                <div class="rp-hl"><div class="rp-levels" role="radiogroup" aria-label="How much help">
+                  <button type="button" role="radio" aria-checked="false" data-say="Hint: ∫ sin(x) dx = −cos(x). What happens with the 3?">Small hint</button>
+                  <button type="button" role="radio" aria-checked="false" data-say="∫ 3 sin(x) dx = 3 · (−cos(x)) = −3 cos(x)">Show one step</button>
+                  <button type="button" role="radio" aria-checked="false" data-say="Constant multiple rule: ∫ k·f(x) dx = k·∫ f(x) dx. Here k = 3, and the antiderivative of sin(x) is −cos(x).">Explain this part</button>
+                </div>
+                <span class="rp-math rp-follow" aria-live="polite"></span></div>
+              </div>
+              <p class="rp-note">More help is one tap away, without revealing the whole solution.</p>
+            </div>
+          </div>
+          <div class="rp-recs"><div class="rp-r"><span class="rp-rn">Rec 03</span><h4>Reduce direct answering during struggle</h4><p>Prioritize targeted questions, hints, and scaffolding before revealing a complete solution, particularly when learners are confused or seeking the answer.</p><span class="rp-tr">Answer-seeking → Participation</span></div><div class="rp-r"><span class="rp-rn">Rec 05</span><h4>Provide encouragement during sustained struggle</h4><p>Pair instructional guidance with brief encouragement that acknowledges difficulty and supports continued effort.</p><span class="rp-tr">Sustained struggle → Re-engagement</span></div></div>
+        </li>
+        <li class="rp-branch is-rec"><span>Attempts successfully</span></li>
+        <li class="rp-seg is-rec">
+          <div class="rp-seg-h"><span class="rp-n">4</span><span class="rp-state">Re-engagement</span><span class="rp-arrow" aria-hidden="true">→</span><span class="rp-pname">Affirm and return control</span></div>
+          <div class="rp-row">
+            <div class="rp-pol">
+              <div class="rp-saidrow"><p class="rp-said">“−3 cos(x)”</p></div>
+              <p class="rp-int"><b>Interpretation</b>Participating again; not yet independent mastery.</p>
+            </div>
+            <div class="rp-ui">
+              <div class="rp-card">
+                <p class="rp-okline"><svg class="rp-ok" viewBox="0 0 24 24" width="15" height="15" aria-hidden="true"><path d="M12 1l2.9 3.3 4.3-.6.6 4.3L23 12l-3.2 3-.6 4.3-4.3.6L12 23l-2.9-3.1-4.3.6-.6-4.3L1 12l3.2-3 .6-4.3 4.3-.6z" fill="#6359C4"/><path d="M8.5 12.5l2 2 5-5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>That step is correct.</p>
+                <p class="rp-t">Now try the next part.</p>
+                <div class="rp-hl"><span class="rp-math">∫ 2 cos(x) dx = ?</span><form class="rp-field" data-ans="s3" novalidate><input type="text" placeholder="Try 2sin(x), or sin(x)" aria-label="Your answer" autocomplete="off" spellcheck="false"><button type="submit">Check</button></form><p class="rp-fb" aria-live="polite"></p></div>
+              </div>
+              <p class="rp-note">The next reasoning step goes back to the learner.</p>
+            </div>
+          </div>
+        </li>
+      </ol>
+      <div class="rp-loop"><span>↺</span>A new attempt goes back to interpretation. Any state can lead straight to re-engagement.</div>
     </div>
 
-    <div class="rec-callout rv">
-      <p class="rec-callout-label">Design implication</p>
-      <p class="rec-callout-main">The tutor should respond to the learner's behavioral state — not only whether the latest answer is correct.</p>
-    </div>
+    <p class="rp-foot rv">Proposed response policy informed by the study · illustrative interaction examples, not a deployed classifier.</p>
   </div>
 </section>
 
@@ -443,6 +469,7 @@
           <h4>Adaptive Solutions</h4>
           <p class="pc-q">How should the tutor respond?</p>
         </div>
+          <div class="rp-recs"><div class="rp-r"><span class="rp-rn">Rec 06</span><h4>Affirm what the learner has right</h4><p>Identify correct or partially correct thinking before redirecting the learner toward revision, a different representation, or another approach.</p><span class="rp-tr">Repetition → Revised attempt</span></div></div>
         <ul class="pc-list">
           <li>Misconception-specific guidance</li>
           <li>Progressive hint ladders</li>
@@ -452,20 +479,50 @@
         </ul>
       </div>
     </div>
+  </div>
+</section>
 
-    <div class="demo-split rv">
-      <div class="demo-text">
-        <span class="demo-rule"></span>
-        <h3 class="demo-heading">The redesigned tutor experience</h3>
-        <p class="demo-caption">The tutor responds to confusion with scaffolded next steps, targeted feedback, and support for recovery.</p>
-      </div>
-      <div class="demo-container">
-        <div class="demo-chrome">
-          <div class="demo-dots"><span></span><span></span><span></span></div>
-          <span class="demo-label">Interactive prototype — Adaptive AI Tutor</span>
+<!-- ═══ 07 THE TUTOR IN CONTEXT ═══ -->
+<section id="tutor" class="sec">
+  <div class="wrap-wide">
+    <span class="sec-eyebrow rv">07 · The Tutor in Context</span>
+    <h2 class="sec-heading rv">The redesigned tutor experience</h2>
+    <p class="sec-desc rv">The tutor responds to confusion with scaffolded next steps, targeted feedback, and support for recovery.</p>
+
+    <div class="tf rv" id="tf">
+      <div class="tf-bar">
+        <div class="tf-tabs" role="tablist" aria-label="Tutor flows">
+          <button type="button" role="tab" aria-selected="true" data-f="0"><b>01</b>First confusion</button>
+          <button type="button" role="tab" aria-selected="false" data-f="1"><b>02</b>A loop starts to form</button>
+          <button type="button" role="tab" aria-selected="false" data-f="2"><b>03</b>Sustained struggle</button>
         </div>
-        <iframe id="tutorDemo" src="tutor-demo.html?autoplay=1" class="demo-frame" title="Learnvia Tutor Demo"></iframe>
+        <button type="button" class="tf-replay" id="tfReplay"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>Replay</button>
       </div>
+
+      <div class="tf-stage" id="tfStage">
+        <div class="tf-app" aria-label="Learnvia course page with the AI tutor open">
+          <div class="tf-course" aria-hidden="true">
+            <div class="tf-mod">
+              <span class="tf-ring"><i>12</i><small>of 60</small></span>
+              <div><p class="tf-mod-k">Module 5.3</p><p class="tf-mod-t">Antiderivatives of trig, exponential &amp; reciprocal functions</p></div>
+            </div>
+            <div class="tf-lesson on"><span class="tf-ring sm"><i></i></span><div><p class="tf-l-k">Lesson 5.3.1 <em>Resume</em></p><p class="tf-l-t">Antiderivatives of sine and cosine functions</p></div><span class="tf-l-m">10m · 3/15</span></div>
+            <div class="tf-lesson"><span class="tf-ring sm"><i>0</i></span><div><p class="tf-l-k">Lesson 5.3.2</p><p class="tf-l-t">Antiderivatives of exponential functions</p></div><span class="tf-l-m">9m · 0/12</span></div>
+            <div class="tf-lesson"><span class="tf-ring sm"><i>0</i></span><div><p class="tf-l-k">Lesson 5.3.3</p><p class="tf-l-t">Antiderivatives of reciprocal functions</p></div><span class="tf-l-m">9m · 0/10</span></div>
+            <div class="tf-lesson hw"><span class="tf-ring sm"><i>0</i></span><div><p class="tf-l-k">Homework 5.3.4</p><p class="tf-l-t">Trigonometric, exponential, and reciprocal functions</p></div><span class="tf-l-m">11m · 0/16</span></div>
+            <div class="tf-lesson qz"><span class="tf-ring sm"><i>0</i></span><div><p class="tf-l-k">Quiz 5.3.5</p><p class="tf-l-t">Trigonometric, exponential, and reciprocal functions</p></div><span class="tf-l-m">18m · 0/7</span></div>
+          </div>
+          <div class="tf-tutor">
+            <div class="tf-tt"><span>Discussions</span><span class="on">Tutor <svg viewBox="0 0 24 24" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M12 2l1.8 5.4L19 9l-5.2 1.6L12 16l-1.8-5.4L5 9l5.2-1.6z"/><path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8z"/></svg></span></div>
+            <div class="tf-sub"><span>All</span><span class="on">Lesson 5.3.1</span></div>
+            <div class="tf-chat" id="tfChat" aria-live="polite"></div>
+            <div class="tf-input"><span>Ask the AI Tutor:</span><i><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></i></div>
+          </div>
+        </div>
+        <div class="tf-notes" id="tfNotes"></div>
+        <svg class="tf-wires" id="tfWires" aria-hidden="true"></svg>
+      </div>
+      <p class="tf-outcome" id="tfOutcome"></p>
     </div>
   </div>
 </section>
@@ -487,7 +544,9 @@
   </div>
 </footer>
 <script src="script.js"></script>
-<script>window.CSN={"eyebrow": "Learning science · 2026", "title": "Learnvia AI Tutor", "accent": "#4FB3A5", "accentInk": "#06201C", "theme": "dark", "side": "#0E0F10", "line": "#202324", "next": {"href": "../a-grain-of/index.html", "label": "A Grain Of"}, "sections": [["problem", "Problem"], ["lens", "The lens"], ["research", "Research"], ["insights", "Insights"], ["response", "The response"], ["design", "Adaptive tutor"]], "home": "../index.html", "back": "../index.html#work"};</script>
+<script src="tutor-flows.js"></script>
+<script src="policy.js"></script>
+<script>window.CSN={"eyebrow": "Learning science · 2026", "title": "Learnvia AI Tutor", "accent": "#4FB3A5", "accentInk": "#06201C", "theme": "dark", "side": "#0E0F10", "line": "#202324", "next": {"href": "https://oreyxia.com/a-grain-of/", "label": "A Grain Of"}, "sections": [["problem", "Problem"], ["lens", "The lens"], ["research", "Research"], ["insights", "Insights"], ["response", "Response policy"], ["design", "Adaptive tutor"], ["tutor", "Tutor in context"]], "home": "../index.html", "back": "../index.html#work"};</script>
 <script src="../assets/cs-nav.js"></script>
 </body>
 </html>
