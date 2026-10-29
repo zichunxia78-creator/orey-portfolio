@@ -426,6 +426,8 @@ footer{color:var(--dim)}
 .pt::after{content:"→";font-weight:400;opacity:0;transform:translateX(-6px);transition:opacity .25s,transform .25s var(--ease)}
 .pcard:hover .pt::after{opacity:1;transform:none}
 .pcard:focus-visible{outline:2px solid var(--ink);outline-offset:6px;border-radius:20px}
+.pcard.feature{grid-column:1/-1}.pcard.feature .pimg{aspect-ratio:2/1}
+@media (max-width:700px){.pcard.feature .pimg{aspect-ratio:16/10}}
 @media (max-width:700px){.pgrid{grid-template-columns:1fr}}
 /* brighter secondary text in More work */
 .mmeta{color:#C2C2BD!important}
@@ -478,8 +480,9 @@ footer{color:var(--dim)}
       <p>Research, design, and engineering on real problems, each with the evidence of what worked and what didn't.</p>
     </div>
     <div class="pgrid">
-      <a class="pcard" href="learnvia/index.html"><div class="pimg"><img src="img/learnvia-cover.webp" alt="" loading="lazy"></div><p class="pk">Adaptive AI tutor · 38% vs. 14% learner recovery</p><h3 class="pt">Learnvia AI Tutor</h3></a>
+      <a class="pcard feature" href="learnvia/index.html"><div class="pimg"><img src="img/learnvia-cover.webp" alt="" loading="lazy"></div><p class="pk">Adaptive AI tutor · 38% vs. 14% learner recovery</p><h3 class="pt">Learnvia AI Tutor</h3></a>
       <a class="pcard" href="bumble/index.html"><div class="pimg"><img src="img/bumble-cover.webp" alt="" loading="lazy"></div><p class="pk">Turning shared priorities into conversation</p><h3 class="pt">Bumble DeepSync</h3></a>
+      <a class="pcard" href="pivot/index.html"><div class="pimg"><img src="img/pivot-cover.webp" alt="" loading="lazy"></div><p class="pk">Budget-first meal planner · 4.89/5 peer review</p><h3 class="pt">Pivot</h3></a>
       <a class="pcard" href="ancestor/index.html"><div class="pimg"><img src="img/ancestor.webp" alt="" loading="lazy"></div><p class="pk">AI family-memory app · curation, not capture</p><h3 class="pt">Ancestor</h3></a>
       <a class="pcard" href="verifier/index.html"><div class="pimg"><img src="img/verifier-cover.webp" alt="" loading="lazy"></div><p class="pk">Source-grounded answers · unsupported claims cut from 2 to 0</p><h3 class="pt">Answer Verifier</h3></a>
     </div>

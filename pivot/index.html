@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pivot — Case Study · Orey Xia</title>
+<meta name="description" content="Pivot, a budget-first meal planner for students, designed for the tired Wednesday when the plan falls apart.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000'/><g fill='%23F3EFE8'><rect x='44' y='12' width='12' height='76' rx='6'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(60 50 50)'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(120 50 50)'/></g><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@700&display=swap">
+<link rel="stylesheet" href="../assets/cs-nav.css">
+<style>
+/* Zine system: black ground, cream paper panels, condensed caps, pink accent, ruled menu lists. */
+:root{
+  --ink:#0C0C0C; --paper:#F6F0E2; --paper-ink:#141414; --pink:#F4AFC6; --pink-deep:#B8336A;
+  --dim:rgba(246,240,226,.72); --rule:rgba(20,20,20,.85); --frame:#2A2A2A;
+  --display:"Archivo","Arial Black",Impact,sans-serif;
+  --body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --hand:"Caveat","Comic Sans MS",cursive;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--ink);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.5;margin:0;-webkit-font-smoothing:antialiased}
+img,video{max-width:100%}
+.in{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,48px)}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;font-stretch:72%;text-transform:uppercase;line-height:.88;letter-spacing:-.01em}
+h2{font-size:clamp(2.3rem,5.6vw,4.6rem);text-wrap:balance}
+h3{font-size:clamp(1.2rem,2vw,1.5rem);line-height:.95}
+p{margin:0}
+a{color:inherit}
+.hand{font-family:var(--hand);font-weight:700;color:var(--pink);font-size:1.5em;line-height:1;text-transform:none;letter-spacing:0}
+.tag{font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.lead{font-size:clamp(1.05rem,1.5vw,1.2rem);max-width:56ch}
+section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
+.paper{background:var(--paper);color:var(--paper-ink)}
+.pinkbg{background:var(--pink);color:var(--paper-ink)}
+.paper .hand{color:var(--pink-deep)}
+.paper .lead,.pinkbg .lead{color:#2B2B2B}
+.stack{display:grid;gap:20px;align-content:start}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+
+/* phone frames */
+.phone{margin:0;background:var(--frame);padding:8px;border-radius:26px;box-shadow:0 30px 60px -30px rgba(0,0,0,.7)}
+.phone video,.phone img{display:block;width:100%;aspect-ratio:420/850;object-fit:cover;border-radius:19px;background:#1a1a1a}
+
+/* HERO */
+.hero{position:relative;padding-block:clamp(40px,6vw,88px) clamp(48px,6vw,80px);background:
+  radial-gradient(ellipse 60% 70% at 78% 40%,rgba(244,175,198,.20),transparent 70%),var(--ink)}
+.hero .top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);align-items:center}
+.hero h1{font-size:clamp(4.5rem,13vw,10.5rem);line-height:.8;color:var(--paper);display:flex}
+.hero h1 .l{display:inline-block;transform-origin:50% 100%;animation:unfold .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*70ms + 120ms)}
+@keyframes unfold{from{transform:rotateX(-95deg) translateY(.15em);opacity:0}}
+.hero .lede{font-size:clamp(1.15rem,2vw,1.5rem);font-weight:600;max-width:24ch;line-height:1.25}
+.hero .lede em{font-style:normal;color:var(--pink)}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:var(--paper-ink);text-decoration:none;font-weight:800;text-transform:uppercase;font-size:.85rem;letter-spacing:.04em;padding:13px 20px;border-radius:999px;transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.btn:hover{transform:scale(1.04)}
+.btn.ghost{background:transparent;color:var(--paper);box-shadow:inset 0 0 0 1.5px rgba(246,240,226,.5)}
+.btn:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
+.duo{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,22px);max-width:460px;justify-self:end;width:100%}
+.duo .phone:first-child{transform:rotate(-4deg) translateY(18px)}
+.duo .phone:last-child{transform:rotate(3deg)}
+.duo .note{position:absolute;left:-8px;top:-34px;transform:rotate(-6deg)}
+@media (max-width:860px){.hero .top{grid-template-columns:1fr}.duo{justify-self:start;max-width:380px;margin-top:28px}}
+.meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 28px;margin:clamp(40px,5vw,64px) 0 0;padding-top:18px;border-top:2px solid var(--paper)}
+.meta dt{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--dim)}
+.meta dd{margin:4px 0 0;font-weight:700}
+@media (max-width:720px){.meta{grid-template-columns:1fr 1fr}}
+.tldr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:28px;border:2px solid rgba(246,240,226,.9)}
+.tldr div{padding:18px 20px;display:grid;gap:8px;align-content:start}
+.tldr div+div{border-left:2px solid rgba(246,240,226,.9)}
+.tldr .tag{color:var(--pink)}
+.tldr p{color:var(--paper)}
+@media (max-width:760px){.tldr{grid-template-columns:1fr}.tldr div+div{border-left:0;border-top:2px solid rgba(246,240,226,.9)}}
+
+/* MENU list */
+.menu{display:grid;border-top:2px solid var(--rule)}
+.menu .r{display:grid;grid-template-columns:max-content minmax(0,1fr) auto;gap:16px 24px;align-items:baseline;padding-block:14px;border-bottom:1.5px solid var(--rule)}
+.menu .k{font-family:var(--display);font-weight:600;font-stretch:72%;font-size:clamp(1.25rem,2.3vw,1.7rem);text-transform:uppercase;line-height:1}
+.menu .v{font-size:clamp(.98rem,1.3vw,1.06rem);font-weight:500}
+.menu .p{font-family:var(--display);font-weight:700}
+.vs .r{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr)}
+.vs .old{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6}
+.vs .arrow{font-family:var(--display);font-size:1.2rem}
+
+/* principles */
+.big4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--paper);margin-top:40px}
+.big4 div{padding:22px 18px 8px 0;display:grid;gap:10px;align-content:start}
+.big4 .n{font-family:var(--display);font-weight:600;font-stretch:72%;font-size:clamp(2.6rem,5.5vw,4.2rem);line-height:.8;color:var(--pink)}
+.big4 p{color:var(--dim)}
+@media (max-width:760px){.big4{grid-template-columns:1fr 1fr;row-gap:16px}}
+
+/* core loop: big, readable steps */
+.steps{display:grid;gap:clamp(56px,8vw,96px);margin-top:clamp(40px,6vw,72px)}
+.step{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,320px);gap:clamp(24px,6vw,96px);align-items:center}
+.step:nth-child(even){grid-template-columns:minmax(220px,320px) minmax(0,1fr)}
+.step:nth-child(even) .txt{order:2}
+.step .txt{display:grid;gap:14px;max-width:46ch}
+.step .num{font-family:var(--display);font-weight:700;font-stretch:72%;font-size:clamp(3rem,6vw,5rem);line-height:.8;color:var(--pink)}
+.step h3{font-size:clamp(1.8rem,3.4vw,2.6rem)}
+.step p{color:var(--dim);font-size:1.05rem}
+.step ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.step li{padding-left:22px;position:relative;color:var(--paper)}
+.step li::before{content:"→";position:absolute;left:0;color:var(--pink)}
+@media (max-width:760px){.step,.step:nth-child(even){grid-template-columns:1fr}.step:nth-child(even) .txt{order:0}.step .phone{max-width:280px}}
+
+/* rescue */
+.rescue{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,4vw,56px);margin-top:clamp(36px,5vw,56px)}
+.rescue figure{margin:0;display:grid;grid-template-columns:minmax(150px,240px) minmax(0,1fr);gap:24px;align-items:end}
+.rescue figcaption{display:grid;gap:10px}
+.rescue .phone{background:var(--paper-ink)}
+@media (max-width:900px){.rescue{grid-template-columns:1fr}}
+@media (max-width:520px){.rescue figure{grid-template-columns:1fr}.rescue .phone{max-width:260px}}
+
+/* decisions */
+.decisions{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,32px);margin-top:40px}
+@media (max-width:760px){.decisions{grid-template-columns:1fr}}
+.dec{border:2px solid var(--paper-ink);padding:24px;display:grid;gap:14px;align-content:start;background:var(--paper)}
+.dec .row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:baseline}
+.dec .lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+.dec .was{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6;font-weight:500}
+.dec h3{font-size:clamp(1.25rem,2.1vw,1.55rem)}
+.dec .why{border-top:1.5px solid var(--rule);padding-top:14px;color:#2B2B2B}
+
+/* supporting features */
+.support{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,40px);margin-top:40px}
+.support figure{margin:0;display:grid;gap:14px;align-content:start}
+.support .phone{max-width:240px}
+.support p{color:var(--dim)}
+@media (max-width:760px){.support{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.support{grid-template-columns:1fr}}
+
+/* peer review */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--paper);margin-top:40px}
+.stats div{padding:22px 20px 8px 0;display:grid;gap:10px;align-content:start}
+.stats .big{font-family:var(--display);font-weight:700;font-stretch:72%;font-size:clamp(3rem,7vw,5.6rem);line-height:.8;color:var(--pink)}
+.stats .big small{font-size:.4em;color:var(--dim);margin-left:4px}
+.stats p{color:var(--dim);max-width:28ch}
+@media (max-width:700px){.stats{grid-template-columns:1fr}}
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,24px);margin-top:clamp(36px,5vw,56px)}
+.quotes blockquote{margin:0;background:var(--paper);color:var(--paper-ink);padding:22px;display:grid;gap:16px;align-content:space-between}
+.quotes blockquote:nth-child(2){background:var(--pink)}
+.quotes p{font-family:var(--display);font-weight:600;font-stretch:80%;font-size:clamp(1.15rem,1.7vw,1.4rem);line-height:1.15}
+.quotes cite{font-style:normal;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+@media (max-width:860px){.quotes{grid-template-columns:1fr}}
+.flagged{margin-top:clamp(40px,5vw,64px);display:grid;gap:16px}
+.flagged .menu{border-top-color:var(--paper)}
+.flagged .menu .r{border-bottom-color:rgba(246,240,226,.4)}
+.flagged .menu .p{color:var(--pink);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+.flagged .menu .v{color:var(--dim)}
+.flagged .menu .v b{color:var(--paper)}
+@media (max-width:640px){.flagged .menu .r{grid-template-columns:1fr;gap:6px}}
+
+/* learned */
+.learn{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px);margin-top:36px}
+.learn div{border-top:2px solid var(--paper-ink);padding-top:14px;display:grid;gap:10px}
+.learn p{color:#2B2B2B}
+@media (max-width:640px){.learn{grid-template-columns:1fr}}
+
+/* motion */
+@supports (animation-timeline: view()){
+  .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 45%}
+}
+@keyframes rise{from{opacity:0;transform:translateY(32px)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.duo .phone{transform:none!important}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<main>
+<!-- HERO -->
+<header class="hero" id="overview">
+  <div class="in top">
+    <div class="stack" style="gap:26px">
+      <span class="tag">Case study · Product design · 2026</span>
+      <h1 aria-label="Pivot"><span class="l" style="--i:0" aria-hidden="true">P</span><span class="l" style="--i:1" aria-hidden="true">i</span><span class="l" style="--i:2" aria-hidden="true">v</span><span class="l" style="--i:3" aria-hidden="true">o</span><span class="l" style="--i:4" aria-hidden="true">t</span></h1>
+      <p class="lede">A budget-first meal planner for students, designed for <em>the night the plan falls apart.</em></p>
+      <div class="ctas">
+        <a class="btn" href="https://www.figma.com/make/8LXS1gv9Y3v9uwun4fHBhN/Identity-Specific-Meal-Logic?t=ft5HcfAOp1kZVXVR-1" target="_blank" rel="noopener">Try the prototype ↗</a>
+        <a class="btn ghost" href="#loop">See the flow ↓</a>
+      </div>
+    </div>
+    <div class="duo">
+      <span class="hand note" aria-hidden="true">pick 3, not 7</span>
+      <figure class="phone"><video data-src="vid/sunday.mp4" poster="img/sunday.jpg" muted loop playsinline preload="none" aria-label="Sunday planning: picking three meals that share ingredients"></video></figure>
+      <figure class="phone"><video data-src="vid/today.mp4" poster="img/today.jpg" muted loop playsinline preload="none" aria-label="Today view with the Pivot slider trading budget against nutrition"></video></figure>
+    </div>
+  </div>
+  <div class="in">
+    <dl class="meta">
+      <div><dt>Role</dt><dd>Solo product designer</dd></div>
+      <div><dt>Context</dt><dd>Course project · competitive product</dd></div>
+      <div><dt>Users</dt><dd>College &amp; grad students</dd></div>
+      <div><dt>Tools</dt><dd>Figma Make, Gemini · 60+ versions</dd></div>
+    </dl>
+    <div class="tldr">
+      <div><span class="tag">Problem</span><p>Meal planners assume a perfect week. Students buy for 7 days, cook 2, order takeout, and throw the rest out.</p></div>
+      <div><span class="tag">Bet</span><p>Plan less and plan for failure: 3 shared-ingredient meals, a budget cap, and takeout as part of the plan.</p></div>
+      <div><span class="tag">Built</span><p>An end-to-end prototype with Sunday planning, a priced grocery list and a way out on tired nights. Peer-reviewed at 4.89/5.</p></div>
+    </div>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section class="paper" id="problem">
+  <div class="in split">
+    <div class="stack">
+      <span class="tag">01 · Problem</span>
+      <h2>The week that never goes to plan</h2>
+      <p class="hand">built on guilt, not reality.</p>
+    </div>
+    <div class="stack">
+      <p class="lead">The same week kept showing up in meal-app reviews and Reddit threads from students:</p>
+      <div class="menu">
+        <div class="r"><span class="k">Sun</span><span class="v">Buy a full week of groceries</span><span class="p"></span></div>
+        <div class="r"><span class="k">Wed</span><span class="v">Too tired to cook the plan</span><span class="p"></span></div>
+        <div class="r"><span class="k">Thu</span><span class="v">Order a burrito bowl instead</span><span class="p">$12</span></div>
+        <div class="r"><span class="k">Sun</span><span class="v">Half the food is rotting in the fridge</span><span class="p">waste</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETITOR -->
+<section class="pinkbg" id="competitor">
+  <div class="in split">
+    <div class="stack">
+      <span class="tag">02 · Competitor</span>
+      <h2>Mealime vs. Pivot</h2>
+      <p class="lead">Mealime is great at recipes. It assumes you’ll cook every planned night, and nothing in it tracks what you spend.</p>
+    </div>
+    <div class="menu vs">
+      <div class="r"><span class="v old">Rigid 7-day plan</span><span class="arrow" aria-label="becomes">→</span><span class="k">3 flexible meals</span></div>
+      <div class="r"><span class="v old">No spending cap</span><span class="arrow" aria-label="becomes">→</span><span class="k">Budget first</span></div>
+      <div class="r"><span class="v old">Assumes you always cook</span><span class="arrow" aria-label="becomes">→</span><span class="k">Takeout in the plan</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BET -->
+<section id="bet">
+  <div class="in">
+    <div class="stack">
+      <span class="tag">03 · The bet</span>
+      <h2>Design for the tired Wednesday</h2>
+      <p class="lead" style="color:var(--dim)">If the plan expects you to fail sometimes, failing doesn’t break it. Four principles came out of that:</p>
+    </div>
+    <div class="big4">
+      <div><span class="n">3</span><h3>Meals, not 7</h3><p>Shared ingredients, less waste</p></div>
+      <div><span class="n">$</span><h3>Budget first</h3><p>Grocery and dining-out caps</p></div>
+      <div><span class="n">1×</span><h3>Plan takeout</h3><p>Eating out isn’t failure</p></div>
+      <div><span class="n">↺</span><h3>A way out</h3><p>Rescue meal or Blind Box</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CORE LOOP -->
+<section id="loop" style="padding-top:0">
+  <div class="in">
+    <div class="stack">
+      <span class="tag">04 · Core loop</span>
+      <h2>Pick 3 → Shop → See the week → Cook</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="txt">
+          <span class="num">01</span>
+          <h3>Pick 3 on Sunday</h3>
+          <p>Instead of filling seven slots, you drag in three meals. Pivot only offers recipes that share ingredients, so the basket stays under your weekly budget.</p>
+        </div>
+        <figure class="phone"><video data-src="vid/sunday.mp4" poster="img/sunday.jpg" muted loop playsinline preload="none" aria-label="Dragging three meals into the week"></video></figure>
+      </div>
+      <div class="step">
+        <div class="txt">
+          <span class="num">02</span>
+          <h3>One smart shop</h3>
+          <p>Three recipes become one priced list. Pivot shows its work as it builds the list, so you can trust the result:</p>
+          <ul><li>Reads your 3 recipes</li><li>Merges shared ingredients</li><li>Skips what’s already in your fridge</li><li>Prices the basket</li></ul>
+        </div>
+        <figure class="phone"><video data-src="vid/building.mp4" poster="img/building.jpg" muted loop playsinline preload="none" aria-label="Building the grocery list step by step"></video></figure>
+      </div>
+      <div class="step">
+        <div class="txt">
+          <span class="num">03</span>
+          <h3>A week with a night off</h3>
+          <p>Takeout night is a planned slot in the week, so ordering food is part of the plan, not a broken streak. Meals that need cooking go around it.</p>
+        </div>
+        <figure class="phone"><video data-src="vid/week.mp4" poster="img/week.jpg" muted loop playsinline preload="none" aria-label="Week view with a planned takeout night"></video></figure>
+      </div>
+      <div class="step">
+        <div class="txt">
+          <span class="num">04</span>
+          <h3>Cook today</h3>
+          <p>The Today view shows one next meal and your progress (“Meal 1 of 3”). The Pivot slider trades budget against nutrition, so you can swap in a higher-protein version and see what it costs.</p>
+        </div>
+        <figure class="phone"><video data-src="vid/today.mp4" poster="img/today.jpg" muted loop playsinline preload="none" aria-label="Today view and the Pivot slider"></video></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESCUE -->
+<section class="pinkbg" id="rescue">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">05 · The pivot moment</span>
+        <h2>When Wednesday happens</h2>
+      </div>
+      <p class="lead">This is where the product gets its name. When you’re too tired to cook the plan, you get two ways out that still use what you already bought.</p>
+    </div>
+    <div class="rescue">
+      <figure>
+        <div class="phone"><video data-src="vid/suggest.mp4" poster="img/suggest.jpg" muted loop playsinline preload="none" aria-label="What can I make: suggestions from fridge inventory"></video></div>
+        <figcaption><span class="tag">A · What can I make?</span><h3>Cook from what’s in stock</h3><p>Shows what’s ready to cook now and which recipes are one or two items away.</p></figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><video data-src="vid/blindbox.mp4" poster="img/blindbox.jpg" muted loop playsinline preload="none" aria-label="Blind Box: pick a vibe and Pivot chooses"></video></div>
+        <figcaption><span class="tag">B · Blind Box</span><h3>Pick a vibe, Pivot decides</h3><p>For nights when even choosing feels like too much. Tap 2–3 vibes and Pivot picks the meal.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section class="paper" id="decisions">
+  <div class="in">
+    <div class="stack">
+      <span class="tag">06 · Key decisions</span>
+      <h2>What I changed, and why</h2>
+    </div>
+    <div class="decisions">
+      <div class="dec">
+        <span class="tag">Grocery list handoff</span>
+        <div class="row"><span class="lbl">Before</span><p class="was">Close the modal and return home</p></div>
+        <div class="row"><span class="lbl">After</span><h3>Land on the cart, so users see the result right away</h3></div>
+        <p class="why">The first flow worked, but after the modal closed nothing on screen showed that a list had been made. Landing on the cart makes the result visible. This is where “logic isn’t experience” came from.</p>
+      </div>
+      <div class="dec">
+        <span class="tag">The 3-meal rule</span>
+        <div class="row"><span class="lbl">Before</span><p class="was">A rule that enforces the budget</p></div>
+        <div class="row"><span class="lbl">After</span><h3>A flexible starting point, not a rule</h3></div>
+        <p class="why">A hard limit would bring back the guilt Pivot is meant to remove. Three meals is now the default, and you can change it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORTING -->
+<section id="support">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">07 · Supporting features</span>
+        <h2>Less typing, fewer surprises</h2>
+      </div>
+      <p class="lead" style="color:var(--dim)">These support the core loop. Each one removes a step that would otherwise make students give up on planning.</p>
+    </div>
+    <div class="support">
+      <figure><div class="phone"><video data-src="vid/onb.mp4" poster="img/onb.jpg" muted loop playsinline preload="none" aria-label="Onboarding: choose who you are, set budget and kitchen"></video></div><span class="tag" style="color:var(--pink)">Onboarding</span><h3>Who are you?</h3><p>Pick a profile, a budget and your kitchen setup, so the first plan already fits.</p></figure>
+      <figure><div class="phone"><video data-src="vid/prep.mp4" poster="img/prep.jpg" muted loop playsinline preload="none" aria-label="Smart grocery list grouped by aisle with prices"></video></div><span class="tag" style="color:var(--pink)">Smart list</span><h3>One priced list</h3><p>Grouped by aisle, with each item linked to the meals it’s used in.</p></figure>
+      <figure><div class="phone"><video data-src="vid/receipt.mp4" poster="img/receipt.jpg" muted loop playsinline preload="none" aria-label="Scanning a receipt to load the fridge"></video></div><span class="tag" style="color:var(--pink)">Receipt scan</span><h3>Load the fridge</h3><p>Scan a receipt to fill your fridge. Pivot flags what expires soon.</p></figure>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="paper" id="process">
+  <div class="in split">
+    <div class="stack">
+      <span class="tag">08 · Process</span>
+      <h2>Fast drafts, careful edits</h2>
+      <p class="hand">AI made drafts cheap. Choosing what to keep took the time.</p>
+    </div>
+    <div class="menu">
+      <div class="r"><span class="k">Research</span><span class="v">App reviews and Reddit, synthesized into themes and personas</span><span class="p"></span></div>
+      <div class="r"><span class="k">Define</span><span class="v">Feature specs and flows, pressure-tested</span><span class="p"></span></div>
+      <div class="r"><span class="k">Prototype</span><span class="v">Built and iterated in Figma Make</span><span class="p">60+ versions</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTING -->
+<section id="testing">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">09 · Peer review</span>
+        <h2>3 classmates tried it</h2>
+      </div>
+      <p class="lead" style="color:var(--dim)">Three classmates tried the prototype and scored it on a 6-part design rubric (1–5), then wrote what worked and what they’d change. It’s a small sample, but they all asked for the same missing piece.</p>
+    </div>
+    <div class="stats">
+      <div><span class="big">4.89<small>/5</small></span><p>Average across all 6 criteria</p></div>
+      <div><span class="big">5.0<small>/5</small></span><p>Interaction: well reasoned and well designed, from all 3 reviewers</p></div>
+      <div><span class="big">3/3</span><p>Rated the goal as well reasoned (5/5)</p></div>
+    </div>
+    <div class="quotes">
+      <blockquote><p>“The system reduces cognitive load by making decisions when users are overwhelmed.”</p><cite>Reviewer 1</cite></blockquote>
+      <blockquote><p>“All of the user flows were very clear and intuitive… the navigation across all of the app’s different pages was very smooth.”</p><cite>Reviewer 3</cite></blockquote>
+      <blockquote><p>“I can definitely see myself using this app.”</p><cite>Reviewer 2</cite></blockquote>
+    </div>
+    <div class="flagged">
+      <span class="tag" style="color:var(--pink)">What they flagged → what I’d do next</span>
+      <div class="menu">
+        <div class="r"><span class="k">Personal goals</span><span class="v">Let users set <b>dietary restrictions</b> and <b>fitness goals</b>, so recipes and the Pivot slider aim at their own targets.</span><span class="p">Most asked</span></div>
+        <div class="r"><span class="k">Inventory drift</span><span class="v">Show how the fridge stays accurate when people forget to log what they ate, e.g. a quick check-in before Sunday planning.</span><span class="p"></span></div>
+        <div class="r"><span class="k">Weekly recap</span><span class="v">A light summary of spending, waste and takeout, so savings over time are visible.</span><span class="p"></span></div>
+        <div class="r"><span class="k">More validation</span><span class="v">Test with students outside the class over a real week of meal planning.</span><span class="p"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LEARNED -->
+<section class="pinkbg" id="learned">
+  <div class="in">
+    <div class="stack">
+      <span class="tag">10 · What I learned</span>
+      <h2>Two lessons, one next step</h2>
+    </div>
+    <div class="learn" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <div><h3>Logic isn’t experience</h3><p>A flow can be correct and still leave people unsure it worked. If people can’t see the result, the feature doesn’t feel like it worked.</p></div>
+      <div><h3>Explore wide, then simplify</h3><p>Generating ideas is cheap. Choosing what to cut is the design work.</p></div>
+      <div><h3>Next: plans that know you</h3><p>All three reviewers pointed to the same gap. Add dietary restrictions and fitness goals to onboarding, so budget, nutrition and the Wednesday rescue all work from one profile.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+/* Videos load and play only while on screen; reduced-motion users get posters + controls. */
+(function(){
+  var vids=[].slice.call(document.querySelectorAll('video[data-src]'));
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function load(v){if(!v.src){v.src=v.dataset.src;}}
+  if(reduce||!('IntersectionObserver' in window)){
+    vids.forEach(function(v){v.controls=true;v.preload='none';load(v);});
+  }else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;
+      if(e.isIntersecting){load(v);var p=v.play();if(p&&p.catch)p.catch(function(){});}else{v.pause();}
+    });},{rootMargin:'200px 0px'});
+    vids.forEach(function(v){io.observe(v);});
+  }
+  if(!reduce){document.querySelectorAll('section .stack, .step, .rescue figure, .dec, .support figure, .big4 > div, .learn > div, .menu').forEach(function(el){el.classList.add('reveal');});}
+})();
+</script>
+<script>window.CSN={"eyebrow":"Product design · 2026","title":"Pivot","accent":"#F4AFC6","accentInk":"#141414","theme":"dark","side":"#0C0C0C","line":"#262626","sections":[["overview","Overview"],["problem","Problem"],["competitor","Competitor"],["bet","The bet"],["loop","Core loop"],["rescue","Pivot moment"],["decisions","Decisions"],["support","Features"],["process","Process"],["testing","Peer review"],["learned","Learned"]],"home":"../index.html","back":"../index.html#work"};</script>
+<script src="../assets/cs-nav.js"></script>
+</body>
+</html>
