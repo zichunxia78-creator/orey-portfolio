@@ -190,6 +190,10 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 .kept{color:#2B2B2B;max-width:80ch}
 
 /* process pipeline */
+.brief{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--paper-ink)}
+.brief div{padding:12px 14px 4px 0;display:grid;gap:6px;align-content:start}
+.brief p{font-size:.92rem;color:#2B2B2B}
+@media (max-width:560px){.brief{grid-template-columns:1fr}.brief div+div{border-top:1px solid var(--rule)}}
 .legend{display:flex;gap:8px;flex-wrap:wrap}
 .legend span{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
 .legend .ai,.node.ai{background:var(--pink)}
@@ -263,7 +267,7 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
   <div class="in">
     <dl class="meta">
       <div><dt>Role</dt><dd>Solo product designer</dd></div>
-      <div><dt>Context</dt><dd>Course project · 3 weeks</dd></div>
+      <div><dt>Context</dt><dd>CMU HCII course · 3 weeks</dd></div>
       <div><dt>Users</dt><dd>College &amp; grad students</dd></div>
       <div><dt>Tools</dt><dd>Figma Make, Gemini · 60+ versions</dd></div>
     </dl>
@@ -448,7 +452,13 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
         <p class="hand">AI widened the options. I chose what got through each step.</p>
       </div>
       <div class="stack">
-        <p class="lead">Pivot was a 3-week course project, <i>Design a Competitive Product</i>. The goal was to use AI across the whole Double Diamond and work out where it helps and where it doesn’t. I chained AI generators so each one’s output fed the next. I set the priorities going in and reviewed every output.</p>
+        <p class="lead">Pivot was Project 2 in <i>The AI Augmented Designer</i> at CMU HCII. The brief was to design a competitor to an existing product in 3 weeks, using AI across Discover, Define, Develop and Deliver. The real assignment was metacognition: noticing where AI helped my thinking and where it didn’t.</p>
+        <div class="brief">
+          <div><span class="tag">Compete</span><p>Pick an incumbent and find a need it doesn’t serve. I picked Mealime.</p></div>
+          <div><span class="tag">Point of view</span><p>Develop my own design style and a more advanced prototyping process.</p></div>
+          <div><span class="tag">Metacognition</span><p>Plan, monitor and evaluate how I used AI at each step.</p></div>
+        </div>
+        <p class="lead" style="font-size:1rem">I chained AI generators so each one’s output fed the next. I set the priorities going in and reviewed every output.</p>
         <div class="legend" aria-hidden="true"><span class="ai">AI</span><span class="me">Me</span><span class="out">Output</span></div>
       </div>
     </div>
@@ -477,7 +487,7 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
       <li class="col">
         <span class="phase">Deliver</span>
         <div class="node me"><b>Prototype in Figma Make</b><p>60+ versions</p></div>
-        <div class="node ai"><b>AI as critiquer</b><p>Reviewed flows between versions</p></div>
+        <div class="node ai"><b>AI as critiquer</b><p>Critiqued each version: what’s working, what isn’t</p></div>
         <div class="node me"><b>Peer review</b><p>3 classmates, 4.89/5</p></div>
       </li>
     </ol>
