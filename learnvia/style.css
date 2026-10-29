@@ -961,3 +961,6 @@ details.rp-r p { margin:0 0 12px; padding-left:calc(52px); font-size:14px; line-
 .tf-chips{display:flex;flex-wrap:wrap;gap:6px}
 .tf-chips span{flex:0 0 auto;white-space:nowrap;padding:7px 12px;line-height:1.3}
 .tf-msg.t .tf-txt .tf-chips,.tf-msg.t .tf-txt .tf-levels{margin-right:-28px}
+/* hero backdrop: brighter so the tutor UI reads behind the title */
+.hero-backdrop{opacity:.78}
+.hero-backdrop-frame{filter:brightness(1.25) contrast(1.05)}
