@@ -8,7 +8,7 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000'/><g fill='%23F3EFE8'><rect x='44' y='12' width='12' height='76' rx='6'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(60 50 50)'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(120 50 50)'/></g><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Mono:wght@400&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&family=DM+Mono:wght@400&family=Bodoni+Moda:ital,opsz,wght@1,6..96,400;1,6..96,500&display=swap">
 <style>
 :root{
   color-scheme:dark;
@@ -244,17 +244,63 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
 .btn.ghost:hover span{background:rgba(245,198,214,.86)!important}
 .copy{background:rgba(245,198,214,.86)!important;color:#16121F!important}
 .copy:hover{background:rgba(245,198,214,.95)!important}
+/* ===== home design system ===== */
+:root{--ink:#F5F5F3;--muted:#9A9A96;--line:#262626;--tile:#111111;--tile2:#1C1C1C;--serif:"Bodoni Moda",Didot,"Bodoni 72",Georgia,serif}
+h1 i,h2 i,.nm i{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.02em}
+/* nav = home */
+.bar{padding-top:12px}
+.topbar{background:rgba(0,0,0,.85)!important;border:0!important;border-radius:18px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.topbar .nm{font:700 20px/1 var(--sans);letter-spacing:-.01em;color:var(--ink)}
+.topbar .nm i{font-size:1.15em;margin-left:1px}
+.topbar .links a{color:#A3A3A0!important}
+.topbar .links a:hover{color:var(--ink)!important;background:var(--tile2)!important}
+.topbar .links a[aria-current="page"],.topbar .links a[aria-current="page"]:hover{color:var(--ink)!important;background:#1C1C1C!important}
+/* ambient light: one soft pink glow, no purple */
+body::after{display:none}
+body::before{background:radial-gradient(circle,rgba(245,198,214,.26) 0%,rgba(245,198,214,0) 65%)!important}
+.btn.ghost span.ar,.hero .btn.ghost span.ar{display:inline;background:none!important;height:auto!important;padding:0!important;color:inherit!important;border-radius:0}
+/* hero */
+.hero h1{font:600 clamp(40px,4.4vw,60px)/1.05 var(--sans);letter-spacing:-.035em}
+.hero h1 i{font-size:1.03em}
+.hero .lede{font:400 clamp(16px,1.4vw,19px)/1.55 var(--sans)!important;letter-spacing:0!important;color:#C4C4C0!important;max-width:52ch}
+.portrait{width:clamp(92px,8vw,120px)!important;box-shadow:0 0 0 4px #000,0 0 0 5px #2A2A2E!important}
+@media (min-width:761px){.portrait{margin-top:clamp(28px,3vw,44px)!important}}
+/* buttons = home */
+.hero .btn,.hero .btn.ghost{height:44px!important;padding:0 22px!important;gap:10px!important;border-radius:999px;font:600 15px/1 var(--sans)!important;transition:opacity .2s,border-color .2s}
+.hero .btn:not(.ghost){background:#F5F5F3!important;color:#000!important}
+.hero .btn:not(.ghost):hover{opacity:.88}
+.hero .btn.ghost{background:transparent!important;color:var(--ink)!important;border:1px solid #3A3A3A!important}
+.hero .btn.ghost:hover{border-color:#5A5A60!important}
+.btn .ar{font-weight:400;transition:transform .2s}
+.btn:hover .ar{transform:translateX(3px)}
+.btn.ghost:hover .ar{transform:translate(2px,-2px)}
+/* headings */
+.two h2,.cap .head h2,.pathh{font-size:clamp(34px,4.2vw,56px)!important;font-weight:600;letter-spacing:-.02em}
+/* tiles */
+.tile{background:var(--tile);border-color:var(--line)}
+.do .badge{background:var(--tile2)!important;border:1px solid var(--line)}
+.do .badge svg{stroke:var(--ink)!important}
+.do .badge svg circle{fill:var(--ink)!important}
+.path-line path{stroke:rgba(245,198,214,.45)!important}
+/* contact = home (light tile) */
+.tile.contact{background:#F5F5F3!important;color:#000;border-color:#262626}
+.tile.contact .kicker{color:#555}
+.contact h2{color:#000;font-size:clamp(26px,3.2vw,44px)!important}
+.tile.contact .cbtn.resume,.tile.contact .cbtn.mail{color:#000!important;border-color:#C8C8C4!important}
+.tile.contact .cbtn.resume:hover{background:#E6E6E3!important;border-color:#9A9A96!important}
+.tile.contact .cbtn.mail{color:#000!important}
+.tile.contact .copy,.tile.contact .copy:hover{background:#000!important;color:#fff!important}
 </style>
 </head>
 <body>
 <header class="bar">
   <div class="wrap">
     <nav class="topbar" aria-label="Main">
-      <a class="me" href="../index.html" aria-label="Orey Xia, home"><svg class="mark" viewBox="0 0 100 100" width="26" height="26" aria-hidden="true"><g fill="#F3EFE8"><rect x="44" y="6" width="12" height="88" rx="6"/><rect x="44" y="6" width="12" height="88" rx="6" transform="rotate(60 50 50)"/><rect x="44" y="6" width="12" height="88" rx="6" transform="rotate(120 50 50)"/></g><circle cx="50" cy="50" r="7" fill="#000"/></svg></a>
+      <a class="me" href="../index.html" aria-label="Orey Xia, home"><span class="nm">OX<i>.</i></span></a>
       <div class="links">
         <a href="../index.html">Home</a>
         <a href="../index.html#work">Projects</a>
-        <a href="../playground/index.html">Playground</a>
+        <a href="../index.html#more">More work</a>
         <a href="index.html" aria-current="page">About me</a>
       </div>
     </nav>
@@ -266,18 +312,18 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
     <button class="portrait" type="button" aria-label="Photo of Orey. Hover or tap to see her Memoji."><img class="ph" src="img/photo.jpg" alt="Orey at home, in front of a Whitney Sixties Surreal poster."><img class="mj" src="img/memoji.png" alt="" aria-hidden="true"></button>
     <div>
       <span class="kicker">About me</span>
-      <h1>Hi, I’m <span class="hl">Orey</span>.</h1>
+      <h1>Hi, I’m <i>Orey.</i></h1>
       <p class="lede">I turn ambiguous AI ideas into prototypes people can use, test, and argue with. Studio artist turned HCI researcher, now building toward forward-deployed and design engineering.</p>
       <div class="ctas">
-        <a class="btn" href="../index.html#work">See my work <i><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12h15M13 6l6 6-6 6"/></svg></i></a>
-        <a class="btn ghost" href="https://linkedin.com/in/ox79" target="_blank" rel="noopener"><span>LinkedIn ↗</span></a>
+        <a class="btn" href="../index.html#work">See my work<span class="ar" aria-hidden="true">→</span></a>
+        <a class="btn ghost" href="https://linkedin.com/in/ox79" target="_blank" rel="noopener">LinkedIn<span class="ar" aria-hidden="true">↗</span></a>
       </div>
     </div>
   </div>
 
   <section>
     <div class="two">
-      <div><span class="kicker">01 — Story</span><h2>From materials to models</h2></div>
+      <div><span class="kicker">01 — Story</span><h2>From materials to <i>models</i></h2></div>
       <div class="story">
         <p>I started in <b>studio art</b>, thinking through materials, images, and physical space. Interaction design introduced new materials: code, sensors, interfaces, and eventually AI.</p>
         <p>At <b>CMU HCII</b>, I moved into LLMs, agents, product design, and evaluation, learning to turn uncertain systems into things people can actually use (<a href="../learnvia/index.html">Learnvia</a>, <a href="../verifier/index.html">Answer Verifier</a>).</p>
@@ -289,7 +335,7 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
 
   <section id="do" class="cap">
     <div class="head">
-      <div><span class="kicker">02 — Capabilities</span><h2>What I do</h2></div>
+      <div><span class="kicker">02 — Capabilities</span><h2>What I <i>do</i></h2></div>
       <p>Research, design, and engineering: one person, end to end.</p>
     </div>
     <div class="do">
@@ -302,7 +348,7 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
 
   <section id="stack" class="cap">
     <div class="head">
-      <div><span class="kicker">03 — Tools</span><h2>Stack</h2></div>
+      <div><span class="kicker">03 — Tools</span><h2>The <i>stack</i></h2></div>
       <p>The tools I use to go from research to working systems.</p>
     </div>
     <div class="stack">
@@ -321,7 +367,7 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
 
   <section>
     <span class="kicker">04 — Path</span>
-    <h2 class="pathh">Where I’ve been <svg class="pin" viewBox="0 0 24 32" aria-hidden="true"><path d="M12 1C6.2 1 1.5 5.6 1.5 11.3 1.5 19 12 31 12 31s10.5-12 10.5-19.7C22.5 5.6 17.8 1 12 1z" fill="#E5533D"/><circle cx="12" cy="11.3" r="4" fill="#fff" fill-opacity=".9"/></svg></h2>
+    <h2 class="pathh">Where I’ve <i>been</i> <svg class="pin" viewBox="0 0 24 32" aria-hidden="true"><path d="M12 1C6.2 1 1.5 5.6 1.5 11.3 1.5 19 12 31 12 31s10.5-12 10.5-19.7C22.5 5.6 17.8 1 12 1z" fill="#E5533D"/><circle cx="12" cy="11.3" r="4" fill="#fff" fill-opacity=".9"/></svg></h2>
     <ol class="path">
       <svg class="path-line" aria-hidden="true"><path d=""/></svg>
       <li><span class="when">Start</span><h3>Studio art</h3><p>Wheaton College. Thinking through materials, light, and physical space. Collaborated with artist Xu Tan on <i>Sweet Ruins</i> (2023), a research-based video work at the Red Flag Sugar Factory, Zhuhai.</p><figure class="pol" style="--r:2deg;--x:-40px"><img src="img/pol-lumiere.jpg" alt="Lumière, an installation by Orey Xia: iridescent film on a white plinth casting a golden light pattern onto the gallery wall." loading="lazy"><figcaption>Lumière</figcaption></figure></li>
@@ -335,7 +381,7 @@ body::after{width:52vw;height:52vw;right:-10vw;top:-8vw;background:radial-gradie
   <div class="tile contact" id="contact">
     <div>
       <span class="kicker">05 — Contact</span>
-      <h2>Let’s build something<br>that works.</h2>
+      <h2>Let’s build something<br><i>that works.</i></h2>
       <div class="cta-row">
         <a class="cbtn resume" href="../resume/Orey-Xia-Resume.pdf" download><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M4 19h16"/></svg><span>Resume</span></a>
         <div class="cbtn mail"><span class="addr">zichunxia78@gmail.com</span><button type="button" class="copy" data-copy="zichunxia78@gmail.com">Copy</button></div>
