@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pivot — Case Study · Orey Xia</title>
+<meta name="description" content="Pivot, a budget-first meal planner for students, designed for the tired Wednesday when the plan falls apart.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23000'/><g fill='%23F3EFE8'><rect x='44' y='12' width='12' height='76' rx='6'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(60 50 50)'/><rect x='44' y='12' width='12' height='76' rx='6' transform='rotate(120 50 50)'/></g><circle cx='50' cy='50' r='6' fill='%23000'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Caveat:wght@700&family=Playfair+Display:wght@700&family=Figtree:wght@400;500&display=swap">
+<link rel="stylesheet" href="../assets/cs-nav.css">
+<style>
+/* Zine system: black ground, cream paper panels, condensed caps, pink accent, ruled menu lists. */
+:root{
+  --ink:#0C0C0C; --paper:#F6F0E2; --paper-ink:#141414; --pink:#F4AFC6; --pink-deep:#B8336A;
+  --dim:rgba(246,240,226,.72); --rule:rgba(20,20,20,.85); --frame:#2A2A2A;
+  --display:"Archivo","Arial Black",Impact,sans-serif;
+  --body:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --hand:"Caveat","Comic Sans MS",cursive;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--ink);color:var(--paper);font-family:var(--body);font-size:16px;line-height:1.5;margin:0;-webkit-font-smoothing:antialiased}
+img,video{max-width:100%}
+.in{max-width:1180px;margin:0 auto;padding-inline:clamp(16px,4vw,48px)}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:600;font-stretch:72%;text-transform:uppercase;line-height:.88;letter-spacing:-.01em}
+h2{font-size:clamp(2.3rem,5.6vw,4.6rem);text-wrap:balance}
+h3{font-size:clamp(1.2rem,2vw,1.5rem);line-height:.95}
+p{margin:0}
+a{color:inherit}
+.hand{font-family:var(--hand);font-weight:700;color:var(--pink);font-size:1.5em;line-height:1;text-transform:none;letter-spacing:0}
+.tag{font-weight:700;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}
+.lead{font-size:clamp(1.05rem,1.5vw,1.2rem);max-width:56ch}
+section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
+.paper{background:var(--paper);color:var(--paper-ink)}
+.pinkbg{background:var(--pink);color:var(--paper-ink)}
+.paper .hand{color:var(--pink-deep)}
+.paper .lead,.pinkbg .lead{color:#2B2B2B}
+.stack{display:grid;gap:20px;align-content:start}
+.split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.25fr);gap:clamp(28px,5vw,72px);align-items:start}
+@media (max-width:860px){.split{grid-template-columns:1fr}}
+
+/* phone frames */
+.phone{margin:0;background:none;padding:0;filter:drop-shadow(0 24px 30px rgba(0,0,0,.35))}
+.phone video,.phone img{display:block;width:100%;aspect-ratio:420/850;object-fit:cover;background:#000;-webkit-mask:url(img/phone-mask.png) center/100% 100% no-repeat;mask:url(img/phone-mask.png) center/100% 100% no-repeat}
+
+/* HERO */
+.hero{position:relative;padding-block:clamp(40px,6vw,88px) clamp(48px,6vw,80px);background:
+  radial-gradient(ellipse 60% 70% at 78% 40%,rgba(244,175,198,.20),transparent 70%),var(--ink)}
+.hero .top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:clamp(24px,5vw,64px);align-items:center}
+.hero h1{font-size:clamp(4.5rem,13vw,10.5rem);line-height:.8;color:var(--paper);display:flex}
+.hero h1 .l{display:inline-block;transform-origin:50% 100%;animation:unfold .9s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i)*70ms + 120ms)}
+@keyframes unfold{from{transform:rotateX(-95deg) translateY(.15em);opacity:0}}
+.hero .lede{font-size:clamp(1.15rem,2vw,1.5rem);font-weight:600;max-width:24ch;line-height:1.25}
+.hero .lede em{font-style:normal;color:var(--pink)}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--pink);color:var(--paper-ink);text-decoration:none;font-weight:800;text-transform:uppercase;font-size:.85rem;letter-spacing:.04em;padding:13px 20px;border-radius:999px;transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.btn:hover{transform:scale(1.04)}
+.btn.ghost{background:transparent;color:var(--paper);box-shadow:inset 0 0 0 1.5px rgba(246,240,226,.5)}
+.btn:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
+.duo{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:clamp(12px,2vw,22px);max-width:460px;justify-self:end;width:100%}
+.duo .phone:first-child{transform:rotate(-4deg) translateY(18px)}
+.duo .phone:last-child{transform:rotate(3deg)}
+.duo .note{position:absolute;left:-8px;top:-34px;transform:rotate(-6deg)}
+@media (max-width:860px){.hero .top{grid-template-columns:1fr}.duo{justify-self:start;max-width:380px;margin-top:28px}}
+.hero-meta{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin:clamp(40px,5vw,64px) 0 0;padding-block:32px 8px;border-top:1px solid rgba(246,240,226,.18)}
+.hm-label{display:block;font:500 11px/1.2 "Figtree",ui-sans-serif,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#7A7874;margin-bottom:10px}
+.hm-col p{font-family:"Figtree",ui-sans-serif,system-ui,sans-serif;font-size:16px;line-height:1.5;color:var(--paper);font-weight:400}
+@media (max-width:760px){.hero-meta{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.hero-meta{grid-template-columns:1fr;gap:20px}}
+.tldr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin-top:28px;border:2px solid rgba(246,240,226,.9)}
+.tldr div{padding:18px 20px;display:grid;gap:8px;align-content:start}
+.tldr div+div{border-left:2px solid rgba(246,240,226,.9)}
+.tldr .tag{color:var(--pink)}
+.tldr p{color:var(--paper)}
+@media (max-width:760px){.tldr{grid-template-columns:1fr}.tldr div+div{border-left:0;border-top:2px solid rgba(246,240,226,.9)}}
+
+/* MENU list */
+.menu{display:grid;border-top:2px solid var(--rule)}
+.menu .r{display:grid;grid-template-columns:max-content minmax(0,1fr) auto;gap:16px 24px;align-items:baseline;padding-block:14px;border-bottom:1.5px solid var(--rule)}
+.menu .k{font-family:var(--display);font-weight:600;font-stretch:72%;font-size:clamp(1.25rem,2.3vw,1.7rem);text-transform:uppercase;line-height:1}
+.menu .v{font-size:clamp(.98rem,1.3vw,1.06rem);font-weight:500}
+.menu .p{font-family:var(--display);font-weight:700}
+.vs .r{grid-template-columns:minmax(0,1fr) 28px minmax(0,1fr)}
+.vs .old{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6}
+.vs .arrow{font-family:var(--display);font-size:1.2rem}
+
+/* principles */
+.big4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:2px solid var(--paper);margin-top:40px}
+.big4 div{padding:22px 18px 8px 0;display:grid;gap:10px;align-content:start}
+.big4 .n{font-family:var(--display);font-weight:600;font-stretch:72%;font-size:clamp(2.6rem,5.5vw,4.2rem);line-height:.8;color:var(--pink)}
+.big4 p{color:var(--dim)}
+.big4 .breaks{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink);margin-top:4px}
+.cite{margin-top:28px;font-size:.88rem;color:var(--dim);max-width:70ch}
+.cite a{color:var(--pink);font-weight:700;text-decoration:none;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-left:4px}
+@media (max-width:760px){.big4{grid-template-columns:1fr 1fr;row-gap:16px}}
+
+/* core loop: big, readable steps */
+.steps{display:grid;gap:clamp(56px,8vw,96px);margin-top:clamp(40px,6vw,72px)}
+.step{display:grid;grid-template-columns:minmax(0,1fr) minmax(220px,320px);gap:clamp(24px,6vw,96px);align-items:center}
+.step:nth-child(even){grid-template-columns:minmax(220px,320px) minmax(0,1fr)}
+.step:nth-child(even) .txt{order:2}
+.step .txt{display:grid;gap:14px;max-width:46ch}
+.step .num{font-family:var(--display);font-weight:700;font-stretch:72%;font-size:clamp(3rem,6vw,5rem);line-height:.8;color:var(--pink)}
+.step h3{font-size:clamp(1.8rem,3.4vw,2.6rem)}
+.step p{color:var(--dim);font-size:1.05rem}
+.step ul{margin:4px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.step li{padding-left:22px;position:relative;color:var(--paper)}
+.step li::before{content:"→";position:absolute;left:0;color:var(--pink)}
+@media (max-width:760px){.step,.step:nth-child(even){grid-template-columns:1fr}.step:nth-child(even) .txt{order:0}.step .phone{max-width:280px}}
+
+/* rescue */
+.rescue{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(20px,4vw,56px);margin-top:clamp(36px,5vw,56px)}
+.rescue figure{margin:0;display:grid;grid-template-columns:minmax(150px,240px) minmax(0,1fr);gap:24px;align-items:end}
+.rescue figcaption{display:grid;gap:10px}
+
+@media (max-width:900px){.rescue{grid-template-columns:1fr}}
+@media (max-width:520px){.rescue figure{grid-template-columns:1fr}.rescue .phone{max-width:260px}}
+
+/* decisions */
+.decisions{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,32px);margin-top:40px}
+@media (max-width:760px){.decisions{grid-template-columns:1fr}}
+.dec{border:2px solid var(--paper-ink);padding:24px;display:grid;gap:14px;align-content:start;background:var(--paper)}
+.dec .row{display:grid;grid-template-columns:72px minmax(0,1fr);gap:12px;align-items:baseline}
+.dec .lbl{font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.6}
+.dec .was{text-decoration:line-through;text-decoration-thickness:2px;opacity:.6;font-weight:500}
+.dec h3{font-size:clamp(1.25rem,2.1vw,1.55rem)}
+.dec .why{border-top:1.5px solid var(--rule);padding-top:14px;color:#2B2B2B}
+
+/* supporting features */
+.support{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(16px,3vw,40px);margin-top:40px}
+.support figure{margin:0;display:grid;gap:14px;align-content:start}
+.support .phone{max-width:240px}
+.support p{color:var(--dim)}
+@media (max-width:760px){.support{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.support{grid-template-columns:1fr}}
+
+/* problem */
+.loopviz{position:relative;width:100%;max-width:520px;aspect-ratio:1;justify-self:center;color:var(--paper-ink)}
+.loopviz svg{position:absolute;inset:0;width:100%;height:100%}
+.lv-node{position:absolute;transform:translate(-50%,-50%);width:31%;background:var(--paper);border:2px solid var(--paper-ink);padding:8px 10px;display:grid;gap:2px;text-align:center}
+.lv-node b{font-family:var(--display);font-weight:700;font-stretch:72%;text-transform:uppercase;font-size:clamp(1.05rem,2vw,1.45rem);line-height:1}
+.lv-node span{font-size:clamp(.72rem,1.1vw,.85rem);line-height:1.25;color:#2B2B2B}
+.lv-node.hot{background:var(--pink)}
+.lv-center{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;text-align:center;font-family:var(--display);font-weight:700;font-stretch:72%;text-transform:uppercase;font-size:clamp(1rem,2.2vw,1.6rem);line-height:.95}
+.lv-center .pk{color:var(--pink-deep);font-size:1.6em}
+@media (max-width:860px){.loopviz{max-width:440px;margin-top:12px}}
+@media (max-width:420px){.lv-node{width:36%;padding:6px}.lv-node span{font-size:.66rem}}
+.stats.paperstats{border-top-color:var(--paper-ink)}
+.stats.paperstats p{color:#2B2B2B}
+.paperstats a{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-deep);text-decoration:none}
+.paperstats a:hover{text-decoration:underline}
+.stats.paperstats .big{color:var(--paper-ink)}
+.prio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.prio div{border:2px solid var(--paper-ink);padding:16px;display:grid;gap:6px;align-content:start}
+.prio .n{font-family:var(--display);font-weight:700;font-stretch:72%;font-size:1.6rem;line-height:1;color:var(--pink-deep)}
+.prio b{font-weight:800}
+.prio p{font-size:.92rem;color:#2B2B2B}
+.prio .later{border-style:dashed;background:#EFE7D4}
+@media (max-width:700px){.prio{grid-template-columns:1fr}}
+
+/* peer review */
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--paper);margin-top:40px}
+.stats div{padding:22px 20px 8px 0;display:grid;gap:10px;align-content:start}
+.stats .big{font-family:var(--display);font-weight:700;font-stretch:72%;font-size:clamp(3rem,7vw,5.6rem);line-height:.8;color:var(--pink)}
+.stats .big small{font-size:.4em;color:var(--dim);margin-left:4px}
+.stats p{color:var(--dim);max-width:28ch}
+@media (max-width:700px){.stats{grid-template-columns:1fr}}
+.quotes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(14px,2vw,24px);margin-top:clamp(36px,5vw,56px)}
+.quotes blockquote{margin:0;background:var(--paper);color:var(--paper-ink);padding:22px;display:grid;gap:16px;align-content:space-between}
+.quotes blockquote:nth-child(2){background:var(--pink)}
+.quotes p{font-family:var(--display);font-weight:600;font-stretch:80%;font-size:clamp(1.15rem,1.7vw,1.4rem);line-height:1.15}
+.quotes cite{font-style:normal;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.65}
+@media (max-width:860px){.quotes{grid-template-columns:1fr}}
+.flagged{margin-top:clamp(40px,5vw,64px);display:grid;gap:16px}
+.flagged .menu{border-top-color:var(--paper)}
+.flagged .menu .r{border-bottom-color:rgba(246,240,226,.4)}
+.flagged .menu .p{color:var(--pink);font-size:.8rem;text-transform:uppercase;letter-spacing:.06em}
+.flagged .menu .v{color:var(--dim)}
+.flagged .menu .v b{color:var(--paper)}
+@media (max-width:640px){.flagged .menu .r{grid-template-columns:1fr;gap:6px}}
+
+/* heuristic review */
+.fix{margin-top:clamp(48px,6vw,72px);display:grid;gap:22px}
+.fix-hd{display:grid;gap:10px;justify-items:start}
+.fix-hd h3{font-size:clamp(1.6rem,3vw,2.3rem)}
+.sev{display:inline-block;font-weight:800;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;background:var(--paper-ink);color:var(--pink);padding:5px 10px;border-radius:999px}
+.sev.s2{background:transparent;color:var(--paper-ink);box-shadow:inset 0 0 0 1.5px var(--paper-ink)}
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,36px)}
+@media (max-width:760px){.ba{grid-template-columns:1fr}}
+.ba figure{margin:0;display:grid;gap:14px;align-content:start;border:2px solid var(--paper-ink);padding:clamp(16px,2.4vw,28px);background:#EFE7D4}
+.ba .after{background:var(--pink)}
+.ba .lbl{font-weight:800;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase}
+.ba figcaption{color:#2B2B2B;font-size:.98rem}
+.ba figcaption i{display:block;margin-top:6px;font-size:.85rem;opacity:.7}
+.shot{display:grid;place-items:center;min-height:260px;background:#E2D8C2;border-radius:14px;padding:16px}
+.shot img{display:block;width:100%;max-width:300px;border-radius:12px;box-shadow:0 14px 30px -18px rgba(0,0,0,.5)}
+/* app-style mocks (match the prototype's look) */
+.app{font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;background:#fff;color:#141414;border-radius:20px;padding:18px;box-shadow:0 18px 40px -22px rgba(60,10,30,.5);max-width:340px;width:100%;justify-self:center;min-height:260px;display:grid;align-content:start;gap:14px}
+.app-k{display:flex;justify-content:space-between;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:#7A7A7A}
+.app-meal{display:flex;gap:14px;align-items:center}
+.app-meal .dot{flex:none;width:56px;height:56px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#F4B183,#C9673A 55%,#5D7F3A)}
+.app-name{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:1.25rem;line-height:1.15;transition:opacity .2s}
+.app-sub{margin-top:4px;font-size:.9rem;color:#555}
+.app-sub b{color:#141414}
+.app-range input{width:100%;accent-color:#141414;height:28px;cursor:pointer}
+.app-ends{display:flex;justify-content:space-between;font-size:.72rem;color:#7A7A7A;margin-top:-8px}
+.app-delta{font-size:.85rem;font-weight:600;background:#F4F1EA;border-radius:10px;padding:10px 12px}
+.app input:focus-visible{outline:2px solid #141414;outline-offset:4px}
+.rest{margin-top:clamp(48px,6vw,72px);display:grid;gap:16px}
+.rest .menu .r{grid-template-columns:auto minmax(0,1fr) auto;align-items:center}
+.rest .menu .sev{font-size:.8rem;padding:4px 10px}
+.rest .menu .p{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;font-weight:700;opacity:.6}
+@media (max-width:640px){.rest .menu .r{grid-template-columns:auto minmax(0,1fr)}.rest .menu .p{grid-column:2}}
+.kept{color:#2B2B2B;max-width:80ch}
+
+/* process pipeline */
+.brief{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--paper-ink)}
+.brief div{padding:12px 14px 4px 0;display:grid;gap:6px;align-content:start}
+.brief p{font-size:.92rem;color:#2B2B2B}
+@media (max-width:560px){.brief{grid-template-columns:1fr}.brief div+div{border-top:1px solid var(--rule)}}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+.legend span{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px}
+.legend .ai,.node.ai{background:var(--pink)}
+.legend .me,.node.me{background:var(--paper-ink);color:var(--paper)}
+.legend .out{box-shadow:inset 0 0 0 1.5px var(--paper-ink)}
+.pipe{list-style:none;margin:clamp(36px,5vw,56px) 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border-top:2px solid var(--paper-ink)}
+.pipe .col{display:flex;flex-direction:column;gap:22px;padding:18px clamp(10px,1.4vw,18px) 0;position:relative}
+.pipe .col+.col{border-left:1.5px solid var(--rule)}
+.pipe .col+.col::before{content:"→";position:absolute;left:-10px;top:14px;background:var(--paper);font-family:var(--display);font-weight:700;line-height:1;padding:2px 2px}
+.phase{font-family:var(--display);font-weight:700;font-stretch:72%;text-transform:uppercase;font-size:clamp(1.3rem,2.2vw,1.7rem);line-height:1}
+.node{position:relative;border-radius:14px;padding:12px 14px;display:grid;gap:4px}
+.node b{font-weight:800;font-size:.95rem;line-height:1.2}
+.node p{font-size:.85rem;line-height:1.35;opacity:.85}
+.node.out{box-shadow:inset 0 0 0 1.5px var(--paper-ink);background:transparent}
+.node+.node::before{content:"";position:absolute;left:50%;top:-22px;width:1.5px;height:22px;background:var(--paper-ink)}
+.node .with{font-family:var(--hand);font-size:1.15rem;line-height:1.05;color:var(--paper-ink);margin-top:4px}
+@media (max-width:900px){.pipe{grid-template-columns:1fr 1fr;row-gap:28px}.pipe .col:nth-child(3){border-left:0}.pipe .col:nth-child(3)::before{display:none}}
+@media (max-width:560px){.pipe{grid-template-columns:1fr}.pipe .col+.col{border-left:0;border-top:1.5px solid var(--rule);padding-top:22px}.pipe .col+.col::before,.pipe .col:nth-child(3)::before{display:block;content:"↓";left:50%;top:-12px;transform:translateX(-50%)}.pipe .col:nth-child(3){border-top:1.5px solid var(--rule)}}
+.prompts{margin-top:clamp(48px,6vw,72px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:clamp(24px,4vw,56px);align-items:start}
+@media (max-width:860px){.prompts{grid-template-columns:1fr}}
+.prompts>.kept{grid-column:1/-1}
+.pcards{display:grid;grid-template-columns:1fr 1.3fr;gap:16px}
+@media (max-width:560px){.pcards{grid-template-columns:1fr}}
+.pc{border-radius:18px;padding:18px;display:grid;gap:12px;align-content:start}
+.pc p{font-weight:600;line-height:1.55;font-size:clamp(1rem,1.4vw,1.15rem)}
+.pc-h{font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.pc.naive{background:#E2D8C2;color:#5A5650}
+.pc.grounded{background:var(--paper-ink);color:var(--paper)}
+.pc mark{padding:1px 3px;border-radius:3px;color:var(--paper-ink)}
+.pc mark.g{background:#9FE0A8}.pc mark.r{background:#FF8C7A}.pc mark.b{background:#8EC5FF}.pc mark.m{background:var(--pink)}
+.keys{display:flex;gap:8px;flex-wrap:wrap}
+.keys span{font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:4px 8px;border-radius:999px;color:var(--paper-ink)}
+.keys .g{background:#9FE0A8}.keys .r{background:#FF8C7A}.keys .b{background:#8EC5FF}.keys .m{background:var(--pink)}
+
+/* learned */
+.learn{display:grid;grid-template-columns:1fr 1fr;gap:clamp(20px,4vw,48px);margin-top:36px}
+.learn div{border-top:2px solid var(--paper-ink);padding-top:14px;display:grid;gap:10px}
+.learn p{color:#2B2B2B}
+@media (max-width:640px){.learn{grid-template-columns:1fr}}
+
+/* motion */
+@supports (animation-timeline: view()){
+  .reveal{animation:rise linear both;animation-timeline:view();animation-range:entry 0% entry 45%}
+}
+@keyframes rise{from{opacity:0;transform:translateY(32px)}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}.duo .phone{transform:none!important}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+</style>
+</head>
+<body>
+
+<main>
+<!-- HERO -->
+<header class="hero" id="overview">
+  <div class="in top">
+    <div class="stack" style="gap:26px">
+      <span class="tag">Case study · Product design · 2026</span>
+      <h1 aria-label="Pivot"><span class="l" style="--i:0" aria-hidden="true">P</span><span class="l" style="--i:1" aria-hidden="true">i</span><span class="l" style="--i:2" aria-hidden="true">v</span><span class="l" style="--i:3" aria-hidden="true">o</span><span class="l" style="--i:4" aria-hidden="true">t</span></h1>
+      <p class="lede">A budget-first meal planner for students, designed for <em>the night the plan falls apart.</em></p>
+      <div class="ctas">
+        <a class="btn" href="https://www.figma.com/make/8LXS1gv9Y3v9uwun4fHBhN/Identity-Specific-Meal-Logic?t=ft5HcfAOp1kZVXVR-1" target="_blank" rel="noopener">Try the prototype ↗</a>
+        <a class="btn ghost" href="#loop">See the flow ↓</a>
+      </div>
+    </div>
+    <div class="duo">
+      <span class="hand note" aria-hidden="true">pick 3, not 7</span>
+      <figure class="phone"><video data-src="vid/sunday.mp4" poster="img/sunday.jpg" muted loop playsinline preload="none" aria-label="Sunday planning: picking three meals that share ingredients"></video></figure>
+      <figure class="phone"><video data-src="vid/today.mp4" poster="img/today.jpg" muted loop playsinline preload="none" aria-label="Today view with the Pivot slider trading budget against nutrition"></video></figure>
+    </div>
+  </div>
+  <div class="in">
+    <div class="hero-meta">
+      <div class="hm-col"><span class="hm-label">Context</span><p>CMU HCII · The AI Augmented Designer<br>with Nik Martelaro &amp; John Zimmerman</p></div>
+      <div class="hm-col"><span class="hm-label">Role focus</span><p>Product design · AI-assisted research · Rapid prototyping</p></div>
+      <div class="hm-col"><span class="hm-label">Timeline</span><p>3 weeks · 2026</p></div>
+      <div class="hm-col"><span class="hm-label">Team</span><p>Independent project</p></div>
+    </div>
+    <div class="tldr">
+      <div><span class="tag">Problem</span><p>Students overbuy, food spoils before they know what to cook, and most of it gets thrown out. Budget, fridge and recipe apps each fix only one step.</p></div>
+      <div><span class="tag">Bet</span><p>Plan from the fridge, not from zero: 3 shared-ingredient meals, a budget cap, inventory-first suggestions and takeout built into the week.</p></div>
+      <div><span class="tag">Built</span><p>An end-to-end prototype with Sunday planning, a priced grocery list and a way out on tired nights. Peer-reviewed at 4.89/5.</p></div>
+    </div>
+  </div>
+</header>
+
+<!-- PROBLEM -->
+<section class="paper" id="problem">
+  <div class="in">
+    <div class="split" style="align-items:center">
+      <div class="stack">
+        <span class="tag">01 · Problem</span>
+        <h2>I kept throwing my groceries away</h2>
+        <p class="hand">this one started with my own fridge.</p>
+        <p class="lead">Every grocery run went the same way, and each step made the next one worse. Then the next run started from zero again.</p>
+      </div>
+      <div class="loopviz" role="img" aria-label="A loop: Shop, overbuy and go over budget. Store, food spoils in the fridge. Cook, no idea what to make with what is left. Toss, most of it gets thrown out. Repeat, the next shop starts from zero, back to Shop.">
+        <svg viewBox="0 0 100 100" aria-hidden="true">
+          <defs><marker id="ah" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker>
+          <marker id="ahp" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#B8336A"/></marker></defs>
+          <g fill="none" stroke="currentColor" stroke-width=".6" stroke-linecap="round">
+            <path d="M 61.11 13.66 A 38 38 0 0 1 81.13 28.20" marker-end="url(#ah)"/>
+            <path d="M 87.99 49.34 A 38 38 0 0 1 80.35 72.87" marker-end="url(#ah)"/>
+            <path d="M 62.37 85.93 A 38 38 0 0 1 37.63 85.93" marker-end="url(#ah)"/>
+            <path d="M 19.65 72.87 A 38 38 0 0 1 12.01 49.34" marker-end="url(#ah)"/>
+            <path d="M 18.87 28.20 A 38 38 0 0 1 38.89 13.66" marker-end="url(#ahp)" stroke="#B8336A" stroke-dasharray="1.6 1.4"/>
+          </g>
+        </svg>
+        <div class="lv-center"><span>Every run</span><span>starts from</span><span class="pk">zero</span></div>
+        <div class="lv-node" style="left:50%;top:12%"><b>Shop</b><span>Overbuy, go over budget</span></div>
+        <div class="lv-node" style="left:86.1%;top:38.3%"><b>Store</b><span>Spoils in the fridge</span></div>
+        <div class="lv-node" style="left:72.3%;top:80.7%"><b>Cook?</b><span>No idea what to make</span></div>
+        <div class="lv-node hot" style="left:27.7%;top:80.7%"><b>Toss</b><span>Most of it goes in the trash</span></div>
+        <div class="lv-node" style="left:13.9%;top:38.3%"><b>Repeat</b><span>Next shop starts from zero</span></div>
+      </div>
+    </div>
+
+    <div class="stats paperstats">
+      <div><span class="big">$760</span><p>spent per American in 2024 on food that went uneaten</p><a href="https://refed.org/food-waste/consumer-food-waste/" target="_blank" rel="noopener">ReFED ↗</a></div>
+      <div><span class="big">80%+</span><p>of surplus food is perishable, like produce and dairy, the stuff that spoils in the fridge</p><a href="https://refed.org/food-waste/the-problem/" target="_blank" rel="noopener">ReFED ↗</a></div>
+      <div><span class="big">23%</span><p>of U.S. college students were food insecure in 2020, so every wasted dollar counts</p><a href="https://www.gao.gov/products/gao-24-107074" target="_blank" rel="noopener">GAO ↗</a></div>
+    </div>
+
+    <div class="split" style="margin-top:clamp(40px,5vw,64px)">
+      <div class="stack">
+        <span class="tag">The gap</span>
+        <h3 style="font-size:clamp(1.6rem,3vw,2.3rem)">Four apps for one problem</h3>
+      </div>
+      <div class="stack">
+        <p class="lead">Budget trackers, fridge inventories, recipe finders and meal planners each fix one step of that loop. None of them see the whole loop, so the waste happens in the gaps between them. I wanted one planner that connects all four.</p>
+        <div class="prio">
+          <div><span class="n">01</span><b>Food waste</b><p>Buy what you’ll actually cook, and use up what you have.</p></div>
+          <div><span class="n">02</span><b>Adaptive planning</b><p>A plan that bends when the week doesn’t go to plan.</p></div>
+          <div class="later"><span class="n">03</span><b>Personal goals</b><p>Added after peer feedback: dietary restrictions and targets like a weekly calorie limit, on top of the budget cap.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPETITOR -->
+<section class="pinkbg" id="competitor">
+  <div class="in split">
+    <div class="stack">
+      <span class="tag">02 · Competitor</span>
+      <h2>Mealime vs. Pivot</h2>
+      <p class="lead">Mealime has a huge recipe library, and that’s part of the problem. Every plan means scrolling and deciding again, and it doesn’t know what’s already in your fridge, so each check-in starts from scratch. Pivot takes decisions off your plate by planning from what you already own.</p>
+    </div>
+    <div class="menu vs">
+      <div class="r"><span class="v old">Endless recipes to choose from</span><span class="arrow" aria-label="becomes">→</span><span class="k">A few picks, chosen for you</span></div>
+      <div class="r"><span class="v old">Every check-in starts from zero</span><span class="arrow" aria-label="becomes">→</span><span class="k">Starts from your fridge</span></div>
+      <div class="r"><span class="v old">Rigid 7-day plan</span><span class="arrow" aria-label="becomes">→</span><span class="k">3 flexible meals</span></div>
+      <div class="r"><span class="v old">No spending cap</span><span class="arrow" aria-label="becomes">→</span><span class="k">Budget first</span></div>
+      <div class="r"><span class="v old">Assumes you always cook</span><span class="arrow" aria-label="becomes">→</span><span class="k">Takeout in the plan</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- BET -->
+<section id="bet">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">03 · The bet</span>
+        <h2>Plan from the fridge, not from zero</h2>
+      </div>
+      <p class="lead" style="color:var(--dim)">Every step of that loop has the same root: each plan starts from scratch and assumes a perfect week. So Pivot starts from what you already have, and expects some nights to go off-plan. Each principle breaks one step of the loop.</p>
+    </div>
+    <div class="big4">
+      <div><span class="n">3</span><h3>Meals, not 7</h3><p>Fewer recipes that share ingredients, so you buy less.</p><span class="breaks">Breaks: Shop</span></div>
+      <div><span class="n">$</span><h3>Budget first</h3><p>Caps on groceries and eating out, set before you shop.</p><span class="breaks">Breaks: Shop</span></div>
+      <div><span class="n">◎</span><h3>Fridge first</h3><p>Suggestions start from your inventory, not a recipe library.</p><span class="breaks">Breaks: Store · Cook?</span></div>
+      <div><span class="n">↺</span><h3>A way out</h3><p>Planned takeout, a rescue meal or Blind Box when plans slip.</p><span class="breaks">Breaks: Toss</span></div>
+    </div>
+    <p class="cite">ReFED’s advice to households points the same way: plan ahead, cook “recipe trios” that share ingredients, and plan for takeout nights. <a href="https://refed.org/food-waste/consumer-food-waste/" target="_blank" rel="noopener">ReFED ↗</a></p>
+  </div>
+</section>
+
+<!-- CORE LOOP -->
+<section id="loop" style="border-top:1px solid rgba(246,240,226,.14)">
+  <div class="in">
+    <div class="stack">
+      <span class="tag">04 · Core loop</span>
+      <h2>Pick 3 → Shop → See the week → Cook</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="txt">
+          <span class="num">01</span>
+          <h3>Pick 3 on Sunday</h3>
+          <p>Instead of filling seven slots, you drag in three meals. Pivot only offers recipes that share ingredients, so the basket stays under your weekly budget.</p>
+        </div>
+        <figure class="phone"><video data-src="vid/sunday.mp4" poster="img/sunday.jpg" muted loop playsinline preload="none" aria-label="Dragging three meals into the week"></video></figure>
+      </div>
+      <div class="step">
+        <div class="txt">
+          <span class="num">02</span>
+          <h3>One smart shop</h3>
+          <p>Three recipes become one priced list. Pivot shows its work as it builds the list, so you can trust the result:</p>
+          <ul><li>Reads your 3 recipes</li><li>Merges shared ingredients</li><li>Skips what’s already in your fridge</li><li>Prices the basket</li></ul>
+        </div>
+        <figure class="phone"><video data-src="vid/building.mp4" poster="img/building.jpg" muted loop playsinline preload="none" aria-label="Building the grocery list step by step"></video></figure>
+      </div>
+      <div class="step">
+        <div class="txt">
+          <span class="num">03</span>
+          <h3>A week with a night off</h3>
+          <p>Takeout night is a planned slot in the week, so ordering food is part of the plan, not a broken streak. Meals that need cooking go around it.</p>
+        </div>
+        <figure class="phone"><video data-src="vid/week.mp4" poster="img/week.jpg" muted loop playsinline preload="none" aria-label="Week view with a planned takeout night"></video></figure>
+      </div>
+      <div class="step">
+        <div class="txt">
+          <span class="num">04</span>
+          <h3>Cook today</h3>
+          <p>The Today view shows one next meal and your progress (“Meal 1 of 3”). The Pivot slider trades budget against nutrition, so you can swap in a higher-protein version and see what it costs.</p>
+        </div>
+        <figure class="phone"><video data-src="vid/today.mp4" poster="img/today.jpg" muted loop playsinline preload="none" aria-label="Today view and the Pivot slider"></video></figure>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESCUE -->
+<section class="pinkbg" id="rescue">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">05 · The pivot moment</span>
+        <h2>When Wednesday happens</h2>
+      </div>
+      <p class="lead">This is where the product gets its name. When you’re too tired to cook the plan, you get two ways out that still use what you already bought.</p>
+    </div>
+    <div class="rescue">
+      <figure>
+        <div class="phone"><video data-src="vid/suggest.mp4" poster="img/suggest.jpg" muted loop playsinline preload="none" aria-label="What can I make: suggestions from fridge inventory"></video></div>
+        <figcaption><span class="tag">A · What can I make?</span><h3>Cook from what’s in stock</h3><p>Shows what’s ready to cook now and which recipes are one or two items away.</p></figcaption>
+      </figure>
+      <figure>
+        <div class="phone"><video data-src="vid/blindbox.mp4" poster="img/blindbox.jpg" muted loop playsinline preload="none" aria-label="Blind Box: pick a vibe and Pivot chooses"></video></div>
+        <figcaption><span class="tag">B · Blind Box</span><h3>Pick a vibe, Pivot decides</h3><p>For nights when even choosing feels like too much. Tap 2–3 vibes and Pivot picks the meal.</p></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- DECISIONS -->
+<section class="paper" id="decisions">
+  <div class="in">
+    <div class="stack">
+      <span class="tag">06 · Key decisions</span>
+      <h2>What I changed, and why</h2>
+    </div>
+    <div class="decisions">
+      <div class="dec">
+        <span class="tag">Grocery list handoff</span>
+        <div class="row"><span class="lbl">Before</span><p class="was">Close the modal and return home</p></div>
+        <div class="row"><span class="lbl">After</span><h3>Land on the cart, so users see the result right away</h3></div>
+        <p class="why">The first flow worked, but after the modal closed nothing on screen showed that a list had been made. Landing on the cart makes the result visible. This is where “logic isn’t experience” came from.</p>
+      </div>
+      <div class="dec">
+        <span class="tag">The 3-meal rule</span>
+        <div class="row"><span class="lbl">Before</span><p class="was">A rule that enforces the budget</p></div>
+        <div class="row"><span class="lbl">After</span><h3>A flexible starting point, not a rule</h3></div>
+        <p class="why">A hard limit would bring back the guilt Pivot is meant to remove. Three meals is now the default, and you can change it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORTING -->
+<section id="support">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">07 · Supporting features</span>
+        <h2>Less typing, fewer surprises</h2>
+      </div>
+      <p class="lead" style="color:var(--dim)">These support the core loop. Each one removes a step that would otherwise make students give up on planning.</p>
+    </div>
+    <div class="support">
+      <figure><div class="phone"><video data-src="vid/onb.mp4" poster="img/onb.jpg" muted loop playsinline preload="none" aria-label="Onboarding: choose who you are, set budget and kitchen"></video></div><span class="tag" style="color:var(--pink)">Onboarding</span><h3>Who are you?</h3><p>Pick a profile, a budget and your kitchen setup, so the first plan already fits.</p></figure>
+      <figure><div class="phone"><video data-src="vid/prep.mp4" poster="img/prep.jpg" muted loop playsinline preload="none" aria-label="Smart grocery list grouped by aisle with prices"></video></div><span class="tag" style="color:var(--pink)">Smart list</span><h3>One priced list</h3><p>Grouped by aisle, with each item linked to the meals it’s used in.</p></figure>
+      <figure><div class="phone"><video data-src="vid/receipt.mp4" poster="img/receipt.jpg" muted loop playsinline preload="none" aria-label="Scanning a receipt to load the fridge"></video></div><span class="tag" style="color:var(--pink)">Receipt scan</span><h3>Load the fridge</h3><p>Scan a receipt to fill your fridge. Pivot flags what expires soon.</p></figure>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="paper" id="process">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">08 · Process</span>
+        <h2>Designing with an AI pipeline</h2>
+        <p class="hand">AI widened the options. I chose what got through each step.</p>
+      </div>
+      <div class="stack">
+        <p class="lead">Pivot was Project 2 in <i>The AI Augmented Designer</i> at CMU HCII. The brief was to design a competitor to an existing product in 3 weeks, using AI across Discover, Define, Develop and Deliver. The real assignment was metacognition: noticing where AI helped my thinking and where it didn’t.</p>
+        <div class="brief">
+          <div><span class="tag">Compete</span><p>Pick an incumbent and find a need it doesn’t serve. I picked Mealime.</p></div>
+          <div><span class="tag">Point of view</span><p>Develop my own design style and a more advanced prototyping process.</p></div>
+          <div><span class="tag">Metacognition</span><p>Plan, monitor and evaluate how I used AI at each step.</p></div>
+        </div>
+        <p class="lead" style="font-size:1rem">I chained AI generators so each one’s output fed the next. I set the priorities going in and reviewed every output.</p>
+        <div class="legend" aria-hidden="true"><span class="ai">AI</span><span class="me">Me</span><span class="out">Output</span></div>
+      </div>
+    </div>
+
+    <ol class="pipe" role="list">
+      <li class="col">
+        <span class="phase">Discover</span>
+        <div class="node ai"><b>Deep research</b><p>As a UX research lead, searched Reddit and meal-app reviews for students’ complaints</p></div>
+        <div class="node ai"><b>Synthetic users</b><p>Personas built from that research, not from a generic role-play prompt</p></div>
+        <div class="node out"><b>Research summary</b><p>Themes and personas</p></div>
+      </li>
+      <li class="col">
+        <span class="phase">Define</span>
+        <div class="node ai"><b>Need statement generator</b><p>User · Need · Goal · Measurement</p></div>
+        <div class="node out"><b>Need statement</b></div>
+        <div class="node ai duo-node"><b>Requirement generator</b><p>What it achieves for the user · what it must do · constraints · priority</p><span class="with">Built with me, from the research summary and my priorities</span></div>
+        <div class="node out"><b>Prioritized requirements &amp; constraints</b></div>
+      </li>
+      <li class="col">
+        <span class="phase">Develop</span>
+        <div class="node ai"><b>Feature ideator</b><p>Functions · Screens · Databases · User flows</p></div>
+        <div class="node out"><b>Feature list</b></div>
+        <div class="node ai"><b>Spec writer</b><p>Functional and technical specs</p></div>
+        <div class="node out"><b>Specifications</b></div>
+      </li>
+      <li class="col">
+        <span class="phase">Deliver</span>
+        <div class="node me"><b>Prototype in Figma Make</b><p>60+ versions</p></div>
+        <div class="node ai"><b>AI as critiquer</b><p>Critiqued each version: what’s working, what isn’t</p></div>
+        <div class="node me"><b>Peer review</b><p>3 classmates, 4.89/5</p></div>
+      </li>
+    </ol>
+
+    <div class="prompts">
+      <div class="stack" style="gap:10px">
+        <span class="tag">Synthetic users · prompt pattern</span>
+        <h3>Research first, personas second</h3>
+        <p class="kept">A naive prompt (“You are a 21-year-old student…”) gives you a made-up character. Instead, I had the AI do the research first, then build personas from what it found, so they carried real student complaints.</p>
+        <div class="keys" style="margin-top:6px"><span class="g">Give AI a persona</span><span class="r">Find real sources</span><span class="b">Focus on your goal</span><span class="m">Use research as context</span></div>
+      </div>
+      <div class="pc grounded"><span class="pc-h">Advanced prompt · deep research</span><p>“<mark class="g">You are a professional UX research lead.</mark> <mark class="r">Search Reddit, app-store reviews of Mealime and other meal planners, and student forums</mark> for <mark class="b">complaints</mark> students have about planning meals on a budget. <mark class="m">Based on your research</mark>, create a set of personas we can use to design a better meal planner.”</p></div>
+      <p class="kept" style="font-size:.85rem;opacity:.75">Pattern paraphrased from the method I used, not the exact prompt.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTING -->
+<section id="testing">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">09 · Peer review</span>
+        <h2>3 classmates tried it</h2>
+      </div>
+      <p class="lead" style="color:var(--dim)">Three classmates tried the prototype and scored it on a 6-part design rubric (1–5), then wrote what worked and what they’d change. It’s a small sample, but they all asked for the same missing piece.</p>
+    </div>
+    <div class="stats">
+      <div><span class="big">4.89<small>/5</small></span><p>Average across all 6 criteria</p></div>
+      <div><span class="big">5.0<small>/5</small></span><p>Interaction: well reasoned and well designed, from all 3 reviewers</p></div>
+      <div><span class="big">3/3</span><p>Rated the goal as well reasoned (5/5)</p></div>
+    </div>
+    <div class="quotes">
+      <blockquote><p>“The system reduces cognitive load by making decisions when users are overwhelmed.”</p><cite>Reviewer 1</cite></blockquote>
+      <blockquote><p>“All of the user flows were very clear and intuitive… the navigation across all of the app’s different pages was very smooth.”</p><cite>Reviewer 3</cite></blockquote>
+      <blockquote><p>“I can definitely see myself using this app.”</p><cite>Reviewer 2</cite></blockquote>
+    </div>
+    <div class="flagged">
+      <span class="tag" style="color:var(--pink)">What they flagged → what I’d do next</span>
+      <div class="menu">
+        <div class="r"><span class="k">Personal goals</span><span class="v">Let users set <b>dietary restrictions</b> and <b>goals like a weekly calorie limit</b>, alongside the budget cap, so recipes and the Pivot slider aim at their own targets.</span><span class="p">Most asked</span></div>
+        <div class="r"><span class="k">Inventory drift</span><span class="v">Show how the fridge stays accurate when people forget to log what they ate, e.g. a quick check-in before Sunday planning.</span><span class="p"></span></div>
+        <div class="r"><span class="k">Weekly recap</span><span class="v">A light summary of spending, waste and takeout, so savings over time are visible.</span><span class="p"></span></div>
+        <div class="r"><span class="k">More validation</span><span class="v">Test with students outside the class over a real week of meal planning.</span><span class="p"></span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HEURISTIC REVIEW -->
+<section class="paper" id="heuristics">
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">10 · Heuristic review</span>
+        <h2>Auditing my own prototype</h2>
+      </div>
+      <p class="lead">Peers rated the flows highly. Then I checked the recorded prototype against Nielsen’s 10 usability heuristics myself, rating each issue from 1 (cosmetic) to 4 (must fix). Four issues scored a 3. The most important one is shown before and after below.</p>
+    </div>
+
+    <div class="fix">
+      <div class="fix-hd"><span class="sev">Severity 3</span><span class="tag">Visibility of system status</span><h3>The Pivot slider moves, but nothing changes</h3></div>
+      <div class="ba">
+        <figure class="before"><span class="lbl">Before</span><div class="shot"><img src="img/hr-slider-before.webp" alt="Original Pivot slider card: Grilled Salmon Bowl, $14.50, with a Budget to Performance slider" loading="lazy"></div><figcaption>Dragging from Budget to Performance leaves the meal, the price and “+26% protein” exactly the same. The feature named after the product doesn’t visibly do anything.</figcaption></figure>
+        <figure class="after"><span class="lbl">After · try it</span>
+          <div class="app slider-demo" aria-live="polite">
+            <div class="app-k"><span>Next up · Dinner</span><span>Pivot slider</span></div>
+            <div class="app-meal"><span class="dot" aria-hidden="true"></span><div><p class="app-name" data-f="name">Garlic Chicken</p><p class="app-sub"><b data-f="price">$6.20</b> · <span data-f="protein">34g</span> protein · <span data-f="kcal">560</span> kcal</p></div></div>
+            <label class="app-range"><span class="sr">Trade budget against protein</span><input type="range" min="0" max="2" step="1" value="1"></label>
+            <div class="app-ends"><span>$ Cheapest</span><span>Balanced</span><span>Most protein</span></div>
+            <p class="app-delta" data-f="delta">+$2.40 for +16g protein vs. the cheapest pick</p>
+          </div>
+          <figcaption>Each stop swaps the meal and spells out the trade-off in dollars and grams. “Performance” becomes “Most protein”, which says what it means. <i>Redesign concept, illustrative numbers.</i></figcaption>
+        </figure>
+      </div>
+    </div>
+
+    <div class="rest">
+      <span class="tag">Other issues and fixes</span>
+      <div class="menu">
+        <div class="r"><span class="sev">3</span><span class="v"><b>Tab names don’t match their pages.</b> “Pulse” opens Today, “Command” opens the week. → Rename the tabs Today / Week / Shop.</span><span class="p">Real-world match</span></div>
+        <div class="r"><span class="sev">3</span><span class="v"><b>Two shopping lists.</b> Prep and Week each show a list with a different total. → Keep one list. Week links to it.</span><span class="p">Consistency</span></div>
+        <div class="r"><span class="sev">3</span><span class="v"><b>Receipt scan writes straight to the fridge.</b> → Add a review step before saving, plus a quick fridge check before Sunday planning.</span><span class="p">Error prevention</span></div>
+        <div class="r"><span class="sev s2">2</span><span class="v"><b>Three “what do I eat” buttons on one screen.</b> → One “Too tired?” entry that opens both rescue options.</span><span class="p">Minimalism</span></div>
+        <div class="r"><span class="sev s2">2</span><span class="v"><b>Budget reads $180, $30 and $127 in one flow.</b> → One budget model shown the same way everywhere.</span><span class="p">Consistency</span></div>
+        <div class="r"><span class="sev s2">2</span><span class="v"><b>Six onboarding steps, including a visual style picker.</b> → Replace it with diet and fitness goals, the thing peers asked for.</span><span class="p">Minimalism</span></div>
+        <div class="r"><span class="sev s2">2</span><span class="v"><b>Meals can only be dragged into slots.</b> → Tap a meal to fill the next empty slot.</span><span class="p">Flexibility</span></div>
+      </div>
+      <p class="kept"><b>What already worked:</b> the “Building your list” progress steps, the “Used in” thumbnails on every grocery item, missing-ingredient prices, back and close on every step, and a Generate button that stays disabled until 3 meals are picked.</p>
+    </div>
+  </div>
+</section>
+
+<!-- LEARNED -->
+<section class="pinkbg" id="learned">
+  <div class="in">
+    <div class="stack">
+      <span class="tag">11 · What I learned</span>
+      <h2>Two lessons, one next step</h2>
+    </div>
+    <div class="learn" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
+      <div><h3>Logic isn’t experience</h3><p>A flow can be correct and still leave people unsure it worked. If people can’t see the result, the feature doesn’t feel like it worked.</p></div>
+      <div><h3>Explore wide, then simplify</h3><p>Generating ideas is cheap. Choosing what to cut is the design work.</p></div>
+      <div><h3>Next: plans that know you</h3><p>All three reviewers pointed to the same gap. Add dietary restrictions and fitness goals to onboarding, so budget, nutrition and the Wednesday rescue all work from one profile.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<script>
+/* Videos load and play only while on screen; reduced-motion users get posters + controls. */
+(function(){
+  var vids=[].slice.call(document.querySelectorAll('video[data-src]'));
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function load(v){if(!v.src){v.src=v.dataset.src;}}
+  if(reduce||!('IntersectionObserver' in window)){
+    vids.forEach(function(v){v.controls=true;v.preload='none';load(v);});
+  }else{
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){var v=e.target;
+      if(e.isIntersecting){load(v);var p=v.play();if(p&&p.catch)p.catch(function(){});}else{v.pause();}
+    });},{rootMargin:'200px 0px'});
+    vids.forEach(function(v){io.observe(v);});
+  }
+  /* heuristic-review slider demo */
+  var demo=document.querySelector('.slider-demo');
+  if(demo){
+    var M=[{name:'Spinach Wrap',price:3.80,protein:18,kcal:420},{name:'Garlic Chicken',price:6.20,protein:34,kcal:560},{name:'Grilled Salmon Bowl',price:14.50,protein:46,kcal:650}];
+    var f=function(k){return demo.querySelector('[data-f="'+k+'"]');}, inp=demo.querySelector('input');
+    var upd=function(){var m=M[+inp.value],b=M[0];
+      f('name').textContent=m.name;f('price').textContent='$'+m.price.toFixed(2);f('protein').textContent=m.protein+'g';f('kcal').textContent=m.kcal;
+      f('delta').textContent=+inp.value===0?'Cheapest pick: lowest cost, least protein':'+$'+(m.price-b.price).toFixed(2)+' for +'+(m.protein-b.protein)+'g protein vs. the cheapest pick';
+      inp.setAttribute('aria-valuetext',m.name+', $'+m.price.toFixed(2)+', '+m.protein+' grams protein');};
+    inp.addEventListener('input',upd);upd();
+  }
+  if(!reduce){document.querySelectorAll('section .stack, .step, .rescue figure, .dec, .support figure, .big4 > div, .learn > div, .menu').forEach(function(el){el.classList.add('reveal');});}
+})();
+</script>
+<script>window.CSN={"eyebrow":"Product design · 2026","title":"Pivot","accent":"#F4AFC6","accentInk":"#141414","theme":"dark","side":"#0C0C0C","line":"#262626","sections":[["overview","Overview"],["problem","Problem"],["competitor","Competitor"],["bet","The bet"],["loop","Core loop"],["rescue","Pivot moment"],["decisions","Decisions"],["support","Features"],["process","Process"],["testing","Peer review"],["heuristics","Heuristic review"],["learned","Learned"]],"home":"../index.html","back":"../index.html#work"};</script>
+<script src="../assets/cs-nav.js"></script>
+</body>
+</html>

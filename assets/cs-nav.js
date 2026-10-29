@@ -77,7 +77,8 @@ var P=[
   {id:'learnvia',href:'learnvia/index.html',img:'img/learnvia-cover.webp',k:'Adaptive AI tutor · 38% vs. 14% learner recovery',t:'Learnvia AI Tutor'},
   {id:'verifier',href:'verifier/index.html',img:'img/verifier-cover.webp',k:'Source-grounded answers · unsupported claims cut from 2 to 0',t:'Answer Verifier'},
   {id:'ancestor',href:'ancestor/index.html',img:'img/ancestor.webp',k:'AI family-memory app · curation, not capture',t:'Ancestor'},
-  {id:'bumble',href:'bumble/index.html',img:'img/bumble-cover.webp',k:'Turning shared priorities into conversation',t:'Bumble DeepSync'}
+  {id:'bumble',href:'bumble/index.html',img:'img/bumble-cover.webp',k:'Turning shared priorities into conversation',t:'Bumble DeepSync'},
+  {id:'pivot',href:'pivot/index.html',img:'img/pivot-cover.webp',k:'Budget-first meal planner · 4.89/5 peer review',t:'Pivot'}
 ];
 var me=-1;P.forEach(function(p,i){if(location.pathname.indexOf('/'+p.id+'/')>-1)me=i;});
 if(me>-1&&C.more!==false){
