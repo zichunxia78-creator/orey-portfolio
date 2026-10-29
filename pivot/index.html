@@ -135,6 +135,21 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 @media (max-width:760px){.support{grid-template-columns:1fr 1fr}}
 @media (max-width:480px){.support{grid-template-columns:1fr}}
 
+/* problem */
+.loop5{list-style:none;margin:0;padding:0}
+.stats.paperstats{border-top-color:var(--paper-ink)}
+.stats.paperstats p{color:#2B2B2B}
+.paperstats a{font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pink-deep);text-decoration:none}
+.paperstats a:hover{text-decoration:underline}
+.stats.paperstats .big{color:var(--paper-ink)}
+.prio{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.prio div{border:2px solid var(--paper-ink);padding:16px;display:grid;gap:6px;align-content:start}
+.prio .n{font-family:var(--display);font-weight:700;font-stretch:72%;font-size:1.6rem;line-height:1;color:var(--pink-deep)}
+.prio b{font-weight:800}
+.prio p{font-size:.92rem;color:#2B2B2B}
+.prio .later{border-style:dashed;background:#EFE7D4}
+@media (max-width:700px){.prio{grid-template-columns:1fr}}
+
 /* peer review */
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:2px solid var(--paper);margin-top:40px}
 .stats div{padding:22px 20px 8px 0;display:grid;gap:10px;align-content:start}
@@ -273,7 +288,7 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
       <div class="hm-col"><span class="hm-label">Team</span><p>Independent project</p></div>
     </div>
     <div class="tldr">
-      <div><span class="tag">Problem</span><p>Meal planners assume a perfect week. Students buy for 7 days, cook 2, order takeout, and throw the rest out.</p></div>
+      <div><span class="tag">Problem</span><p>Students overbuy, food spoils before they know what to cook, and most of it gets thrown out. Budget, fridge and recipe apps each fix only one step.</p></div>
       <div><span class="tag">Bet</span><p>Plan less and plan for failure: 3 shared-ingredient meals, a budget cap, and takeout as part of the plan.</p></div>
       <div><span class="tag">Built</span><p>An end-to-end prototype with Sunday planning, a priced grocery list and a way out on tired nights. Peer-reviewed at 4.89/5.</p></div>
     </div>
@@ -282,19 +297,43 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 
 <!-- PROBLEM -->
 <section class="paper" id="problem">
-  <div class="in split">
-    <div class="stack">
-      <span class="tag">01 · Problem</span>
-      <h2>The week that never goes to plan</h2>
-      <p class="hand">built on guilt, not reality.</p>
+  <div class="in">
+    <div class="split">
+      <div class="stack">
+        <span class="tag">01 · Problem</span>
+        <h2>I kept throwing my groceries away</h2>
+        <p class="hand">this one started with my own fridge.</p>
+      </div>
+      <div class="stack">
+        <p class="lead">Every grocery run went the same way. Each step made the next one worse:</p>
+        <ol class="menu loop5" role="list">
+          <li class="r"><span class="k">Shop</span><span class="v">I’d overbuy without noticing and go over budget.</span><span class="p">$↑</span></li>
+          <li class="r"><span class="k">Store</span><span class="v">Food went into the fridge and spoiled before I used it.</span><span class="p"></span></li>
+          <li class="r"><span class="k">Cook?</span><span class="v">I didn’t know what I could make with what was left.</span><span class="p"></span></li>
+          <li class="r"><span class="k">Toss</span><span class="v">So most of it ended up in the trash.</span><span class="p">waste</span></li>
+          <li class="r"><span class="k">Repeat</span><span class="v">And I never knew how long a shop should actually last.</span><span class="p">↺</span></li>
+        </ol>
+      </div>
     </div>
-    <div class="stack">
-      <p class="lead">The same week kept showing up in meal-app reviews and Reddit threads from students:</p>
-      <div class="menu">
-        <div class="r"><span class="k">Sun</span><span class="v">Buy a full week of groceries</span><span class="p"></span></div>
-        <div class="r"><span class="k">Wed</span><span class="v">Too tired to cook the plan</span><span class="p"></span></div>
-        <div class="r"><span class="k">Thu</span><span class="v">Order a burrito bowl instead</span><span class="p">$12</span></div>
-        <div class="r"><span class="k">Sun</span><span class="v">Half the food is rotting in the fridge</span><span class="p">waste</span></div>
+
+    <div class="stats paperstats">
+      <div><span class="big">$760</span><p>spent per American in 2024 on food that went uneaten</p><a href="https://refed.org/food-waste/consumer-food-waste/" target="_blank" rel="noopener">ReFED ↗</a></div>
+      <div><span class="big">80%+</span><p>of surplus food is perishable, like produce and dairy, the stuff that spoils in the fridge</p><a href="https://refed.org/food-waste/the-problem/" target="_blank" rel="noopener">ReFED ↗</a></div>
+      <div><span class="big">23%</span><p>of U.S. college students were food insecure in 2020, so every wasted dollar counts</p><a href="https://www.gao.gov/products/gao-24-107074" target="_blank" rel="noopener">GAO ↗</a></div>
+    </div>
+
+    <div class="split" style="margin-top:clamp(40px,5vw,64px)">
+      <div class="stack">
+        <span class="tag">The gap</span>
+        <h3 style="font-size:clamp(1.6rem,3vw,2.3rem)">Four apps for one problem</h3>
+      </div>
+      <div class="stack">
+        <p class="lead">Budget trackers, fridge inventories, recipe finders and meal planners each fix one step of that loop. None of them see the whole loop, so the waste happens in the gaps between them. I wanted one planner that connects all four.</p>
+        <div class="prio">
+          <div><span class="n">01</span><b>Food waste</b><p>Buy what you’ll actually cook, and use up what you have.</p></div>
+          <div><span class="n">02</span><b>Adaptive planning</b><p>A plan that bends when the week doesn’t go to plan.</p></div>
+          <div class="later"><span class="n">03</span><b>Personal goals</b><p>Added after peer feedback: dietary restrictions and targets like a weekly calorie limit, on top of the budget cap.</p></div>
+        </div>
       </div>
     </div>
   </div>
@@ -322,7 +361,7 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
     <div class="stack">
       <span class="tag">03 · The bet</span>
       <h2>Design for the tired Wednesday</h2>
-      <p class="lead" style="color:var(--dim)">If the plan expects you to fail sometimes, failing doesn’t break it. Four principles came out of that:</p>
+      <p class="lead" style="color:var(--dim)">If the plan expects you to fail sometimes, failing doesn’t break it. ReFED’s own advice to households points the same way: plan a few days ahead, cook <a href="https://refed.org/food-waste/consumer-food-waste/" target="_blank" rel="noopener" style="color:var(--pink)">“recipe trios” that share ingredients, and plan for takeout nights</a>. Four principles came out of that:</p>
     </div>
     <div class="big4">
       <div><span class="n">3</span><h3>Meals, not 7</h3><p>Shared ingredients, less waste</p></div>
@@ -529,7 +568,7 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
     <div class="flagged">
       <span class="tag" style="color:var(--pink)">What they flagged → what I’d do next</span>
       <div class="menu">
-        <div class="r"><span class="k">Personal goals</span><span class="v">Let users set <b>dietary restrictions</b> and <b>fitness goals</b>, so recipes and the Pivot slider aim at their own targets.</span><span class="p">Most asked</span></div>
+        <div class="r"><span class="k">Personal goals</span><span class="v">Let users set <b>dietary restrictions</b> and <b>goals like a weekly calorie limit</b>, alongside the budget cap, so recipes and the Pivot slider aim at their own targets.</span><span class="p">Most asked</span></div>
         <div class="r"><span class="k">Inventory drift</span><span class="v">Show how the fridge stays accurate when people forget to log what they ate, e.g. a quick check-in before Sunday planning.</span><span class="p"></span></div>
         <div class="r"><span class="k">Weekly recap</span><span class="v">A light summary of spending, waste and takeout, so savings over time are visible.</span><span class="p"></span></div>
         <div class="r"><span class="k">More validation</span><span class="v">Test with students outside the class over a real week of meal planning.</span><span class="p"></span></div>
