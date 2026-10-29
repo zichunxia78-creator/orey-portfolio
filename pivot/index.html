@@ -93,6 +93,9 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 .big4 div{padding:22px 18px 8px 0;display:grid;gap:10px;align-content:start}
 .big4 .n{font-family:var(--display);font-weight:600;font-stretch:72%;font-size:clamp(2.6rem,5.5vw,4.2rem);line-height:.8;color:var(--pink)}
 .big4 p{color:var(--dim)}
+.big4 .breaks{font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink);margin-top:4px}
+.cite{margin-top:28px;font-size:.88rem;color:var(--dim);max-width:70ch}
+.cite a{color:var(--pink);font-weight:700;text-decoration:none;font-size:.75rem;letter-spacing:.06em;text-transform:uppercase;margin-left:4px}
 @media (max-width:760px){.big4{grid-template-columns:1fr 1fr;row-gap:16px}}
 
 /* core loop: big, readable steps */
@@ -298,7 +301,7 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
     </div>
     <div class="tldr">
       <div><span class="tag">Problem</span><p>Students overbuy, food spoils before they know what to cook, and most of it gets thrown out. Budget, fridge and recipe apps each fix only one step.</p></div>
-      <div><span class="tag">Bet</span><p>Plan less and plan for failure: 3 shared-ingredient meals, a budget cap, and takeout as part of the plan.</p></div>
+      <div><span class="tag">Bet</span><p>Plan from the fridge, not from zero: 3 shared-ingredient meals, a budget cap, inventory-first suggestions and takeout built into the week.</p></div>
       <div><span class="tag">Built</span><p>An end-to-end prototype with Sunday planning, a priced grocery list and a way out on tired nights. Peer-reviewed at 4.89/5.</p></div>
     </div>
   </div>
@@ -379,22 +382,25 @@ section{padding-block:clamp(56px,8vw,104px);overflow:hidden;scroll-margin-top:0}
 <!-- BET -->
 <section id="bet">
   <div class="in">
-    <div class="stack">
-      <span class="tag">03 · The bet</span>
-      <h2>Design for the tired Wednesday</h2>
-      <p class="lead" style="color:var(--dim)">If the plan expects you to fail sometimes, failing doesn’t break it. ReFED’s own advice to households points the same way: plan a few days ahead, cook <a href="https://refed.org/food-waste/consumer-food-waste/" target="_blank" rel="noopener" style="color:var(--pink)">“recipe trios” that share ingredients, and plan for takeout nights</a>. Four principles came out of that:</p>
+    <div class="split">
+      <div class="stack">
+        <span class="tag">03 · The bet</span>
+        <h2>Plan from the fridge, not from zero</h2>
+      </div>
+      <p class="lead" style="color:var(--dim)">Every step of that loop has the same root: each plan starts from scratch and assumes a perfect week. So Pivot starts from what you already have, and expects some nights to go off-plan. Each principle breaks one step of the loop.</p>
     </div>
     <div class="big4">
-      <div><span class="n">3</span><h3>Meals, not 7</h3><p>Shared ingredients, less waste</p></div>
-      <div><span class="n">$</span><h3>Budget first</h3><p>Grocery and dining-out caps</p></div>
-      <div><span class="n">1×</span><h3>Plan takeout</h3><p>Eating out isn’t failure</p></div>
-      <div><span class="n">↺</span><h3>A way out</h3><p>Rescue meal or Blind Box</p></div>
+      <div><span class="n">3</span><h3>Meals, not 7</h3><p>Fewer recipes that share ingredients, so you buy less.</p><span class="breaks">Breaks: Shop</span></div>
+      <div><span class="n">$</span><h3>Budget first</h3><p>Caps on groceries and eating out, set before you shop.</p><span class="breaks">Breaks: Shop</span></div>
+      <div><span class="n">◎</span><h3>Fridge first</h3><p>Suggestions start from your inventory, not a recipe library.</p><span class="breaks">Breaks: Store · Cook?</span></div>
+      <div><span class="n">↺</span><h3>A way out</h3><p>Planned takeout, a rescue meal or Blind Box when plans slip.</p><span class="breaks">Breaks: Toss</span></div>
     </div>
+    <p class="cite">ReFED’s advice to households points the same way: plan ahead, cook “recipe trios” that share ingredients, and plan for takeout nights. <a href="https://refed.org/food-waste/consumer-food-waste/" target="_blank" rel="noopener">ReFED ↗</a></p>
   </div>
 </section>
 
 <!-- CORE LOOP -->
-<section id="loop" style="padding-top:0">
+<section id="loop" style="border-top:1px solid rgba(246,240,226,.14)">
   <div class="in">
     <div class="stack">
       <span class="tag">04 · Core loop</span>
